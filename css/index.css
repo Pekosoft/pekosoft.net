@@ -1217,6 +1217,7 @@ body.release-toc-active #panel-container {
 .column-sides {
   flex: 0.5;
   padding: 0px;
+  overflow: hidden;
 }
 
 .column-middle {
