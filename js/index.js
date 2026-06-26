@@ -31,30 +31,6 @@ if (window.visualViewport) {
   window.visualViewport.addEventListener('scroll', syncPekosoftViewport);
 }
 
-function repeatSideSpeakers() {
-  const container = document.querySelector('.three-columns-container');
-  if (!container) return;
-
-  const sideColumns = container.querySelectorAll('.column-sides');
-  if (!sideColumns.length) return;
-
-  sideColumns.forEach(column => {
-    const speaker = column.querySelector('.speaker:not(.speaker-repeat)');
-    if (!speaker) return;
-
-    column.querySelectorAll('.speaker-repeat').forEach(repeat => repeat.remove());
-
-    const clone = speaker.cloneNode(true);
-    clone.classList.add('speaker-repeat');
-    clone.setAttribute('aria-hidden', 'true');
-    clone.removeAttribute('role');
-    column.appendChild(clone);
-  });
-}
-
-window.addEventListener('resize', repeatSideSpeakers);
-window.addEventListener('load', repeatSideSpeakers);
-
 // Function to toggle the TOC visibility
 
 function toggleMenu() {
@@ -734,7 +710,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   markActiveFooterLink();
-  repeatSideSpeakers();
   setupTimelineSaveButton();
   ensureControlsStatusBars();
   setupStatusBars();
