@@ -93,7 +93,7 @@ function saveModuleOrder(order) {
 }
 
 function isTwoColumnLayoutEnabled() {
-  return localStorage.getItem("global.layout") === "true";
+  return localStorage.getItem("global.layout") !== "false";
 }
 
 function isTwoColumnLayoutActive() {

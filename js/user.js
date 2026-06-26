@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // LAYOUT TOGGLE
 
-    const twoColumnLayout = localStorage.getItem("global.layout") === "true";
+    const twoColumnLayout = localStorage.getItem("global.layout") !== "false";
     const modulePage = document.documentElement.classList.contains("modules-page");
     const twoColumnLayoutActive = twoColumnLayout && modulePage && layoutMedia.matches;
     document.documentElement.classList.toggle("layout-two-columns", twoColumnLayout);

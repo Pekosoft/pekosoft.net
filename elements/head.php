@@ -11,7 +11,7 @@ if (in_array($currentScript, $toolPages, true) || in_array($requestPath, $toolSl
 ?>
 <script>
 try {
-	if (localStorage.getItem('global.layout') === 'true') {
+	if (localStorage.getItem('global.layout') !== 'false') {
 		document.documentElement.classList.add('layout-two-columns');
 	}
 } catch (_) {}

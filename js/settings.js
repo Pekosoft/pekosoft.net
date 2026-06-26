@@ -10,7 +10,7 @@ window.FactoryDefaults = {
   gridSize: 16,
   guides: false,
   headers: true,
-  layout: false,
+  layout: true,
   haptics: false,
   toggleButtonText: false,
   alpha: false,
@@ -245,7 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
       settings.headers.checked = (localStorage.getItem("global.headers") ?? defaults.headers) === "true";
     }
     if (settings.layout) {
-      settings.layout.checked = (localStorage.getItem("global.layout") ?? defaults.layout) === "true";
+      settings.layout.checked = localStorage.getItem("global.layout") !== "false";
     }
     if (settings.toggleButtonText) {
       settings.toggleButtonText.checked = (localStorage.getItem("global.toggle_button_text") ?? defaults.toggleButtonText) === "true";
