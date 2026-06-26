@@ -60,7 +60,7 @@ body {
   line-height: 1.5;
   text-align: center;
   padding-top: 96px;
-  padding-bottom: calc(48px + var(--visual-viewport-bottom-gap));
+  padding-bottom: 48px;
 }
 
 h1 {
@@ -408,7 +408,7 @@ tbody tr:hover {
     width: 100%;
     max-width: var(--maxwidth);
     margin: 0 auto;
-    padding: 114px 0 calc(48px + var(--visual-viewport-bottom-gap));
+    padding: 114px 0 48px;
   }
 
   html.modules-page.layout-two-columns .container,
@@ -1024,7 +1024,7 @@ li h1 img {
   max-width: var(--maxwidth);
   margin: 0 auto;
   position: fixed;
-  bottom: var(--visual-viewport-bottom-gap);
+  bottom: 0;
   left: 0;
   right: 0;
   width: 100%;
