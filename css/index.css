@@ -1044,7 +1044,7 @@ li h1 img {
 }
 
 /* Hide columns on medium screens */
-@media (max-width: 2048px) {
+@media (max-width: 1920px) {
   .hide-on-medium-screen {
     display: none;
   }
