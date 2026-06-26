@@ -106,7 +106,7 @@ function betaFooterHref($toolFile, $currentPage)
 
 </div>
 
-<script src="/js/index.js"></script>
+<script src="/js/index.js?v=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/js/index.js'); ?>"></script>
 <script src="/js/user.js"></script>
 <script src="/js/swipe.js"></script>
 <script src="/js/meters.js"></script>
