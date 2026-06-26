@@ -35,9 +35,8 @@ function repeatSideSpeakers() {
   const container = document.querySelector('.three-columns-container');
   if (!container) return;
 
-  const middleColumn = container.querySelector('.column-middle, .column-middle-about');
   const sideColumns = container.querySelectorAll('.column-sides');
-  if (!middleColumn || !sideColumns.length) return;
+  if (!sideColumns.length) return;
 
   sideColumns.forEach(column => {
     const speaker = column.querySelector('.speaker:not(.speaker-repeat)');
@@ -45,18 +44,11 @@ function repeatSideSpeakers() {
 
     column.querySelectorAll('.speaker-repeat').forEach(repeat => repeat.remove());
 
-    const speakerHeight = speaker.getBoundingClientRect().height;
-    const targetHeight = Math.max(middleColumn.scrollHeight, middleColumn.getBoundingClientRect().height);
-    if (!Number.isFinite(speakerHeight) || speakerHeight <= 0 || !Number.isFinite(targetHeight)) return;
-
-    const repeatCount = Math.max(0, Math.ceil(targetHeight / speakerHeight) - 1);
-    for (let index = 0; index < repeatCount; index++) {
-      const clone = speaker.cloneNode(true);
-      clone.classList.add('speaker-repeat');
-      clone.setAttribute('aria-hidden', 'true');
-      clone.removeAttribute('role');
-      column.appendChild(clone);
-    }
+    const clone = speaker.cloneNode(true);
+    clone.classList.add('speaker-repeat');
+    clone.setAttribute('aria-hidden', 'true');
+    clone.removeAttribute('role');
+    column.appendChild(clone);
   });
 }
 
