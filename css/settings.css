@@ -1,0 +1,76 @@
+/* Pekosoft Settings */
+/* pekosoft.net/css/settings.css */
+
+.settings {
+  max-width: var(--maxwidth);
+  margin-top: 0;
+  padding: 16px 16px;
+  display: flex;
+  flex-direction: column; /* Stack rows vertically */
+  gap: 16px; /* Add spacing between rows */
+  align-items: center; /* Center child elements horizontally */
+}
+
+.setting-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  min-width: 180px;
+  max-width: 320px;
+  width: 100%;
+}
+
+.setting-row>label,
+.setting-row>:is(input:not([type="checkbox"]), select) {
+  flex: 1;
+  min-width: 80px;
+}
+
+.setting-row>.knob-wrap>:is(input:not([type="checkbox"]), select) {
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  min-width: 180px;
+  max-width: 320px;
+  width: 100%;
+}
+
+.setting-row>input[type="checkbox"] {
+  flex: 0 0 auto;
+  margin-right: 0;
+}
+
+.knob-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 80px;
+}
+
+.knob-value {
+  width: 40px;
+  text-align: center;
+  background: none;
+  border: none;
+  outline: none;
+  color: inherit;
+  font: inherit;
+  pointer-events: none;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+.knob-value::-webkit-inner-spin-button,
+.knob-value::-webkit-outer-spin-button {
+  display: none;
+}
+
+/* END OF FILE */

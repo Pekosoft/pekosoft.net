@@ -1,0 +1,28 @@
+/* Pekosoft Beta */
+/* pekosoft.net/css/beta.css */
+
+.beta-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.beta-link-row {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.beta-links .icons {
+  margin: 0;
+}
+
+.beta-link-title {
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* END OF FILE */

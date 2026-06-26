@@ -1,0 +1,13 @@
+/* Pekosoft Bitcoin */
+/* pekosoft.net/css/bitcoin.css */
+
+.bitcoin-address {
+  font-family: Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 8px 16px 16px;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+/* END OF FILE */

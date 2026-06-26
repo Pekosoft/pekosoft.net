@@ -1,0 +1,151 @@
+/* Pekosoft BPM Curve */
+/* pekosoft.net/css/bpm_curve.css */
+
+#tool-container .curve-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+}
+
+#tool-container .curve-view > #curve-svg {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  background: var(--black);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+#tool-container.module-maximized .curve-view {
+  padding: 0;
+  min-height: 0;
+  height: auto;
+}
+
+#tool-container.module-maximized .curve-view > #curve-svg {
+  height: auto;
+}
+
+.curve-status {
+  min-height: 24px;
+  flex: 1 1 auto;
+  width: auto;
+  text-align: center;
+}
+
+#curve-grid line {
+  stroke: var(--grey1);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+#curve-grid line.curve-beat-line {
+  stroke: var(--color1);
+  stroke-width: 1;
+  opacity: 0.72;
+  shape-rendering: crispEdges;
+}
+
+#curve-grid text {
+  fill: var(--grey2);
+  font-size: 12px;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.curve-line {
+  fill: none;
+  stroke: var(--color1);
+  stroke-width: 1;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.curve-playhead {
+  stroke: var(--white);
+  stroke-width: 1;
+  display: none;
+}
+
+.curve-playhead.visible {
+  display: block;
+}
+
+.curve-point {
+  fill: var(--color1);
+  stroke: none;
+  stroke-width: 0;
+  cursor: crosshair;
+}
+
+.curve-point.selected,
+.curve-point:hover {
+  fill: var(--white);
+}
+
+.curve-point-label {
+  fill: var(--white);
+  font-size: 13px;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#timeline-container .canvas-container {
+  padding: 0;
+  background: var(--black);
+}
+
+#timeline-container .timeline-scroll {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+#timeline-container.module-maximized #curve-timeline-svg {
+  height: 100%;
+}
+
+#panel-container .info-text {
+  min-height: 220px;
+  resize: none;
+}
+
+#panel-container .panel-syntax-editor {
+  overflow: hidden;
+}
+
+#panel-container .panel-syntax-preview,
+#panel-container .panel-syntax-textarea {
+  max-width: 100%;
+}
+
+#controls-container .controls-values.hidden {
+  display: none;
+}
+
+#tool-container.hidden,
+#controls-container.hidden,
+#timeline-container.hidden,
+#panel-container.hidden {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  #tool-container .curve-view {
+    height: 360px;
+  }
+
+  #tool-container.module-maximized .curve-view {
+    height: calc(100vh - 155px);
+    min-height: 320px;
+  }
+}
+
+/* END OF FILE */

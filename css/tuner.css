@@ -1,0 +1,151 @@
+/* Pekosoft Tuner */
+/* pekosoft.net/css/tuner.css */
+
+.tuner-stage-wrapper {
+  padding: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.tuner-stage {
+  display: grid;
+  gap: 16px;
+}
+
+.tuner-readout-block {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+}
+
+.tuner-detected-note {
+  font-size: 64px;
+  line-height: 1;
+  letter-spacing: 1px;
+  color: var(--color2);
+}
+
+.tuner-detected-hz {
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.tuner-cents {
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.tuner-status {
+  color: var(--grey2);
+}
+
+.tuner-meter {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+}
+
+.tuner-meter-label {
+  color: var(--grey2);
+  font-size: 14px;
+}
+
+.tuner-meter-label-left {
+  text-align: left;
+}
+
+.tuner-meter-label-center {
+  text-align: center;
+}
+
+.tuner-meter-label-right {
+  text-align: right;
+}
+
+.tuner-meter-track {
+  grid-column: 1 / 4;
+  position: relative;
+  height: 56px;
+  border: 1px solid var(--grey1);
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 23px,
+    var(--grey1) 24px,
+    transparent 25px
+  );
+}
+
+.tuner-meter-center-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: var(--color2);
+}
+
+.tuner-needle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  left: calc(50% - 1px);
+  background: var(--white);
+}
+
+.tuner-target-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+  gap: 8px;
+}
+
+.tuner-target-button {
+  min-height: 40px;
+}
+
+.tuner-target-button .button-note {
+  display: inline-block;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.tuner-target-button .button-hz {
+  display: block;
+  font-size: 12px;
+  color: var(--grey2);
+  line-height: 1.2;
+}
+
+#controls-container .controls-values.wrapper .pair input[readonly] {
+  color: var(--white);
+}
+
+#timeline-container.module-maximized #tuner-timeline-svg {
+  height: 100%;
+}
+
+#tool-container.module-maximized .tuner-stage-wrapper {
+  height: 100%;
+}
+
+#tool-container.module-maximized .tuner-stage {
+  height: 100%;
+  align-content: center;
+}
+
+@media (max-width: 800px) {
+  .tuner-detected-note {
+    font-size: 52px;
+  }
+
+  .tuner-detected-hz {
+    font-size: 18px;
+  }
+
+  .tuner-cents {
+    font-size: 22px;
+  }
+}
+
+/* END OF FILE */

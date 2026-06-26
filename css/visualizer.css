@@ -1,0 +1,518 @@
+/* Pekosoft Visualizer */
+/* pekosoft.net/css/visualizer.css */
+
+/* Meters */
+
+#controls-container .visualizer-controls-buttons {
+  justify-content: flex-start;
+  align-content: flex-start;
+  gap: 8px;
+}
+
+#controls-container .visualizer-controls-top-row,
+#controls-container .visualizer-meter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+#controls-container .visualizer-meter-buttons {
+  border-top: 4px solid var(--grey1);
+  margin: 0 -4px;
+  padding-top: 8px;
+  padding-left: 4px;
+  padding-right: 4px;
+  width: calc(100% + 8px);
+}
+
+#controls-container .visualizer-bpm-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#controls-container .visualizer-bpm-inline label {
+  min-width: 72px;
+}
+
+#controls-container .visualizer-bpm-inline input {
+  width: 88px;
+  min-width: 88px;
+}
+
+#controls-container .statusbar {
+  flex: 0 0 auto;
+  width: 100%;
+  margin-top: auto;
+}
+
+.meter {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  max-width: 512px;
+}
+
+#tool-container .meter {
+  flex: 0 1 220px;
+  width: min(220px, 100%);
+  max-width: 220px;
+  margin-top: 0;
+}
+
+#tool-container .standard.wrapper {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+#tool-container.visualizer-single-mode .standard.wrapper {
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+#tool-container.visualizer-single-mode .meter {
+  flex: 0 0 auto;
+  width: var(--visualizer-single-meter-size, 220px);
+  max-width: none;
+}
+
+#tool-container.visualizer-single-mode .meter .label {
+  top: 8px;
+  left: 8px;
+  transform: none;
+}
+
+.meter.hidden {
+  display: none;
+}
+
+.circle-outline {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--grey1);
+  border-radius: 0;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.visualizer-mask-on .circle-outline {
+  border-radius: 50%;
+}
+
+body.visualizer-mask-on :is(
+  .pulse-container,
+  .clock-container,
+  .blink-container,
+  .cake-container,
+  .speedometer-container,
+  .metronome-container,
+  .ticker-container,
+  .lines-container,
+  .stars-container
+) {
+  border-radius: 50%;
+  overflow: hidden;
+  clip-path: circle(50% at 50% 50%);
+}
+
+body.visualizer-mask-on .ticker-container {
+  border-radius: 0;
+  overflow: hidden;
+  clip-path: inset(0);
+}
+
+body:not(.visualizer-mask-on) :is(
+  .pulse-container,
+  .clock-container,
+  .blink-container,
+  .cake-container,
+  .speedometer-container,
+  .metronome-container,
+  .ticker-container,
+  .lines-container,
+  .stars-container
+) {
+  border-radius: 0;
+  overflow: visible;
+  clip-path: none;
+}
+
+.circle-outline::before,
+.circle-outline::after {
+  content: '';
+  position: absolute;
+  background-color: var(--grey1);
+}
+
+body:not(.visualizer-crosshair-on) .circle-outline::before,
+body:not(.visualizer-crosshair-on) .circle-outline::after {
+  opacity: 0;
+}
+
+.circle-outline::before {
+  width: 100%;
+  height: 1px;
+}
+
+.circle-outline::after {
+  height: 100%;
+  width: 1px;
+}
+
+.label {
+  font-weight: bold;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  transform: none;
+  z-index: 2;
+}
+
+body:not(.visualizer-titles-on) #tool-container .label {
+  display: none;
+}
+
+/* Pulse */
+
+.pulse-container,
+.clock-container,
+.blink-container,
+.cake-container,
+.speedometer-container,
+.metronome-container,
+.ticker-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pulse-container,
+.clock-container,
+.blink-container,
+.speedometer-container,
+.metronome-container,
+.ticker-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.pulse-container {
+  background-color: var(--color1);
+  animation: pulse var(--delay) infinite;
+}
+
+/* Clock */
+
+.clock-hand {
+  position: absolute;
+  width: 1px;
+  height: 50%;
+  background-color: transparent;
+  top: auto;
+  bottom: 50%;
+  left: 50%;
+  margin-left: -0.5px;
+  transform: rotate(0deg);
+  transform-origin: bottom center;
+  animation: none;
+}
+
+.clock-hand line {
+  stroke: var(--color1);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Blink */
+
+.blink-container {
+  background-color: var(--color1);
+  animation: blink var(--delay) step-start infinite;
+}
+
+/* Cake */
+
+.cake-container {
+  width: 100%;
+  height: 100%;
+  align-self: center;
+  margin-top: 0;
+}
+
+.cake-line {
+  position: absolute;
+  width: 1px;
+  height: 50%;
+  background-color: var(--color1);
+  transform-origin: bottom center;
+  top: auto;
+  bottom: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+body:not(.visualizer-mask-on) .cake-line {
+  height: 70.710678%;
+}
+
+body.visualizer-mask-on .cake-line {
+  height: 50%;
+}
+
+body:not(.visualizer-mask-on) .cake-container {
+  border-radius: 0;
+  overflow: hidden;
+  clip-path: inset(0);
+}
+
+body.visualizer-mask-on .cake-container {
+  border-radius: 50%;
+  overflow: hidden;
+  clip-path: circle(50% at 50% 50%);
+}
+
+/* Metronome */
+
+.metronome-container {
+  width: 60%;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.pendulum {
+  position: absolute;
+  width: 1px;
+  height: 70.710678%;
+  background-color: transparent;
+  bottom: 0;
+  left: 50%;
+  margin-left: -0.5px;
+  transform: rotate(0deg);
+  transform-origin: bottom center;
+  animation: none;
+}
+
+.pendulum line {
+  stroke: var(--color1);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Clock */
+
+.clock-dots-container {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.clock-dot {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background-color: var(--color1);
+  border-radius: 50%;
+}
+
+/* Speedometer */
+
+.speedometer-needle {
+  position: absolute;
+  width: 1px;
+  height: 50%;
+  background-color: transparent;
+  top: 0;
+  left: 50%;
+  transform-origin: bottom center;
+  transform: translateX(-50%);
+}
+
+.speedometer-needle line {
+  stroke: var(--color1);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  vector-effect: non-scaling-stroke;
+}
+
+.speedometer-labels {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.speedometer-label {
+  position: absolute;
+  color: var(--color1);
+  font-size: 0.8em;
+  transform-origin: center;
+}
+
+.total-beats {
+  position: absolute;
+  bottom: 40px;
+  border: 1px solid var(--color1);
+  padding: 4px 8px;
+  font-size: 0.8em;
+  color: var(--color1);
+  text-align: center;
+  width: 30%;
+}
+
+/* Stars */
+
+.stars-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  border-radius: 50%;
+}
+
+.star {
+  position: absolute;
+  background-color: var(--color1);
+  border-radius: 50%;
+}
+
+/* Ticker */
+
+.ticker-container {
+  position: relative;
+  overflow: hidden;
+  clip-path: inset(0);
+  contain: paint;
+  text-align: center;
+  font-size: 4em;
+  color: var(--color1);
+  justify-content: flex-start;
+}
+
+.ticker-text {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  animation: scroll-left var(--delay) linear infinite;
+}
+
+/* Animations */
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.5);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rotate-clock-hand {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes swing {
+  0% {
+    transform: rotate(-45deg);
+  }
+
+  50% {
+    transform: rotate(45deg);
+  }
+
+  100% {
+    transform: rotate(-45deg);
+  }
+}
+
+@keyframes scroll-left {
+  from {
+    transform: translateX(var(--ticker-start));
+  }
+
+  to {
+    transform: translateX(var(--ticker-end));
+  }
+}
+
+/* Pause all animations by default */
+.pulse-container,
+.clock-hand,
+.blink-container,
+.pendulum,
+.ticker-text {
+  animation-play-state: paused;
+}
+
+/* Lines */
+
+.lines-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* If only one tick, center it */
+.lines-container:has(.timeline-line:first-child:last-child) {
+  justify-content: center;
+}
+
+.timeline-line {
+  width: 1px;
+  height: 100%;
+  background-color: var(--color1);
+}
+
+/* END OF FILE */

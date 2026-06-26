@@ -1,0 +1,381 @@
+/* Pekosoft Icons */
+/* pekosoft.net/css/icons.css */
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
+  gap: 16px;
+  padding: 4px;
+  text-align: center;
+  align-content: start;
+}
+
+#timeline-container .canvas-container {
+  justify-content: flex-start;
+}
+
+#timeline-container .timeline-scroll,
+#timeline-container .scrollable {
+  justify-content: flex-start;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: auto;
+}
+
+#timeline-container .timeline-scroll::-webkit-scrollbar,
+#timeline-container .scrollable::-webkit-scrollbar {
+  display: block;
+}
+
+.grid-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  cursor: pointer;
+}
+
+#timeline-container .icon-grid.timeline-grid-on {
+}
+
+#timeline-container .icon-grid.timeline-grid-on .grid-icon {
+  box-shadow: inset 0 0 0 1px var(--grey2);
+}
+
+.grid-icon.active svg {
+  fill: var(--color1);
+}
+
+.preview-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  overflow: hidden;
+}
+
+#tool-container .preview-wrapper {
+  background: var(--black);
+  overflow: auto;
+}
+
+.preview-stage {
+  position: relative;
+  display: grid;
+  --preview-ruler-width: 40px;
+  --preview-ruler-height: 28px;
+  --preview-size: 512px;
+  grid-template-columns: var(--preview-ruler-width) var(--preview-size) var(--preview-ruler-width);
+  grid-template-rows: var(--preview-ruler-height) var(--preview-size) var(--preview-ruler-height);
+  width: calc((var(--preview-ruler-width) * 2) + var(--preview-size));
+  height: calc((var(--preview-ruler-height) * 2) + var(--preview-size));
+  max-width: none;
+  --grid-divisions: 32;
+  --grid-step: calc(100% / var(--grid-divisions));
+  --ruler-line-width: 1px;
+}
+
+#tool-container .preview-stage {
+  --preview-size: min(304px, calc(100vw - 160px), calc(100vh - 176px));
+}
+
+.preview-canvas {
+  position: relative;
+  grid-column: 2;
+  grid-row: 2;
+  width: var(--preview-size);
+  height: var(--preview-size);
+  z-index: 1;
+}
+
+#tool-container.module-maximized .preview-wrapper {
+  height: 100%;
+  padding: 24px;
+}
+
+.preview-icon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: var(--white);
+  z-index: 1;
+  touch-action: none;
+  cursor: default;
+}
+
+.preview-icon > * {
+  pointer-events: all;
+}
+
+.preview-stage[data-editor-tool="select"] .preview-icon {
+  cursor: move;
+}
+
+.preview-stage[data-editor-tool="draw"] .preview-icon {
+  cursor: crosshair;
+}
+
+.preview-stage[data-editor-tool="rectangle"] .preview-icon,
+.preview-stage[data-editor-tool="rectangle-outline"] .preview-icon,
+.preview-stage[data-editor-tool="circle"] .preview-icon,
+.preview-stage[data-editor-tool="circle-outline"] .preview-icon {
+  cursor: crosshair;
+}
+
+.preview-stage[data-editor-tool="resize"] .preview-icon {
+  cursor: nwse-resize;
+}
+
+.preview-icon .editor-selected {
+  color: var(--color1);
+  fill: var(--color1);
+}
+
+.preview-icon .editor-selected[fill="none"] {
+  fill: none;
+  stroke: var(--color1);
+}
+
+.preview-icon .editor-selected[stroke] {
+  stroke: var(--color1);
+}
+
+.preview-grid-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  fill: none;
+  stroke: var(--grey2);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  shape-rendering: crispEdges;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.preview-grid-overlay .grid-line {
+  stroke: var(--grey2);
+  stroke-width: 1;
+}
+
+.preview-stage.preview-grid-on .preview-grid-overlay {
+  display: block;
+}
+
+.preview-rulers {
+  position: relative;
+  grid-column: 1 / span 3;
+  grid-row: 1 / span 3;
+  display: none;
+  grid-template-columns: var(--preview-ruler-width) var(--preview-size) var(--preview-ruler-width);
+  grid-template-rows: var(--preview-ruler-height) var(--preview-size) var(--preview-ruler-height);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.preview-stage.preview-rulers-on .preview-rulers {
+  display: grid;
+}
+
+.preview-rulers::after {
+  content: "";
+  position: absolute;
+  left: var(--preview-ruler-width);
+  top: var(--preview-ruler-height);
+  width: var(--preview-size);
+  height: var(--preview-size);
+  box-sizing: border-box;
+  border: var(--ruler-line-width) solid var(--grey2);
+  pointer-events: none;
+}
+
+.preview-stage.preview-rulers-on.preview-grid-on .preview-grid-overlay .grid-line-edge {
+  display: none;
+}
+
+.preview-ruler {
+  box-sizing: border-box;
+  color: var(--grey2);
+  font-size: 10px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.preview-ruler-left {
+  grid-column: 1;
+  grid-row: 2;
+  width: var(--preview-ruler-width);
+  height: var(--preview-size);
+  position: relative;
+  background: none;
+}
+
+.preview-ruler-right {
+  grid-column: 3;
+  grid-row: 2;
+  width: var(--preview-ruler-width);
+  height: var(--preview-size);
+  position: relative;
+  background: none;
+}
+
+.preview-ruler-top {
+  grid-column: 2;
+  grid-row: 1;
+  width: var(--preview-size);
+  height: var(--preview-ruler-height);
+  position: relative;
+  padding-bottom: 8px;
+  background: none;
+}
+
+.preview-ruler-bottom {
+  grid-column: 2;
+  grid-row: 3;
+  width: var(--preview-size);
+  height: var(--preview-ruler-height);
+  position: relative;
+  padding-top: 8px;
+  background: none;
+}
+
+.preview-ruler-label {
+  position: relative;
+  line-height: 1;
+}
+
+.preview-ruler-left .preview-ruler-label {
+  display: block;
+  position: absolute;
+  top: var(--ruler-pos);
+  transform: translateY(-50%);
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 10px;
+  text-align: right;
+}
+
+.preview-ruler-right .preview-ruler-label {
+  display: block;
+  position: absolute;
+  top: var(--ruler-pos);
+  transform: translateY(-50%);
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 10px;
+  text-align: left;
+}
+
+
+.preview-ruler-top .preview-ruler-label,
+.preview-ruler-bottom .preview-ruler-label {
+  position: absolute;
+  left: var(--ruler-pos);
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.preview-ruler-top .preview-ruler-label {
+  bottom: 8px;
+}
+
+.preview-ruler-bottom .preview-ruler-label {
+  top: 8px;
+}
+
+.preview-ruler-left .preview-ruler-label::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  top: 50%;
+  width: 4px;
+  height: var(--ruler-line-width);
+  background: var(--grey2);
+  transform: translateY(-50%);
+}
+
+.preview-ruler-right .preview-ruler-label::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  width: 4px;
+  height: var(--ruler-line-width);
+  background: var(--grey2);
+  transform: translateY(-50%);
+}
+
+.preview-ruler-top .preview-ruler-label::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: var(--ruler-line-width);
+  height: 4px;
+  background: var(--grey2);
+  transform: translateX(-50%);
+}
+
+.preview-ruler-bottom .preview-ruler-label::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: var(--ruler-line-width);
+  height: 4px;
+  background: var(--grey2);
+  transform: translateX(-50%);
+}
+
+
+.preview-guides {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  fill: none;
+  stroke: var(--grey2);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.preview-guides .guide-circle {
+  stroke: var(--grey2);
+  stroke-width: 1;
+}
+
+.preview-wrapper.preview-radius-on .preview-guides {
+  display: block;
+}
+
+#tool-container.module-maximized .preview-stage {
+  --preview-size: round(
+    down,
+    min(
+      calc(82vh - (var(--preview-ruler-height) * 2)),
+      calc(100vw - 96px - (var(--preview-ruler-width) * 2)),
+      1200px
+    ),
+    1px
+  );
+}
+
+#tool-container.module-maximized .preview-icon,
+#tool-container.module-maximized .preview-guides {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+/* END OF FILE */

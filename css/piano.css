@@ -1,0 +1,196 @@
+/* Pekosoft Piano */
+/* pekosoft.net/css/piano.css */
+
+#tool-container .piano-view {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+  max-width: var(--maxwidth);
+  margin: 0;
+  padding: 4px;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+/* Keep the piano content flush with the injected module header. */
+#tool-container .module-header + .module-icon-panel + .piano-view {
+  margin-top: 0;
+}
+
+#piano {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#piano.piano-range-one,
+#piano.piano-range-two {
+  overflow: hidden;
+}
+
+#piano.piano-range-one {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+#piano.piano-range-two {
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.key {
+  cursor: pointer;
+  touch-action: none;
+}
+
+#piano svg,
+#piano g {
+  touch-action: none;
+}
+
+.white-key {
+  fill: var(--grey1);
+  stroke: var(--black);
+  stroke-width: 1;
+}
+
+.white-key:hover {
+  fill: var(--grey2);
+}
+
+.white-key.active {
+  fill: var(--color1);
+}
+
+.black-key {
+  fill: var(--black);
+  stroke: var(--black);
+  stroke-width: 1;
+}
+
+.black-key:hover {
+  fill: var(--grey2);
+}
+
+.black-key.active {
+  fill: var(--color1);
+}
+
+#piano svg {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+#piano.piano-range-one svg {
+  min-width: 0;
+  min-height: 0;
+}
+
+#piano.piano-range-two svg {
+  min-width: 0;
+  min-height: 0;
+}
+
+.piano-octave-hidden {
+  display: none;
+}
+
+#controls-container #tone-type {
+  width: 140px;
+  min-width: 140px;
+}
+
+#controls-container #hzDisplay {
+  width: 80px;
+  min-width: 80px;
+}
+
+#controls-container #noteDisplay {
+  width: 80px;
+  min-width: 80px;
+}
+
+#controls-container #midiDisplay {
+  width: 80px;
+  min-width: 80px;
+}
+
+#timeline-container #piano-roll {
+  width: 100%;
+  height: 100%;
+  min-height: 256px;
+}
+
+#timeline-container .canvas-container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: 0;
+  justify-content: stretch;
+  align-content: stretch;
+}
+
+#timeline-container.module-maximized .canvas-container {
+  height: 100%;
+  min-height: 0;
+}
+
+#timeline-container.module-maximized #piano-roll {
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  border: none;
+}
+
+#timeline-container canvas.hidden {
+  display: none;
+}
+
+.note-label {
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  font-size: 14px;
+  fill: var(--white);
+}
+
+.note-label.visible {
+  opacity: 1;
+}
+
+.octave-label {
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  font-size: 12px;
+  fill: var(--white);
+}
+
+.octave-label.visible {
+  opacity: 1;
+}
+
+#record-button.recording {
+  color: var(--color2);
+}
+
+#record-button.recording .icons {
+  fill: var(--color2);
+}
+
+#copy-button.copied .icons {
+  fill: var(--color2);
+}
+
+#panel-container .recording-text.error {
+  border-bottom-color: var(--color2);
+}
+
+/* END OF FILE */

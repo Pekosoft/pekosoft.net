@@ -1,0 +1,13 @@
+# Prevent accidental upload of local debug/scratch artifacts
+js_variable_list.txt
+
+# Temporary exports and recordings
+*.wav
+*.WAV
+*.tmp
+*.log
+*.bak
+
+# OS/editor junk
+.DS_Store
+Thumbs.db

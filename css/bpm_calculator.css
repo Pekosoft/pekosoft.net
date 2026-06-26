@@ -1,0 +1,59 @@
+/* Pekosoft BPM Calculator */
+/* pekosoft.net/css/bpm_calculator.css */
+
+.row-selected {
+  background: var(--black);
+}
+
+.scrollable-table td input[type="number"] {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+#tool-container.module-maximized .table-container {
+  max-height: none;
+  height: 100%;
+  margin-top: 0;
+  overflow-y: auto;
+}
+
+#tool-container.module-maximized .scrollable-table {
+  width: 100%;
+}
+
+#timeline-container .canvas-container {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  min-height: 0;
+}
+
+#timeline-container .scrollable {
+  min-height: 0;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+#timeline-container.module-maximized .canvas-container {
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  height: 100%;
+  min-height: 0;
+}
+
+#timeline-container.module-maximized .scrollable {
+  min-height: 0;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+#timeline-container.module-maximized #bpm-timeline-svg {
+  width: 4096px;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  border: none;
+}
+
+/* END OF FILE */

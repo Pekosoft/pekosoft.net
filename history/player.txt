@@ -1,0 +1,4 @@
+<h1>1.0
+XX-XX-2026
+</h1>
+Introducing: Pekosoft Player. An audio player, recorder and editor. Features include BPM support, waveform, playlist, analysis, selection, fade curves and undo/redo functionality. Initial release.

@@ -1,0 +1,180 @@
+/* Pekosoft Reference */
+/* pekosoft.net/css/reference.css */
+
+#controls-container .standard {
+  padding: 0;
+}
+
+#controls-container .module-footer {
+  justify-content: flex-start;
+}
+
+#controls-container .reference-column-buttons {
+  border-top: 1px solid var(--grey1);
+}
+
+#tool-container .standard {
+  padding: 0;
+  overflow: auto;
+  display: block;
+  justify-content: flex-start;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#tool-container .reference-tool-footer {
+  border-top: 1px solid var(--grey1);
+}
+
+#tool-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#cards-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px;
+  padding: 8px;
+}
+
+#cards-view.hidden {
+  display: none;
+}
+
+.reference-card {
+  position: relative;
+  padding: 8px;
+  padding-top: 36px;
+  padding-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: var(--black);
+}
+
+.reference-card:hover,
+.reference-card:focus-within {
+  background-color: var(--grey1);
+}
+
+.reference-card-title {
+  margin: 0 0 8px;
+  font-size: var(--size2);
+  font-weight: normal;
+  text-transform: uppercase;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.reference-card-line {
+  margin: 0 0 4px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.reference-card-bpm-pair {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 24px;
+  padding: 0 12px;
+}
+
+.reference-card-bpm-pair-left,
+.reference-card-bpm-pair-right {
+  white-space: nowrap;
+  min-width: 110px;
+  text-align: center;
+}
+
+.reference-card-bpm-corner {
+  position: absolute;
+  bottom: 6px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.reference-card-bpm-corner-left {
+  left: 8px;
+}
+
+.reference-card-bpm-corner-right {
+  right: 8px;
+}
+
+.reference-card-scales-count {
+  position: absolute;
+  left: 8px;
+  bottom: 6px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.reference-card-notes-corner {
+  position: absolute;
+  bottom: 6px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.reference-card-notes-corner-left {
+  left: 8px;
+}
+
+.reference-card-notes-corner-right {
+  right: 8px;
+}
+
+.reference-card-chords-notes {
+  position: absolute;
+  left: 8px;
+  bottom: 6px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.reference-play-button {
+  min-width: 24px;
+}
+
+.reference-card-play-toggle {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+}
+
+.reference-card-copy-button {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+}
+
+.reference-external-icon {
+  width: var(--size1);
+  height: var(--size1);
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+.reference-card-label {
+  color: var(--grey3);
+}
+
+#tool-container th,
+#tool-container td {
+  white-space: nowrap;
+}
+
+#tool-container td.right,
+#tool-container th.right {
+  text-align: right;
+}
+
+#tool-container td.left,
+#tool-container th.left {
+  text-align: left;
+}

@@ -1,0 +1,21 @@
+RewriteEngine On
+
+# Redirect www to non-www
+RewriteCond %{HTTP_HOST} ^www\.pekosoft\.net$ [NC]
+RewriteRule ^ https://pekosoft.net%{REQUEST_URI} [R=301,L]
+
+# Redirect http to https only if not already using https
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Canonicalize implementation URLs
+RewriteCond %{THE_REQUEST} \s/+tools/([A-Za-z0-9_]+)\.php[\s?] [NC]
+RewriteRule ^tools/([A-Za-z0-9_]+)\.php$ /$1 [R=301,L]
+
+# Tool routes
+RewriteCond %{DOCUMENT_ROOT}/tools/$1.php -f
+RewriteRule ^([A-Za-z0-9_]+)/?$ /tools/$1.php [L]
+
+ErrorDocument 404 /404.php
+ErrorDocument 403 /403.php
+ErrorDocument 500 /500.php

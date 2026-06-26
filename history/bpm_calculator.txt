@@ -1,0 +1,214 @@
+<h1>3.0
+XX-XX-2026
+</h1>
+
+Brand new modern version!
+Mobile friendly and responsive design.
+Moved from peko.net to pekosoft.net. Welcome to the new website!
+Added to table: Note names in American and English.
+Added to table: 1/128 notes.
+Added to table: Rest icons.
+Added to table: Close row buttons.
+Replaced tempo buttons with slider.
+
+
+<h1>2.3
+14-04-2015
+</h1>
+
+Removed SPB (seconds per bar) for now, as it caused various bugs, and I wasn't able to figure out why.
+Various code improvements, including removing some rounding that caused a bug.
+All buttons now have Enter and Space keys working.
+
+
+<h1>2.2
+22-03-2015
+</h1>
+
+Limited Timeline module and Arrays module to 6000 BPM. This means we can work with extremely large numbers without BPM Calc stalling.
+Added 64th notes.
+Couple of code refinements, such as: 
+Removed redundant action attribute from form tag.
+Loading JS file at bottom of HTML file instead of in header.
+
+
+<h1>2.1
+09-02-2015
+</h1>
+
+Fixed a bad bug. 261.626 HZ was C-1 instead of C 0. Because A was wrongly used as chamber-note instead of C, only C, C# and B showed the right octave. Changed Buttons grid to have 12 instead of 14 columns. This places 120, instead of 130, right below 60, and so forth. There are now four rows instead of three, and the highest value / button is 335 instead of 315.
+
+
+<h1>2.0
+08-02-2015
+</h1>
+
+Audio apps are more fun with sound. Sound is added using the Web Audio API. Hence the major release 2.0. There is now a toggle button for current frequency / note. Default is of course off. Does not work in MIE. Warning: There's a bad click noise when toggling.
+
+
+<h1>1.20
+07-02-2015
+</h1>
+
+Added double (2/1), quadruple (4/1) and octuple (8/1) notes.
+Added notes icons.
+
+
+<h1>1.19
+09-01-2015
+</h1>
+
+New module: Arrays. MS values for BPM and delay-time.
+Made result-only fields readonly, meaning typing is now disabled.
+Moved N, D and T buttons to Table module.
+Made PHP file available directly in browser.
+
+
+<h1>1.18
+16-12-2014
+</h1>
+
+Improvements to Table: 
+Added dotted 32nd notes.
+Radio button column is now slimmer.
+Added tool-tip to Notes names.
+Made JavaScript file available directly in browser.
+
+
+<h1>1.17
+10-12-2014
+</h1>
+
+Timeline can now show also delay times. They are displayed in blue, and are selected from Table. 1/4 is default value.
+
+
+<h1>1.16
+04-10-2014
+</h1>
+
+Introducing file size fields: Rate (input), Resolution (input), Channels (input) and Size (result).
+Added Background button for toggling yellow background in value fields.
+
+
+<h1>1.15
+28-09-2014
+</h1>
+
+Added fancy About box.
+Added Bars (input), Beats (result), Seconds (result) and Time (result).
+Added more hover tool-tips.
+Simplified short and long description.
+
+
+<h1>1.14
+21-09-2014
+</h1>
+
+Added notes and cents. Results only. Grey fields are back.
+Improved button, hover and toggle aspects of interface.
+
+
+<h1>1.13
+13-09-2014
+</h1>
+
+Improved Timeline layout.
+Changed all text fields to number fields. Meaning all fields now has up and down buttons, up and down keys on keyboard work too, and hold is now supported.
+Added restriction against negative numbers.
+Wavelength column now works in reverse. No more grey fields.
+
+
+<h1>1.12
+12-09-2014
+</h1>
+
+Timeline now shows whole minute and has horizontal scroll-bar.
+Corresponding BPM column now works in reverse.
+Removed max 8 characters input limit for BPM, SPB and BPS fields.
+
+
+<h1>1.11
+07-09-2014
+</h1>
+
+Added Timeline.
+Added headers to Buttons, Timeline and Table.
+All three modules can now be toggled.
+Added yellow background corresponding to their values to all fields.
+Reset button now clears all fields backgrounds.
+
+
+<h1>1.10
+04-09-2014
+</h1>
+
+BPM, SPB and BPS fields now has (yellow) background corresponding to their values.
+Added toggle buttons button.
+Expanded BPM buttons with another row. 250 - 315.
+
+
+<h1>1.9
+03-09-2014
+</h1>
+
+Cleaned up, remarked and released code as open source.
+Added whole notes.
+
+
+<h1>1.8
+02-09-2014
+</h1>
+
+Now works also in reverse for both MS and HZ.
+Now has a much slimmer design.
+Changed none input fields background from yellow to grey.
+Released this change-log.
+
+
+<h1>1.7
+24-01-2014
+</h1>
+
+Help file for bpm calculator out now.
+
+
+<h1>1.6
+24-01-2014
+</h1>
+
+Added BPS.
+
+
+<h1>1.5
+15-01-2014
+</h1>
+
+Added triplets and dotted rows toggle buttons. 
+
+
+<h1>1.4
+14-01-2014
+</h1>
+
+Added tempo buttons.
+
+
+<h1>1.3
+14-01-2014
+</h1>
+
+Added -1, +1, /2 and *2 functions.
+
+
+<h1>1.2
+14-01-2014
+</h1>
+
+Added wavelength.
+
+
+<h1>1.0
+14-01-2014
+</h1>
+
+Introducing: Pekosoft BPM Calculator. A BPM to MS and HZ calculation tool. Initial release.

@@ -1,0 +1,144 @@
+/* Pekosoft Metronome */
+/* pekosoft.net/css/metronome.css */
+
+.metronome-spacer {
+  max-width: var(--maxwidth);
+  height: 442px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 16px;
+  margin: 8px auto 0;
+}
+
+#tool-container.blink-bg,
+#tool-container.blink-bg > .metronome-spacer {
+  background-color: var(--color1);
+}
+
+.metronome-wrapper {
+  width: calc(330px * var(--metronome-scale, 1));
+  height: calc(402px * var(--metronome-scale, 1));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border: none;
+}
+
+#tool-container.module-maximized .metronome-spacer {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+}
+
+#tool-container.module-maximized .metronome-wrapper {
+  width: calc(330px * var(--metronome-scale, 1));
+  height: calc(402px * var(--metronome-scale, 1));
+}
+
+.pendulum {
+  width: calc(4px * var(--metronome-scale, 1));
+  height: calc(324px * var(--metronome-scale, 1));
+  background-color: var(--white);
+  position: absolute;
+  transform-origin: bottom;
+  transform: rotate(-30deg);
+  transition: transform 0.3s ease-in-out;
+  z-index: 3;
+  bottom: calc(60px * var(--metronome-scale, 1));
+}
+
+.metronome-body {
+  width: calc(300px * var(--metronome-scale, 1));
+  height: calc(320px * var(--metronome-scale, 1));
+  background-color: var(--grey1);
+  position: absolute;
+  bottom: calc(80px * var(--metronome-scale, 1));
+  left: 50%;
+  transform: translateX(-50%);
+  clip-path: polygon(0% 100%, 49% 100%, 49% 5%, 51% 5%, 51% 100%, 100% 100%, 80% 0%, 20% 0%);
+}
+
+.metronome-base {
+  width: calc(330px * var(--metronome-scale, 1));
+  height: calc(75px * var(--metronome-scale, 1));
+  background-color: var(--grey1);
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  clip-path: polygon(0% 100%, 100% 100%, 96% 0%, 4% 0%);
+  z-index: 3;
+}
+
+.metronome-base-text {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--black);
+  font-size: calc(18px * var(--metronome-scale, 1));
+  font-weight: 900;
+  font-family: Arial, sans-serif;
+  letter-spacing: calc(2px * var(--metronome-scale, 1));
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 4;
+}
+
+#base-bpm-text {
+  bottom: calc(28px * var(--metronome-scale, 1));
+}
+
+#base-tempi-text {
+  bottom: calc(28px * var(--metronome-scale, 1));
+}
+
+.metronome-signature-circles {
+  position: absolute;
+  left: 50%;
+  bottom: calc(29px * var(--metronome-scale, 1));
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: calc(12px * var(--metronome-scale, 1));
+  pointer-events: auto;
+  z-index: 4;
+}
+
+.signature-beat {
+  all: unset;
+  display: block;
+  width: calc(16px * var(--metronome-scale, 1));
+  min-width: calc(16px * var(--metronome-scale, 1));
+  height: calc(16px * var(--metronome-scale, 1));
+  min-height: calc(16px * var(--metronome-scale, 1));
+  margin: 0;
+  padding: 0;
+  background-color: var(--black);
+  border-radius: 50%;
+  appearance: none;
+  cursor: pointer;
+}
+
+.signature-beat-active {
+  background-color: var(--white);
+  box-shadow: none;
+}
+
+.signature-beat-muted {
+  background-color: var(--grey2);
+}
+
+#timeline-container.module-maximized #metronome-timeline-svg {
+  height: 100%;
+}
+
+/* END OF FILE */
