@@ -3,7 +3,9 @@ $release = isset($release) ? $release : '';
 $currentFile = basename($_SERVER['SCRIPT_NAME']);
 $requestPath = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? '', '/');
 $toolPages = ["tap_pad.php", "bpm_calculator.php", "metronome.php", "turntable.php", "bpm_circle.php", "bpm_curve.php", "circle_of_fifths.php", "player.php", "piano.php", "audio_calculator.php", "blockchain.php", "icons.php", "tuner.php", "visualizer.php", "reference.php", "notepad.php"];
-$toolSlugs = array_map(fn($toolPage) => pathinfo($toolPage, PATHINFO_FILENAME), $toolPages);
+$toolSlugs = array_map(function ($toolPage) {
+  return pathinfo($toolPage, PATHINFO_FILENAME);
+}, $toolPages);
 $hasModules = in_array($currentFile, $toolPages, true) || in_array($requestPath, $toolSlugs, true);
 $releaseFile = $release . ".php";
 $releaseHref = in_array($releaseFile, $toolPages, true) ? "/" . $release : "/" . $releaseFile;

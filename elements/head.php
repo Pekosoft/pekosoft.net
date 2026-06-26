@@ -2,7 +2,9 @@
 $currentScript = basename($_SERVER['SCRIPT_NAME']);
 $requestPath = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? '', '/');
 $toolPages = ["tap_pad.php", "bpm_calculator.php", "metronome.php", "turntable.php", "bpm_circle.php", "bpm_curve.php", "circle_of_fifths.php", "player.php", "piano.php", "audio_calculator.php", "blockchain.php", "icons.php", "tuner.php", "visualizer.php", "reference.php", "notepad.php"];
-$toolSlugs = array_map(fn($toolPage) => pathinfo($toolPage, PATHINFO_FILENAME), $toolPages);
+$toolSlugs = array_map(function ($toolPage) {
+	return pathinfo($toolPage, PATHINFO_FILENAME);
+}, $toolPages);
 if (in_array($currentScript, $toolPages, true) || in_array($requestPath, $toolSlugs, true)) {
 	echo "<script>document.documentElement.classList.add('modules-page', 'modules-loading');</script>";
 }
