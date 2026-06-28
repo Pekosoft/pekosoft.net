@@ -224,7 +224,9 @@ Icons Tool ruler numbers must stay readable at small grid sizes.
 
 Rule:
 
-- From `32px` grid size and down, show every second ruler number starting with the current grid size.
+- Grid sizes from `8px` through `64px` use `64px` ruler-number intervals.
+- Grid sizes above `64px` use the current grid size as the ruler-number interval.
+- Ruler numbers are positioned by their own interval, not by the current grid-cell size.
 
 ## Version policy
 

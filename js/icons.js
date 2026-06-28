@@ -1173,37 +1173,34 @@ function buildPreviewRulers() {
   previewRulerRight.innerHTML = "";
   previewRulerBottom.innerHTML = "";
 
-  const values = getPreviewRulerValues();
-  const labelStep = previewGridSize <= 32 ? 64 : previewGridSize;
-  const labelOffset = previewGridSize <= 32 ? previewGridSize : 0;
+  const labelStep = Math.max(64, previewGridSize);
+  const values = Array.from({ length: Math.round(512 / labelStep) }, (_, index) => (index + 1) * labelStep);
 
   values.forEach((value) => {
-    const showLabel = ((value - labelOffset) % labelStep) === 0;
-    const labelText = showLabel ? value : "";
-    const centeredValue = Math.max(previewGridSize / 2, Math.min(512 - (previewGridSize / 2), value - (previewGridSize / 2)));
+    const centeredValue = value - (labelStep / 2);
     const rulerPosition = `${(centeredValue / 512) * 100}%`;
 
     const topLabel = document.createElement("span");
     topLabel.className = "preview-ruler-label";
-    topLabel.textContent = labelText;
+    topLabel.textContent = value;
     topLabel.style.setProperty("--ruler-pos", rulerPosition);
     previewRulerTop.appendChild(topLabel);
 
     const leftLabel = document.createElement("span");
     leftLabel.className = "preview-ruler-label";
-    leftLabel.textContent = labelText;
+    leftLabel.textContent = value;
     leftLabel.style.setProperty("--ruler-pos", rulerPosition);
     previewRulerLeft.appendChild(leftLabel);
 
     const rightLabel = document.createElement("span");
     rightLabel.className = "preview-ruler-label";
-    rightLabel.textContent = labelText;
+    rightLabel.textContent = value;
     rightLabel.style.setProperty("--ruler-pos", rulerPosition);
     previewRulerRight.appendChild(rightLabel);
 
     const bottomLabel = document.createElement("span");
     bottomLabel.className = "preview-ruler-label";
-    bottomLabel.textContent = labelText;
+    bottomLabel.textContent = value;
     bottomLabel.style.setProperty("--ruler-pos", rulerPosition);
     previewRulerBottom.appendChild(bottomLabel);
   });
