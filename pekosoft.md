@@ -218,6 +218,14 @@ Rules:
 - Use a different precision only when the context inherently demands it.
 - Example exception: large average integer counters in Tap Pad use zero decimals.
 
+## Icons ruler density rule
+
+Icons Tool ruler numbers must stay readable at small grid sizes.
+
+Rule:
+
+- From `32px` grid size and down, show only every second ruler number so labels do not overlap.
+
 ## Version policy
 
 Pekosoft does not include fallback behavior for previous versions.

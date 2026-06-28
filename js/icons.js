@@ -1174,7 +1174,7 @@ function buildPreviewRulers() {
   previewRulerBottom.innerHTML = "";
 
   const values = getPreviewRulerValues();
-  const labelStep = previewGridSize < 32 ? 32 : previewGridSize;
+  const labelStep = previewGridSize <= 32 ? 64 : previewGridSize;
 
   values.forEach((value) => {
     const showLabel = (value % labelStep) === 0;
