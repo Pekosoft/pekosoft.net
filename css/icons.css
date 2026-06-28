@@ -362,12 +362,40 @@
   --preview-size: round(
     down,
     min(
-      calc(82vh - (var(--preview-ruler-height) * 2)),
-      calc(100vw - 96px - (var(--preview-ruler-width) * 2)),
+      calc(100vh - 184px),
+      calc(100vw - 48px - (var(--preview-ruler-width) * 2)),
       1200px
     ),
     1px
   );
+}
+
+@media (max-width: 480px) {
+  #tool-container.module-maximized .preview-wrapper {
+    padding: 16px;
+  }
+
+  #tool-container.module-maximized .preview-stage {
+    --preview-ruler-width: 24px;
+    --preview-ruler-height: 24px;
+    --preview-size: round(
+      down,
+      min(
+        calc(100vh - 160px),
+        calc(100vw - 32px - (var(--preview-ruler-width) * 2)),
+        1200px
+      ),
+      1px
+    );
+  }
+
+  #tool-container.module-maximized .preview-ruler-left .preview-ruler-label {
+    padding-right: 6px;
+  }
+
+  #tool-container.module-maximized .preview-ruler-right .preview-ruler-label {
+    padding-left: 6px;
+  }
 }
 
 #tool-container.module-maximized .preview-icon,
