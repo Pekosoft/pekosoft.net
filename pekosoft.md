@@ -224,7 +224,7 @@ Icons Tool ruler numbers must stay readable at small grid sizes.
 
 Rule:
 
-- From `32px` grid size and down, show only every second ruler number so labels do not overlap.
+- From `32px` grid size and down, show every second ruler number starting with the current grid size.
 
 ## Version policy
 

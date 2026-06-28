@@ -1175,9 +1175,10 @@ function buildPreviewRulers() {
 
   const values = getPreviewRulerValues();
   const labelStep = previewGridSize <= 32 ? 64 : previewGridSize;
+  const labelOffset = previewGridSize <= 32 ? previewGridSize : 0;
 
   values.forEach((value) => {
-    const showLabel = (value % labelStep) === 0;
+    const showLabel = ((value - labelOffset) % labelStep) === 0;
     const labelText = showLabel ? value : "";
     const centeredValue = Math.max(previewGridSize / 2, Math.min(512 - (previewGridSize / 2), value - (previewGridSize / 2)));
     const rulerPosition = `${(centeredValue / 512) * 100}%`;
