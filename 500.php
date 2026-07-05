@@ -11,7 +11,7 @@ http_response_code(500);
 <body>
 
   <div>
-    <div class="link-wrapper"><a href="/"><img src="/img/logo.svg" alt="Logo" class="standard-image"></a></div>
+    <div class="link-wrapper"><a href="/"><svg class="standard-image assets" viewBox="0 0 512 101.87" role="img" aria-label="Pekosoft"><use href="/assets.svg#logo" /></svg></a></div>
     <h1>500 Internal Server Error</h1>
     <p>Something went wrong on the server.</p>
     <a href="/">Return to Index</a>

@@ -10,4 +10,10 @@
   user-select: text;
 }
 
+.bitcoin-qr {
+  height: auto;
+  background-color: var(--white);
+  fill: var(--black);
+}
+
 /* END OF FILE */

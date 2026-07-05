@@ -28,7 +28,9 @@
       <div class="border">
         <div class="link-wrapper">
           <a href="bitcoin:<?php echo $bitcoinAddress; ?>">
-            <img src="img/bitcoin_qr.svg?v=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/img/bitcoin_qr.svg'); ?>" alt="Bitcoin QR" title="Bitcoin QR" class="standard-image">
+            <svg class="standard-image assets bitcoin-qr" viewBox="0 0 812 812" role="img" aria-label="Bitcoin QR">
+              <use href="/assets.svg#bitcoin_qr" />
+            </svg>
           </a>
         </div>
         <div>BITCOIN ONLY ADDRESS</div>
