@@ -12,7 +12,7 @@ class BPMVisualizer {
     this.stopButton = document.getElementById('stop-button');
     this.resetButton = document.getElementById('reset-button');
     this.copyButton = document.getElementById('copy-button');
-    this.lineButton = document.getElementById('line-button');
+    this.togglePlayheadButton = document.getElementById('toggle-playhead-button');
     this.holdButton = document.getElementById('hold-button');
     this.loopButton = document.getElementById('loop-button');
     this.soundMasterButton = document.getElementById('sound-master-button');
@@ -138,14 +138,14 @@ class BPMVisualizer {
     this.initializeLinearSegments();
     this.initSegmentHoverInfo();
     this.initSoundButtons();
-    this.initLineButton();
+    this.initPlayheadButton();
     this.initHoldButton();
     this.initLoopButton();
     this.initSoundMasterButton();
     this.init();
 
     this.isLineVisible = true;
-    this.lineButton.classList.add('button-on');
+    this.togglePlayheadButton.classList.add('button-on');
     this.beatLine.classList.add('visible');
     this.linearPlayhead.classList.add('visible');
     this.loopButton.classList.add('button-on');
@@ -421,10 +421,10 @@ class BPMVisualizer {
     });
   }
 
-  initLineButton() {
-    this.lineButton.addEventListener('click', () => {
+  initPlayheadButton() {
+    this.togglePlayheadButton.addEventListener('click', () => {
       this.toggleLine();
-      this.lineButton.classList.toggle('button-on', this.isLineVisible);
+      this.togglePlayheadButton.classList.toggle('button-on', this.isLineVisible);
     });
   }
 
@@ -591,7 +591,7 @@ class BPMVisualizer {
 
     // Reset toggles
     this.isLineVisible = true;
-    this.lineButton.classList.add('button-on');
+    this.togglePlayheadButton.classList.add('button-on');
     this.beatLine.classList.add('visible');
     this.linearPlayhead.classList.add('visible');
     this.linearPlayhead.setAttribute('x1', '0');
@@ -855,7 +855,7 @@ class BPMVisualizer {
 
   toggleLine() {
     this.isLineVisible = !this.isLineVisible;
-    this.setToggleButtonState(this.lineButton, this.isLineVisible);
+    this.setToggleButtonState(this.togglePlayheadButton, this.isLineVisible);
     this.beatLine.classList.toggle('visible', this.isLineVisible);
     this.linearPlayhead.classList.toggle('visible', this.isLineVisible);
     
@@ -896,12 +896,12 @@ class BPMVisualizer {
       this.isLineVisible = false;
       this.beatLine.classList.remove('visible');
       this.linearPlayhead.classList.remove('visible');
-      this.setToggleButtonState(this.lineButton, false);
+      this.setToggleButtonState(this.togglePlayheadButton, false);
     } else if (lineVisible === 'true') {
       this.isLineVisible = true;
       this.beatLine.classList.add('visible');
       this.linearPlayhead.classList.add('visible');
-      this.setToggleButtonState(this.lineButton, true);
+      this.setToggleButtonState(this.togglePlayheadButton, true);
     }
 
     const holdEnabled = localStorage.getItem('bpm_circle.hold_enabled');

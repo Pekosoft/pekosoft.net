@@ -137,11 +137,11 @@
 </div>
 
 <div class="feature-row border"><svg class="standard-image-help">
-    <use href="/icons.svg#timeline"></use>
+    <use href="/icons.svg#playhead"></use>
   </svg>
   <div class="justify">
-    <h1>LINE <span class="object">button</span></h1>
-    Toggles the rotating beat line in the circle and the playhead line in timeline. <span class="default">Default: on.</span>
+    <h1>PLAYHEAD <span class="object">button</span></h1>
+    Toggles the rotating beat line in the circle and the playhead line in the timeline. <span class="default">Default: on.</span>
   </div>
 </div>
 

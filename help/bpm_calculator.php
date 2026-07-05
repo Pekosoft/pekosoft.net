@@ -402,7 +402,7 @@
 </div>
 
 <div class="feature-row border"><svg class="standard-image-help">
-    <use href="/icons.svg#timeline"></use>
+    <use href="/icons.svg#playhead"></use>
   </svg>
   <div class="justify">
     <h1>PLAYHEAD <span class="object">button</span></h1>

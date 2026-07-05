@@ -21,14 +21,30 @@
       <svg viewBox="-150 -150 300 300" preserveAspectRatio="xMidYMid meet">
         <line class="beat-line" x1="0" y1="0" x2="0" y2="-147"></line>
 
-        <g class="note-128"><g class="segments"></g></g>
-        <g class="note-64"><g class="segments"></g></g>
-        <g class="note-32"><g class="segments"></g></g>
-        <g class="note-16"><g class="segments"></g></g>
-        <g class="note-8"><g class="segments"></g></g>
-        <g class="note-4"><g class="segments"></g></g>
-        <g class="note-2"><g class="segments"></g></g>
-        <g class="note-1"><g class="segments"></g></g>
+        <g class="note-128">
+          <g class="segments"></g>
+        </g>
+        <g class="note-64">
+          <g class="segments"></g>
+        </g>
+        <g class="note-32">
+          <g class="segments"></g>
+        </g>
+        <g class="note-16">
+          <g class="segments"></g>
+        </g>
+        <g class="note-8">
+          <g class="segments"></g>
+        </g>
+        <g class="note-4">
+          <g class="segments"></g>
+        </g>
+        <g class="note-2">
+          <g class="segments"></g>
+        </g>
+        <g class="note-1">
+          <g class="segments"></g>
+        </g>
       </svg>
     </div>
     <div class="module-footer wrapper colored" id="note-value-footer"></div>
@@ -38,26 +54,48 @@
     <div class="module-body controls border">
       <div class="controls-buttons wrapper">
         <button id="toggle-play-button" title="Start playback">
-          <svg class="icons" role="img"><use href="/icons.svg#play" /></svg>
+          <svg class="icons" role="img">
+            <use href="/icons.svg#play" />
+          </svg>
           <span class="button-text">PLAY</span>
         </button>
         <button id="stop-button" title="Stop playback and reset position">
-          <svg class="icons" role="img"><use href="/icons.svg#stop" /></svg>
+          <svg class="icons" role="img">
+            <use href="/icons.svg#stop" />
+          </svg>
           <span class="button-text">STOP</span>
         </button>
 
-        <button id="line-button" title="Toggle beat line"><svg class="icons" role="img"><use href="/icons.svg#timeline" /></svg><span class="button-text">LINE</span></button>
-        <button id="hold-button" title="Hold active segment"><svg class="icons" role="img"><use href="/icons.svg#pause" /></svg><span class="button-text">HOLD</span></button>
-        <button id="loop-button" title="Loop playback"><svg class="icons" role="img"><use href="/icons.svg#loop" /></svg><span class="button-text">LOOP</span></button>
-        <button id="sound-master-button" title="Toggle all sounds"><svg class="icons" role="img"><use href="/icons.svg#sound" /></svg><span class="button-text">SOUND</span></button>
+        <button id="toggle-playhead-button" title="Toggle playhead"><svg class="icons" role="img">
+            <use href="/icons.svg#playhead" />
+          </svg><span class="button-text">PLAYHEAD</span></button>
+        <button id="hold-button" title="Hold active segment"><svg class="icons" role="img">
+            <use href="/icons.svg#pause" />
+          </svg><span class="button-text">HOLD</span></button>
+        <button id="loop-button" title="Loop playback"><svg class="icons" role="img">
+            <use href="/icons.svg#loop" />
+          </svg><span class="button-text">LOOP</span></button>
+        <button id="sound-master-button" title="Toggle all sounds"><svg class="icons" role="img">
+            <use href="/icons.svg#sound" />
+          </svg><span class="button-text">SOUND</span></button>
 
-        <button id="all-button" title="Select all notes"><svg class="icons" role="img"><use href="/icons.svg#select_all" /></svg><span class="button-text">ALL</span></button>
-        <button id="none-button" title="Deselect all notes"><svg class="icons" role="img"><use href="/icons.svg#select_none" /></svg><span class="button-text">NONE</span></button>
-        <button id="prev-button" title="Previous note division"><svg class="icons" role="img"><use href="/icons.svg#decrease" /></svg><span class="button-text">PREV</span></button>
-        <button id="next-button" title="Next note division"><svg class="icons" role="img"><use href="/icons.svg#increase" /></svg><span class="button-text">NEXT</span></button>
+        <button id="all-button" title="Select all notes"><svg class="icons" role="img">
+            <use href="/icons.svg#select_all" />
+          </svg><span class="button-text">ALL</span></button>
+        <button id="none-button" title="Deselect all notes"><svg class="icons" role="img">
+            <use href="/icons.svg#select_none" />
+          </svg><span class="button-text">NONE</span></button>
+        <button id="prev-button" title="Previous note division"><svg class="icons" role="img">
+            <use href="/icons.svg#decrease" />
+          </svg><span class="button-text">PREV</span></button>
+        <button id="next-button" title="Next note division"><svg class="icons" role="img">
+            <use href="/icons.svg#increase" />
+          </svg><span class="button-text">NEXT</span></button>
 
         <button id="reset-button" title="Reset to default">
-          <svg class="icons" role="img"><use href="/icons.svg#reset" /></svg>
+          <svg class="icons" role="img">
+            <use href="/icons.svg#reset" />
+          </svg>
           <span class="button-text">RESET</span>
         </button>
       </div>
@@ -80,11 +118,15 @@
         <div class="controls-slider-block">
           <div class="range-input-wrapper">
             <button id="decrease-button" class="tempo-button square icon-only colored" title="Decrease BPM" aria-label="Decrease BPM">
-              <svg class="icons" role="img"><use href="/icons.svg#chevron_left" /></svg>
+              <svg class="icons" role="img">
+                <use href="/icons.svg#chevron_left" />
+              </svg>
             </button>
             <input type="range" id="tempo-slider" min="1" max="300" value="30">
             <button id="increase-button" class="tempo-button square icon-only colored" title="Increase BPM" aria-label="Increase BPM">
-              <svg class="icons" role="img"><use href="/icons.svg#chevron_right" /></svg>
+              <svg class="icons" role="img">
+                <use href="/icons.svg#chevron_right" />
+              </svg>
             </button>
           </div>
         </div>
@@ -92,11 +134,15 @@
         <div class="controls-slider-block">
           <div class="range-input-wrapper">
             <button id="volume-decrease-button" class="square icon-only colored" title="Decrease volume" aria-label="Decrease volume">
-              <svg class="icons" role="img"><use href="/icons.svg#chevron_left" /></svg>
+              <svg class="icons" role="img">
+                <use href="/icons.svg#chevron_left" />
+              </svg>
             </button>
             <input type="range" id="volume-slider" min="0" max="100" value="100">
             <button id="volume-increase-button" class="square icon-only colored" title="Increase volume" aria-label="Increase volume">
-              <svg class="icons" role="img"><use href="/icons.svg#chevron_right" /></svg>
+              <svg class="icons" role="img">
+                <use href="/icons.svg#chevron_right" />
+              </svg>
             </button>
           </div>
         </div>
