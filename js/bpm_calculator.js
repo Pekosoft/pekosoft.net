@@ -60,6 +60,7 @@ const columnButtons = {
   usa: document.getElementById('toggle-usa-button'),
   uk: document.getElementById('toggle-uk-button'),
   bpm: document.getElementById('toggle-bpm-button'),
+  diff: document.getElementById('toggle-diff-button'),
   percent: document.getElementById('toggle-percent-button'),
   rest: document.getElementById('toggle-rest-button'),
   close: document.getElementById('toggle-close-button'),
@@ -77,6 +78,7 @@ const columnHeaders = {
   usa: document.getElementById('usa-header'),
   uk: document.getElementById('uk-header'),
   bpm: document.getElementById('bpm-header'),
+  diff: document.getElementById('diff-header'),
   percent: document.getElementById('percent-header'),
   rest: document.getElementById('rest-header'),
   close: document.getElementById('close-header'),
@@ -127,6 +129,7 @@ function createDefaultColumns() {
     usa: true,
     uk: true,
     bpm: true,
+    diff: true,
     percent: true,
     rest: true,
     close: true,
@@ -141,7 +144,9 @@ function createColumnPresetColumns(preset) {
     return {
       ...full,
       select: false,
-      inches: false
+      inches: false,
+      diff: false,
+      percent: false
     };
   }
 
@@ -154,6 +159,7 @@ function createColumnPresetColumns(preset) {
       cm: false,
       inches: false,
       bpm: false,
+      diff: false,
       percent: false
     };
   }
@@ -380,6 +386,7 @@ function getVisibleValuesText() {
     }
 
     if (state.columns.bpm) values.push(`${(60000 / ms).toFixed(3)} BPM`);
+    if (state.columns.diff) values.push(`${((60000 / ms) - state.bpm).toFixed(3)} DIFF`);
     if (state.columns.percent) values.push(`${(Math.pow(2, 5 - i) * multiplier * 100).toFixed(3)} %`);
 
     return `${valueLabel}: ${values.join(' | ')}`;
@@ -504,6 +511,7 @@ function renderRow(note, i, multiplier, type) {
       ${state.columns.usa ? `<td class="left usa-field" title="${noteData.usa[i]}"><a href="https://en.wikipedia.org/wiki/${noteData.wiki[i]}" target="_blank" rel="noopener noreferrer">${noteData.usa[i]}</a></td>` : ''}
       ${state.columns.uk ? `<td class="left uk-field" title="${noteData.uk[i]}">${noteData.uk[i]}</td>` : ''}
       ${state.columns.bpm ? `<td class="right bpm-field"><input type="number" class="row-bpm-input" step="0.001" data-i="${i}" data-multiplier="${multiplier}" value="${(60000 / ms).toFixed(3)}"></td>` : ''}
+      ${state.columns.diff ? `<td class="right diff-field"><input type="number" class="diff-input" step="0.001" readonly data-i="${i}" data-multiplier="${multiplier}" value="${((60000 / ms) - state.bpm).toFixed(3)}"></td>` : ''}
       ${state.columns.percent ? `<td class="right percent-field"><input type="number" class="percent-input" step="0.001" readonly data-i="${i}" data-multiplier="${multiplier}" value="${(Math.pow(2, 5 - i) * multiplier * 100).toFixed(3)}"></td>` : ''}
       ${state.columns.rest ? `<td class="rest-field"><svg class="icons"><use href="/icons.svg#${noteData.restSymbols[i]}" /></svg></td>` : ''}
       ${state.columns.play ? `<td class="play-field"><button class="square transparent play-toggle-button" title="Play note" aria-label="Play" data-row-id="${rowId}" data-ms="${ms.toFixed(3)}">▶</button></td>` : ''}
@@ -576,6 +584,10 @@ function renderRow(note, i, multiplier, type) {
       if (inp) inp.value = (wavelength/2.54).toFixed(3);
     }
     if (state.columns.bpm) row.querySelector('.row-bpm-input').value = (60000 / ms).toFixed(3);
+    if (state.columns.diff) {
+      const diffInput = row.querySelector('.diff-input');
+      if (diffInput) diffInput.value = ((60000 / ms) - state.bpm).toFixed(3);
+    }
     if (state.columns.percent) {
       const percentInput = row.querySelector('.percent-input');
       if (percentInput) percentInput.value = (Math.pow(2, 5 - i) * multiplier * 100).toFixed(3);

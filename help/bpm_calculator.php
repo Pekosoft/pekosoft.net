@@ -14,7 +14,7 @@
   </svg>
   <div class="justify">
     <h1>Tool <span class="object">module</span></h1>
-    This table shows values and information for the current BPM. This is also where you choose what note value to visualize. Columns: Select, Note, Value, MS, HZ, CM, Inches, USA, UK, BPM, %, Rest, Play and Close. Rows: Triplet, base and dotted notes in the values of 8/1 to 1/128. All rows and columns can be toggled.
+    This table shows values and information for the current BPM. This is also where you choose what note value to visualize. Columns: Select, Note, Value, MS, HZ, CM, Inches, USA, UK, BPM, Diff, Percent, Rest, Play and Close. Rows: Triplet, base and dotted notes in the values of 8/1 to 1/128. All rows and columns can be toggled.
   </div>
 </div>
 
@@ -43,16 +43,6 @@
   <div class="justify">
     <h1>COPY <span class="object">button</span></h1>
     Copies the visible table values to clipboard.
-  </div>
-</div>
-
-<div class="feature-row module">
-  <svg class="standard-image-help">
-    <use href="/icons.svg#controls"></use>
-  </svg>
-  <div class="justify">
-    <h1>Controls <span class="object">module</span></h1>
-    Buttons, fields, menus, knobs and sliders are collected in the Controls module. Status bar explains the interface and provides feedback.
   </div>
 </div>
 
@@ -189,6 +179,16 @@
   </div>
 </div>
 
+<div class="feature-row border">
+  <svg class="standard-image-help">
+    <use href="/icons.svg#menu"></use>
+  </svg>
+  <div class="justify">
+    <h1>Tool <span class="object">menu</span></h1>
+    Rows and Columns toggles are in Tool menu.
+  </div>
+</div>
+
 <div class="feature-row border"><svg class="standard-image-help">
     <use href="/icons.svg#1_4"></use>
   </svg>
@@ -307,11 +307,20 @@
 </div>
 
 <div class="feature-row border"><svg class="standard-image-help">
+    <use href="/icons.svg#plus_minus"></use>
+  </svg>
+  <div class="justify">
+    <h1>Diff <span class="object">button</span></h1>
+    Toggles the BPM difference column, relative to the Crotchet. <span class="default">Default: off.</span>
+  </div>
+</div>
+
+<div class="feature-row border"><svg class="standard-image-help">
     <use href="/icons.svg#value"></use>
   </svg>
   <div class="justify">
-    <h1>% <span class="object">button</span></h1>
-    Toggles the percentage column. <span class="default">Default: on.</span>
+    <h1>Percent <span class="object">button</span></h1>
+    Toggles the percentage column, relative to the Crotchet. <span class="default">Default: off.</span>
   </div>
 </div>
 
@@ -339,6 +348,16 @@
   <div class="justify">
     <h1>CLOSE <span class="object">button</span></h1>
     Toggles the close row buttons column. <span class="default">Default: on.</span>
+  </div>
+</div>
+
+<div class="feature-row module">
+  <svg class="standard-image-help">
+    <use href="/icons.svg#controls"></use>
+  </svg>
+  <div class="justify">
+    <h1>Controls <span class="object">module</span></h1>
+    Tempo and Volume sliders are in Controls module.
   </div>
 </div>
 

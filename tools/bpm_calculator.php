@@ -33,7 +33,8 @@
             <th id="usa-header" title="American name">USA</th>
             <th id="uk-header" title="British name">UK</th>
             <th id="bpm-header" title="Corresponding BPM">BPM</th>
-            <th id="percent-header" title="Percentage">%</th>
+            <th id="diff-header" title="Difference in BPM">DIFF</th>
+            <th id="percent-header" title="Percentage relative to the Crotchet">PERCENT</th>
             <th id="rest-header" title="Rest symbol">REST</th>
             <th id="play-header" title="Play note duration">PLAY</th>
             <th id="close-header" title="Close row">CLOSE</th>
@@ -119,11 +120,17 @@
               </svg>
               <span class="button-text">BPM</span>
             </button>
-            <button id="toggle-percent-button" class="square" title="Toggle percentage column">
+            <button id="toggle-diff-button" class="square" title="Toggle difference column">
+              <svg class="icons">
+                <use href="/icons.svg#plus_minus" />
+              </svg>
+              <span class="button-text">DIFF</span>
+            </button>
+            <button id="toggle-percent-button" class="square" title="Toggle percentage column relative to the Crotchet">
               <svg class="icons">
                 <use href="/icons.svg#value" />
               </svg>
-              <span class="button-text">%</span>
+              <span class="button-text">PERCENT</span>
             </button>
             <button id="toggle-rest-button" class="square" title="Toggle rest column">
               <svg class="icons">
@@ -200,12 +207,12 @@
             <use href="/icons.svg#play" />
           </svg>
           <span class="button-text">PLAY</span>
-        </button>        <button id="stop-button" class="square" title="Stop playback">
+        </button> <button id="stop-button" class="square" title="Stop playback">
           <svg class="icons">
             <use href="/icons.svg#stop" />
           </svg>
           <span class="button-text">STOP</span>
-        </button>        <button id="toggle-sound-button" class="square" title="Toggle sound">
+        </button> <button id="toggle-sound-button" class="square" title="Toggle sound">
           <svg class="icons">
             <use href="/icons.svg#sound" />
           </svg>
