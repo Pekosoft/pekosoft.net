@@ -8,7 +8,7 @@ $toolSlugs = array_map(function ($toolPage) {
 }, $toolPages);
 $hasModules = in_array($currentFile, $toolPages, true) || in_array($requestPath, $toolSlugs, true);
 $releaseFile = $release . ".php";
-$releaseHref = in_array($releaseFile, $toolPages, true) ? "/" . $release : "/" . $releaseFile;
+$releaseHref = is_file($_SERVER['DOCUMENT_ROOT'] . "/tools/" . $releaseFile) ? "/" . $release : "/" . $releaseFile;
 $availableModules = isset($availableModules) && is_array($availableModules)
   ? array_values(array_unique($availableModules))
   : ['tool', 'controls', 'timeline', 'panel'];

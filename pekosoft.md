@@ -296,16 +296,7 @@ Special page note:
 
 ### Icons
 
-Pekosoft uses a single SVG sprite file (`icons.svg`) for all interface icons. Each icon is a geometric, monochrome symbol designed for clarity and consistency with the site's minimal visual language. Icons are referenced via <use> elements and styled with CSS for size and color. All icon symbols are kept in alphabetical order and use a consistent `viewBox` for predictable scaling across the UI.
-
-Icon authoring rules:
-
-- No color attributes in `icons.svg` symbols.
-- Do not use `fill="#..."`, `stroke="#..."`, `fill="currentColor"`, `stroke="currentColor"`, or any inline color value.
-- Build icon shapes as plain geometry so color is controlled only by CSS on `.icons`.
-- Prefer fill-based geometry over stroke-based drawing for consistent rendering with site icon styles.
-- Snap icon geometry to the 512 grid using PO2-friendly steps (prefer 16/32 multiples) when practical.
-- For connected icon parts, overlap geometry slightly; avoid hairline gaps between parts.
+See [`icons.md`](icons.md) for Pekosoft icon authoring rules, sprite conventions, and icon workflow notes.
 
 ## Module philosophy
 

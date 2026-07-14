@@ -1,0 +1,4 @@
+<h1>1.0
+XX-XX-2026
+</h1>
+Introducing: Pekosoft System. Shows client computer, browser, display, network and locale information exposed by the browser and server request. Initial release.
