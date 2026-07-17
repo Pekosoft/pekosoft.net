@@ -274,7 +274,7 @@ function isPointInsidePlatter(x, y) {
   const rect = turntable.getBoundingClientRect();
   const cx = rect.left + rect.width / 2;
   const cy = rect.top + rect.height / 2;
-  const radius = Math.min(rect.width, rect.height) / 2;
+  const radius = Math.min(turntable.clientWidth, turntable.clientHeight) / 2;
   const dx = x - cx;
   const dy = y - cy;
   return (dx * dx + dy * dy) <= (radius * radius);
@@ -937,9 +937,19 @@ function stopTone() {
   }
 }
 
-turntable.addEventListener('mousedown', e => startScratch(e.clientX, e.clientY));
+turntable.addEventListener('mousedown', e => {
+  if (!isPointInsidePlatter(e.clientX, e.clientY)) {
+    if (isDragging) {
+      endScratch();
+    }
+    return;
+  }
+  startScratch(e.clientX, e.clientY);
+});
 document.addEventListener('mousemove', e => moveScratch(e.clientX, e.clientY));
 document.addEventListener('mouseup', endScratch);
+document.addEventListener('mouseleave', endScratch);
+window.addEventListener('blur', endScratch);
 
 turntable.addEventListener('touchstart', e => {
   if (activeTouches === 0 && scratchTouchId === null) {
@@ -947,6 +957,17 @@ turntable.addEventListener('touchstart', e => {
     if (starter) {
       scratchTouchId = starter.identifier;
       startScratch(starter.clientX, starter.clientY);
+    } else {
+      // New touch started outside platter, clear any stale scratch lock.
+      scratchTouchId = null;
+      activeTouches = e.touches.length;
+      endScratch();
+    }
+  } else if (scratchTouchId !== null) {
+    const stillTracking = Array.from(e.touches).some(t => t.identifier === scratchTouchId);
+    if (!stillTracking && isDragging) {
+      // Lost tracked touch without matching end/cancel.
+      endScratch();
     }
   }
   activeTouches = e.touches.length;
@@ -955,7 +976,12 @@ turntable.addEventListener('touchstart', e => {
 document.addEventListener('touchmove', e => {
   if (scratchTouchId === null) return;
   const t = Array.from(e.touches).find(touch => touch.identifier === scratchTouchId);
-  if (!t) return;
+  if (!t) {
+    if (isDragging) {
+      endScratch();
+    }
+    return;
+  }
   moveScratch(t.clientX, t.clientY);
 }, { passive: true });
 
