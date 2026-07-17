@@ -156,6 +156,7 @@ let scratchLastAngle = 0;
 let scratchLastMoveTime = 0;
 let scratchIdleMuteTimer = null;
 let activeTouches = 0;
+let scratchTouchId = null;
 let holeMode = 'standard';
 
 function setupTurntableToolMenuPanel() {
@@ -267,6 +268,16 @@ function getAngleFromCenter(x, y) {
   const cx = rect.left + rect.width / 2;
   const cy = rect.top + rect.height / 2;
   return Math.atan2(y - cy, x - cx) * (180 / Math.PI);
+}
+
+function isPointInsidePlatter(x, y) {
+  const rect = turntable.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const radius = Math.min(rect.width, rect.height) / 2;
+  const dx = x - cx;
+  const dy = y - cy;
+  return (dx * dx + dy * dy) <= (radius * radius);
 }
 
 function updateButtonHighlight() {
@@ -743,6 +754,7 @@ rpmSlider.addEventListener('input', () => {
 
 // Scratch
 function startScratch(x, y) {
+  if (!isPointInsidePlatter(x, y)) return;
   wasPlaying = isPlaying;
   isPlaying = false;
   isScratching = true;
@@ -818,6 +830,7 @@ function endScratch() {
   if (!isDragging) return;
   isDragging = false;
   isScratching = false;
+  scratchTouchId = null;
   isPlaying = wasPlaying;
   scratchLastMoveTime = 0;
   if (scratchIdleMuteTimer) {
@@ -929,29 +942,37 @@ document.addEventListener('mousemove', e => moveScratch(e.clientX, e.clientY));
 document.addEventListener('mouseup', endScratch);
 
 turntable.addEventListener('touchstart', e => {
-  if (activeTouches === 0) {
-    const t = e.touches[0];
-    startScratch(t.clientX, t.clientY);
+  if (activeTouches === 0 && scratchTouchId === null) {
+    const starter = Array.from(e.changedTouches).find(t => isPointInsidePlatter(t.clientX, t.clientY));
+    if (starter) {
+      scratchTouchId = starter.identifier;
+      startScratch(starter.clientX, starter.clientY);
+    }
   }
   activeTouches = e.touches.length;
 }, { passive: true });
 
 document.addEventListener('touchmove', e => {
-  const t = e.touches[0];
+  if (scratchTouchId === null) return;
+  const t = Array.from(e.touches).find(touch => touch.identifier === scratchTouchId);
+  if (!t) return;
   moveScratch(t.clientX, t.clientY);
 }, { passive: true });
 
 document.addEventListener('touchend', e => {
-  activeTouches--;
-  if (activeTouches <= 0) {
-    activeTouches = 0;
+  const endedScratchTouch = Array.from(e.changedTouches).some(t => t.identifier === scratchTouchId);
+  activeTouches = e.touches.length;
+  if (endedScratchTouch || activeTouches <= 0) {
     endScratch();
   }
 }, { passive: true });
 
 document.addEventListener('touchcancel', e => {
+  const cancelledScratchTouch = Array.from(e.changedTouches).some(t => t.identifier === scratchTouchId);
   activeTouches = 0;
-  endScratch();
+  if (cancelledScratchTouch || scratchTouchId !== null) {
+    endScratch();
+  }
 });
 
 toneTypeSelect.addEventListener('change', () => {
