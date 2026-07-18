@@ -155,9 +155,7 @@ let hapticMode = false;
 let scratchLastAngle = 0;
 let scratchLastMoveTime = 0;
 let scratchIdleMuteTimer = null;
-let activeTouches = 0;
-let scratchTouchId = null;
-let scratchInputMode = null;
+let scratchPointerId = null;
 let holeMode = 'standard';
 
 function setupTurntableToolMenuPanel() {
@@ -754,14 +752,12 @@ rpmSlider.addEventListener('input', () => {
 });
 
 // Scratch
-function startScratch(x, y, inputMode) {
-  if (scratchInputMode && inputMode && scratchInputMode !== inputMode) return;
+function startScratch(x, y) {
   if (!isPointInsidePlatter(x, y)) return;
   wasPlaying = isPlaying;
   isPlaying = false;
   isScratching = true;
   isDragging = true;
-  scratchInputMode = inputMode || scratchInputMode;
   scratchLastAngle = getAngleFromCenter(x, y);
   scratchLastMoveTime = performance.now();
 
@@ -780,9 +776,8 @@ function startScratch(x, y, inputMode) {
   }
 }
 
-function moveScratch(x, y, inputMode) {
+function moveScratch(x, y) {
   if (!isDragging) return;
-  if (scratchInputMode && inputMode && scratchInputMode !== inputMode) return;
   const currentAngle = getAngleFromCenter(x, y);
   let delta = currentAngle - scratchLastAngle;
   if (delta > 180) delta -= 360;
@@ -832,14 +827,12 @@ function moveScratch(x, y, inputMode) {
 
 function endScratch() {
   if (!isDragging) {
-    scratchTouchId = null;
-    scratchInputMode = null;
+    scratchPointerId = null;
     return;
   }
   isDragging = false;
   isScratching = false;
-  scratchTouchId = null;
-  scratchInputMode = null;
+  scratchPointerId = null;
   isPlaying = wasPlaying;
   scratchLastMoveTime = 0;
   if (scratchIdleMuteTimer) {
@@ -946,88 +939,33 @@ function stopTone() {
   }
 }
 
-turntable.addEventListener('mousedown', e => {
-  if (activeTouches > 0) return;
-  if (!isPointInsidePlatter(e.clientX, e.clientY)) {
-    if (isDragging && scratchInputMode === 'mouse') {
-      endScratch();
-    }
-    return;
+function endPointerScratch(event) {
+  if (event.pointerId !== scratchPointerId) return;
+  if (turntable.hasPointerCapture(event.pointerId)) {
+    turntable.releasePointerCapture(event.pointerId);
   }
-  startScratch(e.clientX, e.clientY, 'mouse');
-});
-document.addEventListener('mousemove', e => {
-  if (scratchInputMode !== 'mouse') return;
-  if (typeof e.buttons === 'number' && e.buttons === 0) {
-    endScratch();
-    return;
-  }
-  moveScratch(e.clientX, e.clientY, 'mouse');
-});
-document.addEventListener('mouseup', () => {
-  if (scratchInputMode === 'mouse') endScratch();
-});
-document.addEventListener('mouseleave', () => {
-  if (scratchInputMode === 'mouse') endScratch();
-});
-window.addEventListener('blur', () => {
-  if (scratchInputMode === 'mouse') endScratch();
+  endScratch();
+}
+
+turntable.addEventListener('pointerdown', event => {
+  if (!event.isPrimary || event.button !== 0 || scratchPointerId !== null) return;
+  if (!isPointInsidePlatter(event.clientX, event.clientY)) return;
+
+  scratchPointerId = event.pointerId;
+  turntable.setPointerCapture(event.pointerId);
+  startScratch(event.clientX, event.clientY);
+  event.preventDefault();
 });
 
-turntable.addEventListener('touchstart', e => {
-  if (scratchInputMode === 'mouse') return;
-  if (activeTouches === 0 && scratchTouchId === null) {
-    const starter = Array.from(e.changedTouches).find(t => isPointInsidePlatter(t.clientX, t.clientY));
-    if (starter) {
-      scratchTouchId = starter.identifier;
-      startScratch(starter.clientX, starter.clientY, 'touch');
-    }
-  } else if (scratchTouchId !== null) {
-    const stillTracking = Array.from(e.touches).some(t => t.identifier === scratchTouchId);
-    if (!stillTracking && isDragging && scratchInputMode === 'touch') {
-      // Lost tracked touch without matching end/cancel.
-      endScratch();
-    }
-  }
-  activeTouches = e.touches.length;
-}, { passive: true });
-
-document.addEventListener('touchmove', e => {
-  if (scratchInputMode !== 'touch') return;
-  if (scratchTouchId === null) return;
-  const t = Array.from(e.touches).find(touch => touch.identifier === scratchTouchId);
-  if (!t) {
-    if (isDragging) {
-      endScratch();
-    }
-    return;
-  }
-  moveScratch(t.clientX, t.clientY, 'touch');
-}, { passive: true });
-
-document.addEventListener('touchend', e => {
-  if (scratchInputMode !== 'touch') {
-    activeTouches = e.touches.length;
-    return;
-  }
-  const endedScratchTouch = Array.from(e.changedTouches).some(t => t.identifier === scratchTouchId);
-  activeTouches = e.touches.length;
-  if (endedScratchTouch || activeTouches <= 0) {
-    endScratch();
-  }
-}, { passive: true });
-
-document.addEventListener('touchcancel', e => {
-  if (scratchInputMode !== 'touch') {
-    activeTouches = 0;
-    return;
-  }
-  const cancelledScratchTouch = Array.from(e.changedTouches).some(t => t.identifier === scratchTouchId);
-  activeTouches = 0;
-  if (cancelledScratchTouch || scratchTouchId !== null) {
-    endScratch();
-  }
+turntable.addEventListener('pointermove', event => {
+  if (event.pointerId !== scratchPointerId) return;
+  moveScratch(event.clientX, event.clientY);
+  event.preventDefault();
 });
+
+turntable.addEventListener('pointerup', endPointerScratch);
+turntable.addEventListener('pointercancel', endPointerScratch);
+turntable.addEventListener('lostpointercapture', endPointerScratch);
 
 toneTypeSelect.addEventListener('change', () => {
   toneType = normalizeToneType(toneTypeSelect.value);
