@@ -15,6 +15,8 @@ function setupModuleDrag(container, header, id) {
   let currentX = 0;
   let currentY = 0;
   let pointerId = null;
+  let touchId = null;
+  let activeInputType = null;
   let moveHandler = null;
   let endHandler = null;
   let dragOffsetX = 0;
@@ -134,9 +136,15 @@ function setupModuleDrag(container, header, id) {
   };
 
   const removeDragListeners = () => {
-    document.removeEventListener("pointermove", moveHandler, true);
-    document.removeEventListener("pointerup", endHandler, true);
-    document.removeEventListener("pointercancel", endHandler, true);
+    if (activeInputType === "pointer") {
+      document.removeEventListener("pointermove", moveHandler, true);
+      document.removeEventListener("pointerup", endHandler, true);
+      document.removeEventListener("pointercancel", endHandler, true);
+    } else if (activeInputType === "touch") {
+      document.removeEventListener("touchmove", moveHandler, true);
+      document.removeEventListener("touchend", endHandler, true);
+      document.removeEventListener("touchcancel", endHandler, true);
+    }
   };
 
   const clearDragState = () => {
@@ -152,6 +160,8 @@ function setupModuleDrag(container, header, id) {
 
     resetFloatingStyles();
     pointerId = null;
+    touchId = null;
+    activeInputType = null;
     isTouchPointer = false;
     touchHoldReady = true;
     moveHandler = null;
@@ -358,6 +368,7 @@ function setupModuleDrag(container, header, id) {
 
   const startPointerDrag = (event) => {
     if (isDragDisabled()) return;
+    if (event.pointerType === "touch") return;
     if (event.button !== 0) return;
     if (event.target.closest(interactiveSelector)) return;
     if (isPointerDown) return;
@@ -366,6 +377,7 @@ function setupModuleDrag(container, header, id) {
     isDragging = false;
     isTouchPointer = event.pointerType === "touch";
     touchHoldReady = !isTouchPointer;
+    activeInputType = "pointer";
     startX = event.clientX;
     startY = event.clientY;
     currentX = event.clientX;
@@ -428,7 +440,75 @@ function setupModuleDrag(container, header, id) {
     document.addEventListener("pointercancel", endHandler, true);
   };
 
+  const startTouchDrag = (event) => {
+    if (isDragDisabled()) return;
+    const touch = event.changedTouches?.[0];
+    if (!touch) return;
+    if (event.target.closest(interactiveSelector)) return;
+    if (isPointerDown) return;
+
+    isPointerDown = true;
+    isDragging = false;
+    isTouchPointer = true;
+    touchHoldReady = false;
+    activeInputType = "touch";
+    startX = touch.clientX;
+    startY = touch.clientY;
+    currentX = touch.clientX;
+    currentY = touch.clientY;
+    touchId = touch.identifier;
+    pointerId = null;
+
+    clearHoldTimer();
+    holdTimerId = window.setTimeout(() => {
+      holdTimerId = null;
+      touchHoldReady = true;
+    }, touchHoldDelayMs);
+
+    moveHandler = (moveEvent) => {
+      if (!isPointerDown) return;
+
+      const activeTouch = Array.from(moveEvent.touches || []).find((item) => item.identifier === touchId);
+      if (!activeTouch) return;
+
+      currentX = activeTouch.clientX;
+      currentY = activeTouch.clientY;
+      const dx = currentX - startX;
+      const dy = currentY - startY;
+      const movedDistance = Math.hypot(dx, dy);
+
+      if (!isDragging) {
+        if (!touchHoldReady) {
+          if (movedDistance >= contactMoveCancelThreshold) {
+            cancelPendingDragAttempt();
+          }
+          return;
+        }
+
+        if (movedDistance >= 8) {
+          beginDrag();
+        }
+      }
+
+      if (isDragging) {
+        moveEvent.preventDefault();
+        scheduleDragFrame();
+      }
+    };
+
+    endHandler = (endEvent) => {
+      const changed = Array.from(endEvent.changedTouches || []);
+      if (!isPointerDown || !changed.some((item) => item.identifier === touchId)) return;
+      finishDrag();
+    };
+
+    document.addEventListener("touchmove", moveHandler, { capture: true, passive: false });
+    document.addEventListener("touchend", endHandler, true);
+    document.addEventListener("touchcancel", endHandler, true);
+  };
+
   header.addEventListener("pointerdown", startPointerDrag);
+  header.addEventListener("touchstart", startTouchDrag, { passive: true });
 }
 
 // END OF FILE
