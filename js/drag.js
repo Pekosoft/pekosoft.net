@@ -485,13 +485,20 @@ function setupModuleDrag(container, header, id) {
           return;
         }
 
+        if (!moveEvent.cancelable) {
+          cancelPendingDragAttempt();
+          return;
+        }
+
+        moveEvent.preventDefault();
+
         if (movedDistance >= 8) {
           beginDrag();
         }
       }
 
       if (isDragging) {
-        moveEvent.preventDefault();
+        if (moveEvent.cancelable) moveEvent.preventDefault();
         scheduleDragFrame();
       }
     };
