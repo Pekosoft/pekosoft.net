@@ -457,11 +457,11 @@ function setupStatusBars() {
       }, 1200);
     });
 
-    root.addEventListener('touchstart', (event) => {
+    root.addEventListener('pointerdown', (event) => {
       const target = event.target.closest(statusTargetSelector);
       if (!target) return;
       showFromTarget(target);
-    }, { passive: true });
+    });
   });
 }
 

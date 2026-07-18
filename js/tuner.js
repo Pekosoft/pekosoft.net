@@ -1075,7 +1075,7 @@ volumeSlider.addEventListener('input', () => {
 
 function bindHoldAction(button, action) {
   let interval = null;
-  let touched = false;
+  let activePointerId = null;
 
   const start = () => {
     action();
@@ -1087,29 +1087,32 @@ function bindHoldAction(button, action) {
     interval = null;
   };
 
-  button.addEventListener('touchstart', (event) => {
-    touched = true;
+  const stopPointer = (event) => {
+    if (activePointerId === null) return;
+    if (event && event.pointerId !== activePointerId) return;
+    if (event && typeof button.releasePointerCapture === 'function') {
+      try {
+        button.releasePointerCapture(activePointerId);
+      } catch (_) {}
+    }
+    activePointerId = null;
+    stop();
+  };
+
+  button.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0) return;
     event.preventDefault();
-    start();
-  }, { passive: false });
-
-  button.addEventListener('touchend', () => {
-    stop();
-    touched = false;
-  });
-
-  button.addEventListener('touchcancel', () => {
-    stop();
-    touched = false;
-  });
-
-  button.addEventListener('mousedown', () => {
-    if (touched) return;
+    activePointerId = event.pointerId;
+    if (typeof button.setPointerCapture === 'function') {
+      try {
+        button.setPointerCapture(activePointerId);
+      } catch (_) {}
+    }
     start();
   });
 
-  button.addEventListener('mouseup', stop);
-  button.addEventListener('mouseleave', stop);
+  button.addEventListener('pointerup', stopPointer);
+  button.addEventListener('pointercancel', stopPointer);
 }
 
 bindHoldAction(volumeIncreaseButton, () => {

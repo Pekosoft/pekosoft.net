@@ -2068,31 +2068,34 @@ function stopHold(intervalRefName) {
 
 function bindHoldAction(element, startFn, stopFn) {
     if (!element) return;
-    let touched = false;
+    let activePointerId = null;
 
-    element.addEventListener('touchstart', (event) => {
-        touched = true;
+    const stop = (event) => {
+        if (activePointerId === null) return;
+        if (event && event.pointerId !== activePointerId) return;
+        if (event && typeof element.releasePointerCapture === 'function') {
+            try {
+                element.releasePointerCapture(activePointerId);
+            } catch (_) {}
+        }
+        activePointerId = null;
+        stopFn();
+    };
+
+    element.addEventListener('pointerdown', (event) => {
+        if (event.button !== 0) return;
         event.preventDefault();
-        startFn();
-    }, { passive: false });
-
-    element.addEventListener('touchend', () => {
-        stopFn();
-        touched = false;
-    });
-
-    element.addEventListener('touchcancel', () => {
-        stopFn();
-        touched = false;
-    });
-
-    element.addEventListener('mousedown', () => {
-        if (touched) return;
+        activePointerId = event.pointerId;
+        if (typeof element.setPointerCapture === 'function') {
+            try {
+                element.setPointerCapture(activePointerId);
+            } catch (_) {}
+        }
         startFn();
     });
 
-    element.addEventListener('mouseup', stopFn);
-    element.addEventListener('mouseleave', stopFn);
+    element.addEventListener('pointerup', stop);
+    element.addEventListener('pointercancel', stop);
 }
 
 function bindKeyboardAction(element, actionFn) {

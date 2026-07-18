@@ -1117,13 +1117,33 @@ resetButton.addEventListener('click', () => {
 // HOLD
 
 function handleHold(startFn, stopFn, element) {
-  let touched = false;
-  element.addEventListener('touchstart', (e) => { touched = true; e.preventDefault(); startFn(); }, { passive: false });
-  element.addEventListener('touchend', () => { stopFn(); touched = false; });
-  element.addEventListener('touchcancel', () => { stopFn(); touched = false; });
-  element.addEventListener('mousedown', () => { if (!touched) startFn(); });
-  element.addEventListener('mouseup', stopFn);
-  element.addEventListener('mouseleave', stopFn);
+  let activePointerId = null;
+
+  const stop = (event) => {
+    if (activePointerId === null) return;
+    if (event && event.pointerId !== activePointerId) return;
+    if (event && typeof element.releasePointerCapture === 'function') {
+      try {
+        element.releasePointerCapture(activePointerId);
+      } catch (_) {}
+    }
+    activePointerId = null;
+    stopFn();
+  };
+
+  element.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    activePointerId = event.pointerId;
+    if (typeof element.setPointerCapture === 'function') {
+      try {
+        element.setPointerCapture(activePointerId);
+      } catch (_) {}
+    }
+    startFn();
+  });
+  element.addEventListener('pointerup', stop);
+  element.addEventListener('pointercancel', stop);
 }
 
 let increaseInterval, decreaseInterval, volumeIncreaseInterval, volumeDecreaseInterval;

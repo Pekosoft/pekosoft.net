@@ -1045,8 +1045,8 @@
 
     bindHoldButton(element, action) {
       if (!element) return;
-      let touched = false;
       let intervalId = null;
+      let activePointerId = null;
 
       const stop = () => {
         if (intervalId !== null) {
@@ -1061,24 +1061,31 @@
         intervalId = window.setInterval(action, 100);
       };
 
-      element.addEventListener("touchstart", (event) => {
-        touched = true;
+      const stopPointer = (event) => {
+        if (activePointerId === null) return;
+        if (event && event.pointerId !== activePointerId) return;
+        if (event && typeof element.releasePointerCapture === "function") {
+          try {
+            element.releasePointerCapture(activePointerId);
+          } catch (_) {}
+        }
+        activePointerId = null;
+        stop();
+      };
+
+      element.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0) return;
         event.preventDefault();
+        activePointerId = event.pointerId;
+        if (typeof element.setPointerCapture === "function") {
+          try {
+            element.setPointerCapture(activePointerId);
+          } catch (_) {}
+        }
         start();
-      }, { passive: false });
-      element.addEventListener("touchend", () => {
-        stop();
-        touched = false;
       });
-      element.addEventListener("touchcancel", () => {
-        stop();
-        touched = false;
-      });
-      element.addEventListener("mousedown", () => {
-        if (!touched) start();
-      });
-      element.addEventListener("mouseup", stop);
-      element.addEventListener("mouseleave", stop);
+      element.addEventListener("pointerup", stopPointer);
+      element.addEventListener("pointercancel", stopPointer);
     }
 
     bumpVolume(delta) {

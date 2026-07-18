@@ -1021,51 +1021,63 @@ class BPMVisualizer {
   initNavigationButtons() {
     let prevInterval = null;
     let nextInterval = null;
+    let prevPointerId = null;
+    let nextPointerId = null;
 
-    this.prevButton.addEventListener('mousedown', () => {
+    const capturePointer = (button, event) => {
+      if (typeof button.setPointerCapture !== 'function') return;
+      try {
+        button.setPointerCapture(event.pointerId);
+      } catch (_) {}
+    };
+
+    const releasePointer = (button, pointerId) => {
+      if (pointerId === null || typeof button.releasePointerCapture !== 'function') return;
+      try {
+        button.releasePointerCapture(pointerId);
+      } catch (_) {}
+    };
+
+    this.prevButton.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      prevPointerId = event.pointerId;
+      capturePointer(this.prevButton, event);
       this.selectPrevSegment();
       prevInterval = setInterval(() => this.selectPrevSegment(), 200);
     });
-    this.prevButton.addEventListener('mouseup', () => {
+    this.prevButton.addEventListener('pointerup', (event) => {
+      if (prevPointerId !== null && event.pointerId !== prevPointerId) return;
       if (prevInterval) clearInterval(prevInterval);
+      releasePointer(this.prevButton, prevPointerId);
+      prevPointerId = null;
     });
-    this.prevButton.addEventListener('mouseleave', () => {
+    this.prevButton.addEventListener('pointercancel', (event) => {
+      if (prevPointerId !== null && event.pointerId !== prevPointerId) return;
       if (prevInterval) clearInterval(prevInterval);
+      releasePointer(this.prevButton, prevPointerId);
+      prevPointerId = null;
     });
 
-    this.nextButton.addEventListener('mousedown', () => {
+    this.nextButton.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      nextPointerId = event.pointerId;
+      capturePointer(this.nextButton, event);
       this.selectNextSegment();
       nextInterval = setInterval(() => this.selectNextSegment(), 200);
     });
-    this.nextButton.addEventListener('mouseup', () => {
+    this.nextButton.addEventListener('pointerup', (event) => {
+      if (nextPointerId !== null && event.pointerId !== nextPointerId) return;
       if (nextInterval) clearInterval(nextInterval);
+      releasePointer(this.nextButton, nextPointerId);
+      nextPointerId = null;
     });
-    this.nextButton.addEventListener('mouseleave', () => {
+    this.nextButton.addEventListener('pointercancel', (event) => {
+      if (nextPointerId !== null && event.pointerId !== nextPointerId) return;
       if (nextInterval) clearInterval(nextInterval);
-    });
-
-    this.prevButton.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      this.selectPrevSegment();
-      prevInterval = setInterval(() => this.selectPrevSegment(), 200);
-    });
-    this.prevButton.addEventListener('touchend', () => {
-      if (prevInterval) clearInterval(prevInterval);
-    });
-    this.prevButton.addEventListener('touchcancel', () => {
-      if (prevInterval) clearInterval(prevInterval);
-    });
-
-    this.nextButton.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      this.selectNextSegment();
-      nextInterval = setInterval(() => this.selectNextSegment(), 200);
-    });
-    this.nextButton.addEventListener('touchend', () => {
-      if (nextInterval) clearInterval(nextInterval);
-    });
-    this.nextButton.addEventListener('touchcancel', () => {
-      if (nextInterval) clearInterval(nextInterval);
+      releasePointer(this.nextButton, nextPointerId);
+      nextPointerId = null;
     });
 
     this.allButton.addEventListener('click', () => this.toggleAllNotes(true));
@@ -1258,6 +1270,23 @@ class BPMVisualizer {
     });
 
     let downInterval;
+    let downPointerId = null;
+    let upPointerId = null;
+
+    const capturePointer = (button, event) => {
+      if (typeof button.setPointerCapture !== 'function') return;
+      try {
+        button.setPointerCapture(event.pointerId);
+      } catch (_) {}
+    };
+
+    const releasePointer = (button, pointerId) => {
+      if (pointerId === null || typeof button.releasePointerCapture !== 'function') return;
+      try {
+        button.releasePointerCapture(pointerId);
+      } catch (_) {}
+    };
+
     const startTempoDown = () => {
       const currentValue = parseInt(this.bpmInput.value);
       if (currentValue > 1) {
@@ -1267,17 +1296,20 @@ class BPMVisualizer {
       }
     };
     
-    downButton.addEventListener('mousedown', () => {
+    downButton.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      downPointerId = event.pointerId;
+      capturePointer(downButton, event);
       startTempoDown();
       downInterval = setInterval(startTempoDown, 100);
     });
     
-    downButton.addEventListener('mouseup', () => {
+    downButton.addEventListener('pointerup', (event) => {
+      if (downPointerId !== null && event.pointerId !== downPointerId) return;
       clearInterval(downInterval);
-    });
-    
-    downButton.addEventListener('mouseleave', () => {
-      clearInterval(downInterval);
+      releasePointer(downButton, downPointerId);
+      downPointerId = null;
     });
 
     let upInterval;
@@ -1290,37 +1322,32 @@ class BPMVisualizer {
       }
     };
     
-    upButton.addEventListener('mousedown', () => {
+    upButton.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      upPointerId = event.pointerId;
+      capturePointer(upButton, event);
       startTempoUp();
       upInterval = setInterval(startTempoUp, 100);
     });
     
-    upButton.addEventListener('mouseup', () => {
+    upButton.addEventListener('pointerup', (event) => {
+      if (upPointerId !== null && event.pointerId !== upPointerId) return;
       clearInterval(upInterval);
+      releasePointer(upButton, upPointerId);
+      upPointerId = null;
     });
-    
-    upButton.addEventListener('mouseleave', () => {
-      clearInterval(upInterval);
-    });
-
-    downButton.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      startTempoDown();
-      downInterval = setInterval(startTempoDown, 100);
-    });
-    
-    downButton.addEventListener('touchend', () => {
+    downButton.addEventListener('pointercancel', (event) => {
+      if (downPointerId !== null && event.pointerId !== downPointerId) return;
       clearInterval(downInterval);
+      releasePointer(downButton, downPointerId);
+      downPointerId = null;
     });
-    
-    upButton.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      startTempoUp();
-      upInterval = setInterval(startTempoUp, 100);
-    });
-    
-    upButton.addEventListener('touchend', () => {
+    upButton.addEventListener('pointercancel', (event) => {
+      if (upPointerId !== null && event.pointerId !== upPointerId) return;
       clearInterval(upInterval);
+      releasePointer(upButton, upPointerId);
+      upPointerId = null;
     });
   }
 }

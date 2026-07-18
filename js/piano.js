@@ -397,10 +397,17 @@ class Piano {
   bindHoldButton(button, action) {
     if (!button) return;
     let intervalId = null;
-    let touched = false;
+    let activePointerId = null;
 
     const start = (event) => {
-      if (event) event.preventDefault();
+      if (event.button !== 0) return;
+      event.preventDefault();
+      activePointerId = event.pointerId;
+      if (typeof button.setPointerCapture === 'function') {
+        try {
+          button.setPointerCapture(activePointerId);
+        } catch (_) {}
+      }
       action();
       window.clearInterval(intervalId);
       intervalId = window.setInterval(action, 180);
@@ -409,21 +416,23 @@ class Piano {
     const stop = () => {
       window.clearInterval(intervalId);
       intervalId = null;
-      touched = false;
     };
 
-    button.addEventListener('touchstart', (event) => {
-      touched = true;
-      start(event);
-    }, { passive: false });
-    button.addEventListener('touchend', stop);
-    button.addEventListener('touchcancel', stop);
-    button.addEventListener('mousedown', (event) => {
-      if (touched) return;
-      start(event);
-    });
-    button.addEventListener('mouseup', stop);
-    button.addEventListener('mouseleave', stop);
+    const stopPointer = (event) => {
+      if (activePointerId === null) return;
+      if (event && event.pointerId !== activePointerId) return;
+      if (event && typeof button.releasePointerCapture === 'function') {
+        try {
+          button.releasePointerCapture(activePointerId);
+        } catch (_) {}
+      }
+      activePointerId = null;
+      stop();
+    };
+
+    button.addEventListener('pointerdown', start);
+    button.addEventListener('pointerup', stopPointer);
+    button.addEventListener('pointercancel', stopPointer);
     button.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();

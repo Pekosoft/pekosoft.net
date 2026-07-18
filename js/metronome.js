@@ -1018,31 +1018,34 @@ function stopHoldVolumeDecrease() {
 }
 
 function handleHold(startFn, stopFn, element) {
-  let touched = false;
+  let activePointerId = null;
 
-  element.addEventListener('touchstart', (e) => {
-    touched = true;
+  const stop = (event) => {
+    if (activePointerId === null) return;
+    if (event && event.pointerId !== activePointerId) return;
+    if (event && typeof element.releasePointerCapture === 'function') {
+      try {
+        element.releasePointerCapture(activePointerId);
+      } catch (_) {}
+    }
+    activePointerId = null;
+    stopFn();
+  };
+
+  element.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
     e.preventDefault();
-    startFn();
-  }, { passive: false });
-
-  element.addEventListener('touchend', () => {
-    stopFn();
-    touched = false;
-  });
-
-  element.addEventListener('touchcancel', () => {
-    stopFn();
-    touched = false;
-  });
-
-  element.addEventListener('mousedown', (e) => {
-    if (touched) return;
+    activePointerId = e.pointerId;
+    if (typeof element.setPointerCapture === 'function') {
+      try {
+        element.setPointerCapture(activePointerId);
+      } catch (_) {}
+    }
     startFn();
   });
 
-  element.addEventListener('mouseup', stopFn);
-  element.addEventListener('mouseleave', stopFn);
+  element.addEventListener('pointerup', stop);
+  element.addEventListener('pointercancel', stop);
 }
 
 handleHold(startHoldIncrease, stopHoldIncrease, increaseButton);

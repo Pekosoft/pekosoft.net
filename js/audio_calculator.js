@@ -461,28 +461,18 @@ window.addEventListener('DOMContentLoaded', () => {
     updateOutputFields();
   }
 
-  refs.grid.addEventListener('mousedown', (event) => {
+  refs.grid.addEventListener('pointerdown', (event) => {
+    event.preventDefault();
     selectFromGridPoint(event.clientX, event.clientY);
   });
 
-  refs.grid.addEventListener('mousemove', (event) => {
+  refs.grid.addEventListener('pointermove', (event) => {
     updateHoverCell(event.clientX, event.clientY);
   });
 
-  refs.grid.addEventListener('mouseleave', clearHoverCell);
-
-  refs.grid.addEventListener('touchstart', (event) => {
-    event.preventDefault();
-    if (!event.touches[0]) return;
-    selectFromGridPoint(event.touches[0].clientX, event.touches[0].clientY);
-  }, { passive: false });
-
-  refs.grid.addEventListener('touchmove', (event) => {
-    if (!event.touches[0]) return;
-    updateHoverCell(event.touches[0].clientX, event.touches[0].clientY);
-  }, { passive: true });
-
-  refs.grid.addEventListener('touchend', clearHoverCell);
+  refs.grid.addEventListener('pointerleave', clearHoverCell);
+  refs.grid.addEventListener('pointerup', clearHoverCell);
+  refs.grid.addEventListener('pointercancel', clearHoverCell);
 
   refs.duration.addEventListener('input', updateOutputFields);
   refs.bitDepth.addEventListener('change', updateOutputFields);

@@ -4,14 +4,12 @@
 function setupModuleDrag(container, header, id) {
   const interactiveSelector = "button, a, input, select, textarea, label";
   const touchHoldDelayMs = 260;
-  const touchMoveCancelThreshold = 10;
+  const contactMoveCancelThreshold = 10;
   let isPointerDown = false;
   let isDragging = false;
   let isTouchPointer = false;
   let touchHoldReady = true;
   let holdTimerId = null;
-  let touchId = null;
-  let activeInputType = null;
   let startX = 0;
   let startY = 0;
   let currentX = 0;
@@ -133,26 +131,12 @@ function setupModuleDrag(container, header, id) {
     container.style.pointerEvents = "none";
     document.body.classList.add("module-order-dragging");
     header.style.cursor = "move";
-
-    if (!isTouchPointer && typeof header.setPointerCapture === "function" && pointerId !== null) {
-      try {
-        header.setPointerCapture(pointerId);
-      } catch (_) {
-        // Ignore capture failures; document listeners still handle the drag.
-      }
-    }
   };
 
   const removeDragListeners = () => {
-    if (activeInputType === "pointer") {
-      document.removeEventListener("pointermove", moveHandler, true);
-      document.removeEventListener("pointerup", endHandler, true);
-      document.removeEventListener("pointercancel", endHandler, true);
-    } else if (activeInputType === "touch") {
-      document.removeEventListener("touchmove", moveHandler, true);
-      document.removeEventListener("touchend", endHandler, true);
-      document.removeEventListener("touchcancel", endHandler, true);
-    }
+    document.removeEventListener("pointermove", moveHandler, true);
+    document.removeEventListener("pointerup", endHandler, true);
+    document.removeEventListener("pointercancel", endHandler, true);
   };
 
   const clearDragState = () => {
@@ -168,10 +152,8 @@ function setupModuleDrag(container, header, id) {
 
     resetFloatingStyles();
     pointerId = null;
-    touchId = null;
     isTouchPointer = false;
     touchHoldReady = true;
-    activeInputType = null;
     moveHandler = null;
     endHandler = null;
     pendingTargetKey = null;
@@ -376,24 +358,36 @@ function setupModuleDrag(container, header, id) {
 
   const startPointerDrag = (event) => {
     if (isDragDisabled()) return;
-    if (event.pointerType === "touch") return;
     if (event.button !== 0) return;
     if (event.target.closest(interactiveSelector)) return;
     if (isPointerDown) return;
 
     isPointerDown = true;
     isDragging = false;
-    isTouchPointer = false;
-    touchHoldReady = true;
-    activeInputType = "pointer";
+    isTouchPointer = event.pointerType === "touch";
+    touchHoldReady = !isTouchPointer;
     startX = event.clientX;
     startY = event.clientY;
     currentX = event.clientX;
     currentY = event.clientY;
     pointerId = event.pointerId;
-    touchId = null;
 
     clearHoldTimer();
+
+    if (typeof header.setPointerCapture === "function") {
+      try {
+        header.setPointerCapture(pointerId);
+      } catch (_) {
+        // Ignore capture failures; document listeners still handle the drag.
+      }
+    }
+
+    if (isTouchPointer) {
+      holdTimerId = window.setTimeout(() => {
+        holdTimerId = null;
+        touchHoldReady = true;
+      }, touchHoldDelayMs);
+    }
 
     moveHandler = (moveEvent) => {
       if (!isPointerDown || moveEvent.pointerId !== pointerId) return;
@@ -405,6 +399,13 @@ function setupModuleDrag(container, header, id) {
         const dx = currentX - startX;
         const dy = currentY - startY;
         const movedDistance = Math.hypot(dx, dy);
+
+        if (isTouchPointer && !touchHoldReady) {
+          if (movedDistance >= contactMoveCancelThreshold) {
+            cancelPendingDragAttempt();
+          }
+          return;
+        }
 
         if (movedDistance >= 8) {
           beginDrag();
@@ -427,75 +428,7 @@ function setupModuleDrag(container, header, id) {
     document.addEventListener("pointercancel", endHandler, true);
   };
 
-  const startTouchDrag = (event) => {
-    if (isDragDisabled()) return;
-    const touch = event.changedTouches?.[0];
-    if (!touch) return;
-    if (event.target.closest(interactiveSelector)) return;
-    if (isPointerDown) return;
-
-    isPointerDown = true;
-    isDragging = false;
-    isTouchPointer = true;
-    touchHoldReady = false;
-    activeInputType = "touch";
-    startX = touch.clientX;
-    startY = touch.clientY;
-    currentX = touch.clientX;
-    currentY = touch.clientY;
-    touchId = touch.identifier;
-    pointerId = null;
-
-    clearHoldTimer();
-    holdTimerId = window.setTimeout(() => {
-      holdTimerId = null;
-      touchHoldReady = true;
-    }, touchHoldDelayMs);
-
-    moveHandler = (moveEvent) => {
-      if (!isPointerDown) return;
-
-      const activeTouch = Array.from(moveEvent.touches || []).find((item) => item.identifier === touchId);
-      if (!activeTouch) return;
-
-      currentX = activeTouch.clientX;
-      currentY = activeTouch.clientY;
-      const dx = currentX - startX;
-      const dy = currentY - startY;
-      const movedDistance = Math.hypot(dx, dy);
-
-      if (!isDragging) {
-        if (!touchHoldReady) {
-          if (movedDistance >= touchMoveCancelThreshold) {
-            cancelPendingDragAttempt();
-          }
-          return;
-        }
-
-        if (movedDistance >= 8) {
-          beginDrag();
-        }
-      }
-
-      if (isDragging) {
-        moveEvent.preventDefault();
-        scheduleDragFrame();
-      }
-    };
-
-    endHandler = (endEvent) => {
-      const changed = Array.from(endEvent.changedTouches || []);
-      if (!isPointerDown || !changed.some((item) => item.identifier === touchId)) return;
-      finishDrag();
-    };
-
-    document.addEventListener("touchmove", moveHandler, { capture: true, passive: false });
-    document.addEventListener("touchend", endHandler, true);
-    document.addEventListener("touchcancel", endHandler, true);
-  };
-
   header.addEventListener("pointerdown", startPointerDrag);
-  header.addEventListener("touchstart", startTouchDrag, { passive: true });
 }
 
 // END OF FILE

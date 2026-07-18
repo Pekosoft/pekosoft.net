@@ -15,9 +15,9 @@ const params = new URLSearchParams(window.location.search);
 let current = params.get("r");
 
 if (!current) {
-  const match = window.location.pathname.match(/\/([\w]+)\.php$/);
-  if (match) {
-    current = match[1];
+  const pathPage = pageFromPathname(window.location.pathname);
+  if (pathPage) {
+    current = pathPage;
   } else if (window.location.pathname === "/" || window.location.pathname === "/index.php") {
     current = "index";
   }
@@ -44,8 +44,11 @@ function pageFromHref(href) {
 }
 
 function pageFromPathname(pathname) {
-  const match = pathname.match(/\/([\w]+)\.php$/);
-  return match ? match[1] : null;
+  const phpMatch = pathname.match(/\/([\w]+)\.php$/);
+  if (phpMatch) return phpMatch[1];
+
+  const cleanMatch = pathname.match(/^\/([\w]+)\/?$/);
+  return cleanMatch ? cleanMatch[1] : null;
 }
 
 function getNavPages() {
@@ -85,6 +88,7 @@ const scopeEl = isToolPage ? headerScope : document;
 
 let startX = null;
 let startY = null;
+let pointerId = null;
 let swipeLocked = false;
 let swipeHorizontal = false;
 
@@ -94,6 +98,7 @@ const swipeCommitThreshold = 75;
 function resetSwipe() {
   startX = null;
   startY = null;
+  pointerId = null;
   swipeLocked = false;
   swipeHorizontal = false;
 }
@@ -147,13 +152,18 @@ function navigateByDirection(direction) {
 
 // Disable swipe in areas marked with .no-swipe (inside scopeEl)
 (scopeEl || document).querySelectorAll?.(".no-swipe").forEach(el => {
-  el.addEventListener("touchstart", (e) => { e.stopPropagation(); }, { passive: true });
-  el.addEventListener("touchend", (e) => { e.stopPropagation(); }, { passive: true });
+  el.addEventListener("pointerdown", (e) => { e.stopPropagation(); });
+  el.addEventListener("pointerup", (e) => { e.stopPropagation(); });
 });
 
 // Only attach listeners if we have a scope (on tool pages without header, swipe is disabled)
 if (scopeEl) {
-  scopeEl.addEventListener("touchstart", (e) => {
+  if (scopeEl !== document) {
+    scopeEl.style.touchAction = "pan-y";
+  }
+
+  scopeEl.addEventListener("pointerdown", (e) => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
     const target = e.target;
     const tag = target.tagName.toLowerCase();
     const noSwipeTags = ["input", "textarea", "select", "button", "canvas", "table"];
@@ -165,16 +175,25 @@ if (scopeEl) {
       return;
     }
 
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-  }, { passive: true });
+    pointerId = e.pointerId;
+    startX = e.clientX;
+    startY = e.clientY;
 
-  scopeEl.addEventListener("touchmove", (e) => {
+    if (typeof scopeEl.setPointerCapture === "function") {
+      try {
+        scopeEl.setPointerCapture(pointerId);
+      } catch (_) {
+        // Document-scoped swipes continue through normal bubbling.
+      }
+    }
+  });
+
+  scopeEl.addEventListener("pointermove", (e) => {
     if (startX === null || startY === null) return;
-    if (e.touches.length !== 1) return;
+    if (pointerId !== null && e.pointerId !== pointerId) return;
 
-    const moveX = e.touches[0].clientX;
-    const moveY = e.touches[0].clientY;
+    const moveX = e.clientX;
+    const moveY = e.clientY;
     const deltaX = moveX - startX;
     const deltaY = moveY - startY;
 
@@ -189,13 +208,14 @@ if (scopeEl) {
     if (!swipeHorizontal) return;
 
     e.preventDefault();
-  }, { passive: false });
+  });
 
-  scopeEl.addEventListener("touchend", (e) => {
+  scopeEl.addEventListener("pointerup", (e) => {
     if (startX === null || startY === null) return; // no valid start => ignore
+    if (pointerId !== null && e.pointerId !== pointerId) return;
 
-    const endX = e.changedTouches[0].clientX;
-    const endY = e.changedTouches[0].clientY;
+    const endX = e.clientX;
+    const endY = e.clientY;
     const deltaX = endX - startX;
     const deltaY = endY - startY;
 
@@ -206,11 +226,12 @@ if (scopeEl) {
     }
 
     resetSwipe();
-  }, { passive: true });
+  });
 
-  scopeEl.addEventListener("touchcancel", () => {
+  scopeEl.addEventListener("pointercancel", (e) => {
+    if (pointerId !== null && e.pointerId !== pointerId) return;
     resetSwipe();
-  }, { passive: true });
+  });
 }
 
 function goToNextPage() {
