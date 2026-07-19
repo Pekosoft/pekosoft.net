@@ -1050,9 +1050,12 @@ li h1 img {
   z-index: 5;
   overflow-x: auto;
   overflow-y: hidden;
+  overscroll-behavior-x: contain;
   scrollbar-width: none;
   scroll-snap-type: x mandatory;
   scroll-padding-left: 8px;
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
 }
 
 .footer::-webkit-scrollbar {
