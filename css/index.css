@@ -1038,6 +1038,7 @@ li h1 img {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--footer-gap, 12px);
   padding: 8px;
   max-width: var(--maxwidth);
   margin: 0 auto;
@@ -1047,6 +1048,22 @@ li h1 img {
   right: 0;
   width: 100%;
   z-index: 5;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 8px;
+}
+
+.footer::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.footer > div {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
 }
 
 .footer img {

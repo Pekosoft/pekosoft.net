@@ -178,6 +178,29 @@ function markActiveFooterLink() {
   });
 }
 
+function syncFooterGap() {
+  const footers = document.querySelectorAll('.footer');
+  footers.forEach(footer => {
+    const items = Array.from(footer.children);
+    if (items.length < 2) return;
+
+    footer.style.setProperty('--footer-gap', '12px');
+
+    const footerStyles = getComputedStyle(footer);
+    const contentWidth = footer.clientWidth - parseFloat(footerStyles.paddingLeft) - parseFloat(footerStyles.paddingRight);
+    const itemWidth = Math.max(...items.map(item => item.getBoundingClientRect().width));
+    const minimumGap = 12;
+
+    if (!Number.isFinite(contentWidth) || !Number.isFinite(itemWidth) || contentWidth <= 0 || itemWidth <= 0) return;
+
+    const visibleItems = Math.min(items.length, Math.floor((contentWidth + minimumGap) / (itemWidth + minimumGap)));
+    if (visibleItems < 2 || visibleItems >= items.length) return;
+
+    const fittedGap = (contentWidth - visibleItems * itemWidth) / (visibleItems - 1);
+    footer.style.setProperty('--footer-gap', `${Math.max(minimumGap, fittedGap).toFixed(3)}px`);
+  });
+}
+
 function ensurePekosoftFilename(filename) {
   const safeName = String(filename || '').trim();
   if (!safeName) return 'pekosoft_file';
@@ -710,11 +733,17 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   markActiveFooterLink();
+  syncFooterGap();
   setupTimelineSaveButton();
   ensureControlsStatusBars();
   setupStatusBars();
   setupSitePlayMode();
 });
+
+window.addEventListener('resize', syncFooterGap);
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', syncFooterGap);
+}
 
 // Function to toggle fullscreen mode
 
