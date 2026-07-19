@@ -165,12 +165,12 @@ if (scopeEl) {
   scopeEl.addEventListener("pointerdown", (e) => {
     if (e.pointerType === "mouse" && e.button !== 0) return;
     const target = e.target;
-    const tag = target.tagName.toLowerCase();
-    const noSwipeTags = ["input", "textarea", "select", "button", "canvas", "table"];
+    const noSwipeSelector = "a, button, input, textarea, select, canvas, table";
     const isEditable = target.isContentEditable;
+    const hasNoSwipeTarget = target.closest(noSwipeSelector);
     const hasNoSwipeClass = target.closest(".no-swipe");
 
-    if (noSwipeTags.includes(tag) || isEditable || hasNoSwipeClass) {
+    if (hasNoSwipeTarget || isEditable || hasNoSwipeClass) {
       resetSwipe(); // disable swipe
       return;
     }

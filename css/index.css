@@ -997,6 +997,24 @@ li h1 img {
   display: inline-block;
 }
 
+.top-heading a,
+.top-heading a *,
+.top-heading button,
+.top-heading button *,
+.heading button,
+.heading button * {
+  touch-action: manipulation;
+}
+
+.top-heading a svg,
+.top-heading a use,
+.top-heading button svg,
+.top-heading button use,
+.heading button svg,
+.heading button use {
+  pointer-events: none;
+}
+
 .heading {
   display: flex;
   justify-content: space-between;
