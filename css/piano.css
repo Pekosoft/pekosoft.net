@@ -102,26 +102,6 @@
   display: none;
 }
 
-#controls-container #tone-type {
-  width: 140px;
-  min-width: 140px;
-}
-
-#controls-container #hzDisplay {
-  width: 80px;
-  min-width: 80px;
-}
-
-#controls-container #noteDisplay {
-  width: 80px;
-  min-width: 80px;
-}
-
-#controls-container #midiDisplay {
-  width: 80px;
-  min-width: 80px;
-}
-
 #timeline-container #piano-roll {
   width: 100%;
   height: 100%;
