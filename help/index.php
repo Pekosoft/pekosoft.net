@@ -162,7 +162,7 @@
   </svg>
   <div class="justify">
     <h1>Pages</h1>
-    The following is a description of the pages each tool has. They are Release, Help, History and About. Pages can be swiped left and right in header. There are also left and right buttons in footer. Tools are accessible from front page, TOC and footer.
+    The following is a description of the pages each tool has. They are Release, Help, History and About. Pages can be swiped left and right in header. Tools are accessible from front page, TOC and footer.
   </div>
 </div>
 

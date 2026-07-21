@@ -113,7 +113,7 @@ Improved button, hover and toggle aspects of interface.
 </h1>
 
 Improved Timeline layout.
-Changed all text fields to number fields. Meaning all fields now has up and down buttons, up and down keys on keyboard work too, and hold is now supported.
+Changed all text fields to number fields. Meaning all fields now have up and down buttons, up and down keys on keyboard work too, and hold is now supported.
 Added restriction against negative numbers.
 Wavelength column now works in reverse. No more grey fields.
 
@@ -142,7 +142,7 @@ Reset button now clears all fields backgrounds.
 04-09-2014
 </h1>
 
-BPM, SPB and BPS fields now has (yellow) background corresponding to their values.
+BPM, SPB and BPS fields now have (yellow) background corresponding to their values.
 Added toggle buttons button.
 Expanded BPM buttons with another row. 250 - 315.
 
@@ -161,7 +161,7 @@ Added whole notes.
 
 Now works also in reverse for both MS and HZ.
 Now has a much slimmer design.
-Changed none input fields background from yellow to grey.
+Changed non-input fields background from yellow to grey.
 Released this change-log.
 
 
