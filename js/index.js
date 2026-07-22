@@ -563,7 +563,8 @@ let sitePlayTimer = null;
 
 function normalizePageRef(ref) {
   const url = new URL(ref, window.location.origin);
-  const path = (url.pathname.split('/').pop() || 'index.php').trim() || 'index.php';
+  let path = url.pathname.replace(/\/$/, '');
+  if (!path) path = '/index.php';
   const query = url.searchParams.toString();
   return query ? `${path}?${query}` : path;
 }
