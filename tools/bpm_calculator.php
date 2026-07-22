@@ -41,7 +41,7 @@
           </tr>
         </thead>
         <tbody id="result-table">
-          <!-- Values will be displayed here -->
+          <!-- Rows will be displayed here -->
         </tbody>
       </table>
       <div id="bpm-tool-menu-controls" class="module-panel-menu" hidden>
