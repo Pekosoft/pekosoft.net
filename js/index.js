@@ -152,14 +152,19 @@ function markActiveFooterLink() {
   const footerLinks = document.querySelectorAll('.footer a[href]');
   if (!footerLinks.length) return;
 
+  const normalizeFooterPath = (pathname) => {
+    const path = pathname.replace(/\/$/, '') || '/index.php';
+    return path.replace(/\.php$/, '');
+  };
+
   const currentUrl = new URL(window.location.href);
-  const currentPath = currentUrl.pathname.split('/').pop() || 'index.php';
-  const contextPages = new Set(['about.php', 'help.php', 'history.php']);
+  const currentPath = normalizeFooterPath(currentUrl.pathname);
+  const contextPages = new Set(['/about', '/help', '/history']);
   const currentRelease = currentUrl.searchParams.get('r') || '';
 
   footerLinks.forEach(link => {
     const linkUrl = new URL(link.getAttribute('href') || '', window.location.origin);
-    const linkPath = linkUrl.pathname.split('/').pop();
+    const linkPath = normalizeFooterPath(linkUrl.pathname);
 
     let isCurrent = false;
     if (contextPages.has(currentPath)) {
