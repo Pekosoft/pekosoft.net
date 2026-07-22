@@ -1170,7 +1170,7 @@ li h1 img {
 .toc-footer {
   width: 100%;
   margin-top: auto;
-  padding: 24px 8px 80px;
+  padding: 24px 8px;
 }
 
 .toc-icons {
@@ -1183,7 +1183,7 @@ li h1 img {
 
 .toc-close {
   width: 100%;
-  padding: 24px 0;
+  padding: 24px 0 80px;
 }
 
 .toc-open {

@@ -64,14 +64,6 @@
       PLAY
     </button>
 
-    <div class="toc-close">
-      <button id="toggle-menu-close-button" class="square transparent" title="Close" aria-label="Close">
-        <svg class="icons" role="img">
-          <use href="/icons.svg#close"></use>
-        </svg>
-      </button>
-    </div>
-
     <div class="toc-footer">
 
       <div class="toc-icons">
@@ -117,6 +109,14 @@
         </a>
       </div>
 
+    </div>
+
+    <div class="toc-close">
+      <button id="toggle-menu-close-button" class="square transparent" title="Close" aria-label="Close">
+        <svg class="icons" role="img">
+          <use href="/icons.svg#close"></use>
+        </svg>
+      </button>
     </div>
 
   </div>
