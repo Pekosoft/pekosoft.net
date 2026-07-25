@@ -82,7 +82,7 @@
   </svg>
   <div class="justify">
     <h1>Mode <span class="object">menu</span></h1>
-    Provides Single beat and All beats modes. This is reflected in Timeline and Panel. <span class="default">Default: All beats.</span>
+    Sets Timeline and Panel to Single beat or All beats mode. Single beat shows all visible table values. All beats shows the selected note across all beats. <span class="default">Default: All beats.</span>
   </div>
 </div>
 
@@ -453,7 +453,7 @@
   </svg>
   <div class="justify">
     <h1>Panel <span class="object">module</span></h1>
-    Text-based output showing calculated values. First line shows BPM (beats per minute), SPB (seconds per beat) and BPS (beats per second). The following data is the same as what is presented in Timeline.
+    Text output reflecting the mode selected in Controls. Single beat shows the complete visible table data. All beats shows beat and selected note positions.
   </div>
 </div>
 

@@ -369,7 +369,7 @@ function getVisibleValuesText() {
   const rows = getVisibleRowDescriptors().map(({ note, i, type, multiplier, ms }) => {
     const hz = 1 / (ms / 1000);
     const wavelength = speedOfSound / hz;
-    const valueLabel = note + (type === 'dotted' ? ' dotted' : type === 'triplet' ? ' triplet' : '');
+    const valueLabel = getValueLabel(note, type);
     const values = [];
 
     if (state.columns.ms) values.push(`${ms.toFixed(3)} MS`);
@@ -393,6 +393,12 @@ function getVisibleValuesText() {
   });
 
   return `${bpm.toFixed(3)} BPM = ${spb.toFixed(3)} SPB = ${bps.toFixed(3)} BPS\n\n${rows.join('\n')}`;
+}
+
+function getValueLabel(note, type) {
+  if (type === 'dotted') return `${note} dotted`;
+  if (type === 'triplet') return `${note} triplet`;
+  return `${note} straight`;
 }
 
 function calculateValues() {
@@ -489,7 +495,7 @@ function renderRow(note, i, multiplier, type) {
   const ms = (60000 / (bpm / Math.pow(2, 5 - i))) * multiplier;
   const hz = 1 / (ms / 1000);
   const wavelength = speedOfSound / hz;
-  const valueLabel = note + (type === 'dotted' ? ' dotted' : type === 'triplet' ? ' triplet' : '');
+  const valueLabel = getValueLabel(note, type);
   const rowId = `${i}-${type}`;
   const rowKey = `row-${rowId}`;
 
@@ -576,6 +582,7 @@ function renderRow(note, i, multiplier, type) {
     resultTable.appendChild(row);
   } else {
     // update existing row's input values and radio check state
+    if (state.columns.value) row.querySelector('.value-field').textContent = valueLabel;
     if (state.columns.ms) row.querySelector('.ms-input').value = ms.toFixed(3);
     if (state.columns.hz) row.querySelector('.hz-input').value = hz.toFixed(3);
     if (state.columns.cm) row.querySelector('.cm-input').value = wavelength.toFixed(3);
@@ -678,31 +685,17 @@ function updateCellBar(el) {
 }
 
 function updatePanel() {
+  if (state.viewMode === 'single') {
+    panelText.value = getVisibleValuesText();
+    return;
+  }
+
   const bpm = state.bpm;
   const spb = 60 / bpm;
   const bps = bpm / 60;
   let output = `${bpm.toFixed(3)} BPM = ${spb.toFixed(3)} SPB = ${bps.toFixed(3)} BPS\n\n`;
 
-  const speedOfSound = getSpeedOfSoundCmPerSec();
-
-  if (state.viewMode === 'single') {
-    noteData.values.forEach((note, i) => {
-      if (!state.rows.has(i)) return;
-
-      ['dotted', 'base', 'triplet'].forEach(type => {
-        if (!state.modes[type]) return;
-
-        const multiplier = type === 'dotted' ? 1.5 : type === 'triplet' ? 2 / 3 : 1;
-        const ms = (60000 / (bpm / Math.pow(2, 5 - i))) * multiplier;
-        const hz = 1 / (ms / 1000);
-        const wavelength = speedOfSound / hz;
-        const label = type === 'base' ? note : `${note} ${type}`;
-        output += `${label} MS: ${ms.toFixed(3)} | Hz: ${hz.toFixed(3)} | CM: ${wavelength.toFixed(3)}\n`;
-      });
-    });
-  }
-
-  else if (state.viewMode === 'all') {
+  if (state.viewMode === 'all') {
     if (!state.selected) {
       panelText.value = output + 'No note selected.';
       return;
@@ -712,7 +705,7 @@ function updatePanel() {
     const i = parseInt(iStr);
     const valueLabel = noteData.values[i];  
     const multiplier = type === 'dotted' ? 1.5 : type === 'triplet' ? 2 / 3 : 1;
-    const modeText = type === 'dotted' ? ' dotted' : type === 'triplet' ? ' triplet' : '';
+    const label = getValueLabel(valueLabel, type);
     const noteMs = (60000 / (bpm / Math.pow(2, 5 - i))) * multiplier;
 
     const beatInterval = 60000 / bpm;
@@ -722,7 +715,7 @@ function updatePanel() {
       const beatTime = n * (60000 / state.bpm);
       const beatPos = beatTime.toFixed(3);
       const delayPos = (beatTime + noteMs).toFixed(3);
-      output += `Beat ${n + 1}: ${beatPos} MS | ${valueLabel}${modeText}: ${delayPos} MS\n`;
+      output += `Beat ${n + 1}: ${beatPos} MS | ${label}: ${delayPos} MS\n`;
     }
   }
 
