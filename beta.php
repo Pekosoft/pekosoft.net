@@ -7,6 +7,7 @@
   $release = "beta";
   $releaseName = "Beta";
   $releasePage = "";
+  $hideReleaseMenu = true;
   ?>
   <link rel="stylesheet" type="text/css" href="/css/<?php echo $release; ?>.css">
 </head>
