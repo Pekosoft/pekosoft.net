@@ -221,7 +221,7 @@
   </svg>
   <div class="justify">
     <h1>SELECT <span class="object">button</span></h1>
-    Toggles the select column. <span class="default">Default: off.</span>
+    Toggles the select column. <span class="default">Default: on.</span>
   </div>
 </div>
 
@@ -293,7 +293,7 @@
   </svg>
   <div class="justify">
     <h1>UK <span class="object">button</span></h1>
-    Toggles the British names column. <span class="default">Default: on.</span>
+    Toggles the British names column. <span class="default">Default: off.</span>
   </div>
 </div>
 
@@ -302,7 +302,7 @@
   </svg>
   <div class="justify">
     <h1>BPM <span class="object">button</span></h1>
-    Toggles the corresponding BPM column. <span class="default">Default: on.</span>
+    Toggles the corresponding BPM column. <span class="default">Default: off.</span>
   </div>
 </div>
 

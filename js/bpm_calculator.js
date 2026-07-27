@@ -147,8 +147,9 @@ function createColumnPresetColumns(preset) {
   if (preset === 'default') {
     return {
       ...full,
-      select: false,
       inches: false,
+      uk: false,
+      bpm: false,
       diff: false,
       percent: false
     };
