@@ -849,6 +849,10 @@ tbody tr:hover {
   display: inline;
 }
 
+.show-button-text button:not(.transparent):not(.icon-only):not(.square):not(.toc-button):hover .button-text {
+  opacity: 0.8;
+}
+
 /* Always keep icons visible for icon-only, square, and TOC buttons */
 .show-button-text button.icon-only .icons,
 .show-button-text button.square .icons,
@@ -1211,6 +1215,14 @@ li h1 img {
 .toc-button .icons {
   flex: 0 0 var(--size1);
   margin: 0;
+}
+
+.toc-button:hover {
+  opacity: 0.8;
+}
+
+.toc-button:hover .icons {
+  opacity: 1;
 }
 
 .toc-button:focus {
