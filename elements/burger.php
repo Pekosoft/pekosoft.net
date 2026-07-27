@@ -12,56 +12,56 @@
       <svg class="icons" role="img">
         <use href="/icons.svg#index"></use>
       </svg>
-      INDEX
+      Index
     </button>
 
     <button class="toc-button" data-href="/tap_pad" title="Tap Pad" aria-label="Tap Pad">
       <svg class="icons" role="img">
         <use href="/icons.svg#tap_pad"></use>
       </svg>
-      TAP PAD
+      Tap Pad
     </button>
 
     <button class="toc-button" data-href="/bpm_calculator" title="BPM Calculator" aria-label="BPM Calculator">
       <svg class="icons" role="img">
         <use href="/icons.svg#bpm_calculator"></use>
       </svg>
-      BPM CALCULATOR
+      BPM Calculator
     </button>
 
     <button class="toc-button" data-href="/metronome" title="Metronome" aria-label="Metronome">
       <svg class="icons" role="img">
         <use href="/icons.svg#metronome"></use>
       </svg>
-      METRONOME
+      Metronome
     </button>
 
     <button class="toc-button" data-href="/turntable" title="Turntable" aria-label="Turntable">
       <svg class="icons" role="img">
         <use href="/icons.svg#turntable"></use>
       </svg>
-      TURNTABLE
+      Turntable
     </button>
 
     <button class="toc-button" data-href="/settings.php" title="Settings" aria-label="Settings">
       <svg class="icons" role="img">
         <use href="/icons.svg#settings"></use>
       </svg>
-      SETTINGS
+      Settings
     </button>
 
     <button class="toc-button" data-href="/bitcoin.php" title="Buy Us Coffee" aria-label="Buy Us Coffee">
       <svg class="icons" role="img">
         <use href="/icons.svg#qr"></use>
       </svg>
-      BUY US COFFEE
+      Buy Us Coffee
     </button>
 
     <button id="play-site-button" class="toc-button" title="Play all pages" aria-label="Play all pages">
       <svg class="icons" role="img">
         <use href="/icons.svg#play"></use>
       </svg>
-      PLAY
+      Play
     </button>
 
     <div class="toc-footer">

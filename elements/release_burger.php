@@ -29,28 +29,28 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
       <svg class="icons" role="img">
         <use href="/icons.svg#release"></use>
       </svg>
-      RELEASE
+      Release
     </button>
 
     <button class="toc-button" data-href="/help.php?r=<?php echo $release; ?>" title="Help" aria-label="Help">
       <svg class="icons" role="img">
         <use href="/icons.svg#help"></use>
       </svg>
-      HELP
+      Help
     </button>
 
     <button class="toc-button" data-href="/history.php?r=<?php echo $release; ?>" title="History" aria-label="History">
       <svg class="icons" role="img">
         <use href="/icons.svg#clock"></use>
       </svg>
-      HISTORY
+      History
     </button>
 
     <button class="toc-button" data-href="/about.php?r=<?php echo $release; ?>" title="About" aria-label="About">
       <svg class="icons" role="img">
         <use href="/icons.svg#about"></use>
       </svg>
-      ABOUT
+      About
     </button>
 
     <?php if ($hasModules): ?>
@@ -62,7 +62,7 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
         <svg class="icons" role="img">
           <use href="/icons.svg#tool"></use>
         </svg>
-        TOOL
+        Tool
       </button>
       <?php endif; ?>
 
@@ -71,7 +71,7 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
         <svg class="icons" role="img">
           <use href="/icons.svg#controls"></use>
         </svg>
-        CONTROLS
+        Controls
       </button>
       <?php endif; ?>
 
@@ -80,7 +80,7 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
         <svg class="icons" role="img">
           <use href="/icons.svg#meter"></use>
         </svg>
-        METERS
+        Meters
       </button>
       <?php endif; ?>
 
@@ -89,7 +89,7 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
         <svg class="icons" role="img">
           <use href="/icons.svg#timeline"></use>
         </svg>
-        TIMELINE
+        Timeline
       </button>
       <?php endif; ?>
 
@@ -99,7 +99,7 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
         <svg class="icons" role="img">
           <use href="/icons.svg#view_list"></use>
         </svg>
-        PLAYLIST
+        Playlist
       </button>
 
       <?php endif; ?>
@@ -109,7 +109,7 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
         <svg class="icons" role="img">
           <use href="/icons.svg#panel"></use>
         </svg>
-        PANEL
+        Panel
       </button>
       <?php endif; ?>
 

@@ -610,7 +610,7 @@ function updatePlayButtonState() {
   button.classList.toggle('button-on', active);
   button.setAttribute('title', 'Play all pages');
   button.setAttribute('aria-label', 'Play all pages');
-  button.innerHTML = '<svg class="icons" role="img"><use href="/icons.svg#play"></use></svg>PLAY';
+  button.innerHTML = '<svg class="icons" role="img"><use href="/icons.svg#play"></use></svg>Play';
 }
 
 function stopSitePlay() {
