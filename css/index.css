@@ -1155,7 +1155,9 @@ li h1 img {
   flex-direction: column;
   position: fixed;
   top: 48px;
-  left: 0px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
   background-color: var(--grey1);
   border: 0px;
   padding: 0px;
@@ -1231,15 +1233,17 @@ li h1 img {
   display: none;
   flex-direction: column;
   position: fixed;
-  top: 48px;
-  left: 0px;
+  top: 98px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
   background-color: var(--black);
   border: 0px;
   padding: 0px;
   z-index: 999;
   max-width: var(--maxwidth);
   width: 100%;
-  height: calc(var(--visual-viewport-height, 100dvh) - 88px);
+  height: calc(var(--visual-viewport-height, 100dvh) - 142px);
   overflow-y: auto;
   align-items: flex-start;
 }
