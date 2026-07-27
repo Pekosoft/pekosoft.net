@@ -31,6 +31,7 @@ const toggleSoundButton = document.getElementById('toggle-sound-button');
 const toggleLoopButton = document.getElementById('toggle-loop-button');
 const togglePlayheadButton = document.getElementById('toggle-playhead-button');
 const guidesButton = document.getElementById('guides-button');
+const followButton = document.getElementById('follow-button');
 const selectNoneButton = document.getElementById('select-none-button');
 const positionField = document.getElementById('position-field');
 const beatField = document.getElementById('beat-field');
@@ -40,12 +41,15 @@ const volumeDecreaseButton = document.getElementById('volume-decrease-button');
 const beatSoundSelect = document.getElementById('beat-sound-type');
 const toneTypeSelect = document.getElementById('tone-type');
 const timelineContainer = document.getElementById('timeline-container');
+const timelineScroll = timelineSvg?.closest('.scrollable');
 const svgUtils = window.PekoSvgUtils;
 const timelineUtils = window.PekoSvgTimeline;
 const BPM_TIMELINE_WIDTH = 4096;
 const BPM_MIN_TIMELINE_HEIGHT = 256;
 const globalGuidesDefault = localStorage.getItem('global.guides') === 'true';
+const reducedMotionDefault = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let disconnectTimelineResize = null;
+let timelineFollow = null;
 
 // Column buttons
 
@@ -198,6 +202,7 @@ function createDefaultState() {
     isLoopOn: false,
     showPlayhead: true,
     showGuides: globalGuidesDefault,
+    followTimeline: !reducedMotionDefault,
     soundVolume: 100,
     beatSound: 'click',
     toneType: 'sine',
@@ -250,6 +255,7 @@ function loadState() {
     state.isLoopOn = parsed.isLoopOn ?? false;
     state.showPlayhead = parsed.showPlayhead ?? true;
     state.showGuides = parsed.showGuides ?? state.showGuides;
+    state.followTimeline = parsed.followTimeline ?? state.followTimeline;
     state.soundVolume = parsed.soundVolume ?? 100;
     state.beatSound = parsed.beatSound ?? 'click';
     state.toneType = parsed.toneType ?? 'sine';
@@ -272,6 +278,7 @@ function saveState() {
     isLoopOn: state.isLoopOn,
     showPlayhead: state.showPlayhead,
     showGuides: state.showGuides,
+    followTimeline: state.followTimeline,
     soundVolume: state.soundVolume,
     beatSound: state.beatSound,
     toneType: state.toneType,
@@ -859,6 +866,10 @@ function drawCanvas() {
       }
     }
   }
+
+  if (state.isPlaying) {
+    timelineFollow?.followRatio(getCurrentPlayheadMs() / 60000);
+  }
 }
 
 function createSvgElement(name) {
@@ -905,6 +916,19 @@ function setupTimelineResizeHandling() {
     container: timelineContainer,
     onResize: drawCanvas
   });
+}
+
+function setupTimelineFollow() {
+  timelineFollow?.destroy();
+  timelineFollow = timelineUtils.createFollowController({
+    scrollElement: timelineScroll,
+    onEnabledChange: (enabled) => {
+      state.followTimeline = enabled;
+      updateFollowButton();
+      saveState();
+    }
+  });
+  timelineFollow.setEnabled(state.followTimeline);
 }
 
 // EVENT LISTENERS
@@ -1077,6 +1101,8 @@ resetButton.addEventListener('click', () => {
   timelineStartTime = 0;
   pausedElapsedMs = 0;
   state = createDefaultState();
+  timelineFollow?.setEnabled(state.followTimeline);
+  timelineFollow?.reset();
 
   if (volumeSlider) {
     volumeSlider.value = String(state.soundVolume);
@@ -1095,6 +1121,7 @@ resetButton.addEventListener('click', () => {
   updateLoopButton();
   updatePlayheadButton();
   updateGuidesButton();
+  updateFollowButton();
   localStorage.removeItem('meters.bpm_calculator.meter');
   localStorage.removeItem('meters.bpm_calculator.speed');
   localStorage.removeItem('meters.bpm_calculator.rate');
@@ -1549,7 +1576,7 @@ function updateVisualMarkers() {
     shouldRedraw = true;
   }
 
-  if (state.isPlaying && state.showPlayhead) {
+  if (state.isPlaying && (state.showPlayhead || state.followTimeline)) {
     shouldRedraw = true;
   }
 
@@ -1730,6 +1757,7 @@ function stopPlayback() {
   playbackEvents = [];
 
   stopAllRowPreviews();
+  timelineFollow?.reset();
   updateTimelineReadout(0, 0);
   updateMetersSourceBridge();
   drawCanvas();
@@ -1776,6 +1804,13 @@ function updatePlayheadButton() {
 function updateGuidesButton() {
   if (guidesButton) {
     guidesButton.classList.toggle('button-on', state.showGuides);
+  }
+}
+
+function updateFollowButton() {
+  if (followButton) {
+    followButton.classList.toggle('button-on', state.followTimeline);
+    followButton.setAttribute('aria-pressed', state.followTimeline ? 'true' : 'false');
   }
 }
 
@@ -1832,16 +1867,30 @@ if (guidesButton) {
   });
 }
 
+if (followButton) {
+  followButton.addEventListener('click', () => {
+    state.followTimeline = !state.followTimeline;
+    timelineFollow?.setEnabled(state.followTimeline);
+    if (state.followTimeline) {
+      timelineFollow?.followRatio(getCurrentPlayheadMs() / 60000);
+    }
+    updateFollowButton();
+    saveState();
+  });
+}
+
 // INITIAL LOAD
 
 loadState();
 state.beatSound = normalizeTone(state.beatSound);
 state.toneType = normalizeToneType(state.toneType);
+setupTimelineFollow();
 calculateValues();
 updateSoundButton();
 updateLoopButton();
 updatePlayheadButton();
 updateGuidesButton();
+updateFollowButton();
 updateTimelineReadout(0, 0);
 setupTimelineResizeHandling();
 drawCanvas();

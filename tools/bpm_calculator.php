@@ -362,6 +362,13 @@
         </svg>
         <span class="button-text">PLAYHEAD</span>
       </button>
+
+      <button id="follow-button" class="square" title="Follow playback position">
+        <svg class="icons">
+          <use href="/icons.svg#asterisk" />
+        </svg>
+        <span class="button-text">FOLLOW</span>
+      </button>
     </div>
   </div>
 

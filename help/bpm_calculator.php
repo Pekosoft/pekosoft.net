@@ -430,6 +430,15 @@
 </div>
 
 <div class="feature-row border"><svg class="standard-image-help">
+    <use href="/icons.svg#asterisk"></use>
+  </svg>
+  <div class="justify">
+    <h1>FOLLOW <span class="object">button</span></h1>
+    Keeps the playback position visible in Timeline. Returns to the start when playback loops. Horizontal timeline navigation turns Follow off. <span class="default">Default: on, or off when reduced motion is preferred.</span>
+  </div>
+</div>
+
+<div class="feature-row border"><svg class="standard-image-help">
     <use href="/icons.svg#photo"></use>
   </svg>
   <div class="justify">
