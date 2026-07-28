@@ -427,7 +427,7 @@ function makeBpmRows() {
   return Array.from({ length: 300 }, (_, i) => {
     const bpm = i + 1;
     return [
-      { html: `<a href="${getWikiLink(bpm)}" target="wiki">${bpm}</a>`, className: 'right' },
+      { text: String(bpm), html: `<a href="${getWikiLink(bpm)}" target="wiki">${bpm}</a>`, className: 'right' },
       { text: words[i], className: 'left' },
       { text: isOdd(bpm), className: 'left' },
       { text: formatter1.format(bpm / 2), className: 'right' },

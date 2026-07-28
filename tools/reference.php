@@ -157,7 +157,7 @@
 
       <button id="toggle-sort-button" class="square" title="SORT: Ascending" aria-pressed="false">
         <svg class="icons">
-          <use href="/icons.svg#sort_az" />
+          <use href="/icons.svg#arrow_up_down" />
         </svg>
         <span id="toggle-sort-text" class="button-text">SORT</span>
       </button>
