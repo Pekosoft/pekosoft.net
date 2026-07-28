@@ -1679,7 +1679,8 @@ button.grey .icons {
 #volume-slider,
 #beat-volume-slider,
 #tone-volume-slider,
-#progress-slider {
+#progress-slider,
+.labeled-range {
   flex: 1;
   position: relative;
   z-index: 2;
@@ -1690,7 +1691,8 @@ button.grey .icons {
 #volume-slider::after,
 #beat-volume-slider::after,
 #tone-volume-slider::after,
-#progress-slider::after {
+#progress-slider::after,
+.labeled-range::after {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -1746,6 +1748,11 @@ button.grey .icons {
 
 #progress-slider::after {
   content: "P R O G R E S S";
+  letter-spacing: 2px;
+}
+
+.labeled-range::after {
+  content: attr(data-label);
   letter-spacing: 2px;
 }
 

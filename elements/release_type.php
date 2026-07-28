@@ -7,6 +7,7 @@ function isBetaRelease($release)
     'bpm_circle',
     'bpm_curve',
     'circle_of_fifths',
+    'drum_machine',
     'icons',
     'notepad',
     'piano',

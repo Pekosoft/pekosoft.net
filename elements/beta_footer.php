@@ -57,6 +57,14 @@ function betaFooterHref($toolFile, $currentPage)
   </div>
 
   <div>
+    <a href="<?php echo betaFooterHref('/drum_machine', $currentPage); ?>" title="Drum Machine" aria-label="Drum Machine">
+      <svg class="icons">
+        <use href="/icons.svg#drum_machine" />
+      </svg>
+    </a>
+  </div>
+
+  <div>
     <a href="<?php echo betaFooterHref('/reference', $currentPage); ?>" title="Reference" aria-label="Reference">
       <svg class="icons">
           <use href="/icons.svg#reference" />

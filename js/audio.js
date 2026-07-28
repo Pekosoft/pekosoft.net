@@ -3,6 +3,7 @@
 
 (() => {
   const clickNoiseBuffers = new WeakMap();
+  const drumNoiseBuffers = new WeakMap();
 
   function normalizeTone(tone) {
     const allowed = ["click", "kick", "sine", "square", "sawtooth", "triangle", "piano"];
@@ -55,6 +56,203 @@
   }
 
   window.getTransientBaseFrequencyHz = getTransientBaseFrequencyHz;
+
+  function clampDrumValue(value, min, max, fallback) {
+    const parsed = Number(value);
+    return Math.max(min, Math.min(max, Number.isFinite(parsed) ? parsed : fallback));
+  }
+
+  function getDrumNoiseBuffer(audioContext) {
+    const cached = drumNoiseBuffers.get(audioContext);
+    if (cached && cached.sampleRate === audioContext.sampleRate) return cached;
+
+    const length = audioContext.sampleRate;
+    const buffer = audioContext.createBuffer(1, length, audioContext.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let index = 0; index < length; index++) {
+      data[index] = (Math.random() * 2) - 1;
+    }
+
+    drumNoiseBuffers.set(audioContext, buffer);
+    return buffer;
+  }
+
+  function createDrumOutput(audioContext, destinationNode, when, level, velocity, pan) {
+    const outputGain = audioContext.createGain();
+    const outputLevel = clampDrumValue(level, 0, 1, 0.8) * clampDrumValue(velocity, 0, 1, 1);
+    outputGain.gain.setValueAtTime(outputLevel, when);
+
+    const panner = typeof audioContext.createStereoPanner === "function"
+      ? audioContext.createStereoPanner()
+      : null;
+
+    if (panner) {
+      panner.pan.setValueAtTime(clampDrumValue(pan, -1, 1, 0), when);
+      outputGain.connect(panner);
+      panner.connect(destinationNode || audioContext.destination);
+    } else {
+      outputGain.connect(destinationNode || audioContext.destination);
+    }
+
+    return { input: outputGain, nodes: panner ? [outputGain, panner] : [outputGain] };
+  }
+
+  function releaseDrumNodes(sources, nodes) {
+    let remaining = sources.length;
+    const cleanup = () => {
+      remaining--;
+      if (remaining > 0) return;
+      nodes.forEach((node) => {
+        try {
+          node.disconnect();
+        } catch (_) {
+          // Node may already be disconnected by the browser.
+        }
+      });
+    };
+
+    sources.forEach((source) => {
+      source.addEventListener("ended", cleanup, { once: true });
+    });
+  }
+
+  window.playDrumSound = function (options = {}) {
+    const {
+      audioContext,
+      destinationNode = null,
+      voice = "kick",
+      when,
+      velocity = 1,
+      level = 0.8,
+      pan = 0,
+      frequency,
+      decay,
+      tone = 0.5,
+      snap = 0.7
+    } = options;
+
+    if (!audioContext) return null;
+
+    const selectedVoice = ["kick", "snare", "hat", "perc"].includes(voice) ? voice : "kick";
+    const startTime = Math.max(when ?? audioContext.currentTime, audioContext.currentTime + 0.001);
+    const output = createDrumOutput(audioContext, destinationNode, startTime, level, velocity, pan);
+    const sources = [];
+    const nodes = [...output.nodes];
+    let stopTime = startTime;
+
+    if (selectedVoice === "kick") {
+      const baseFrequency = clampDrumValue(frequency, 35, 180, 55);
+      const duration = clampDrumValue(decay, 0.06, 1.2, 0.35);
+      const oscillator = audioContext.createOscillator();
+      const envelope = audioContext.createGain();
+      const clickLevel = clampDrumValue(tone, 0, 1, 0.5);
+
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(baseFrequency * (2.6 + clickLevel), startTime);
+      oscillator.frequency.exponentialRampToValueAtTime(baseFrequency, startTime + Math.min(0.09, duration * 0.35));
+      envelope.gain.setValueAtTime(1, startTime);
+      envelope.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+      oscillator.connect(envelope);
+      envelope.connect(output.input);
+      oscillator.start(startTime);
+      oscillator.stop(startTime + duration + 0.01);
+
+      sources.push(oscillator);
+      nodes.push(oscillator, envelope);
+      stopTime = startTime + duration + 0.01;
+    } else if (selectedVoice === "snare") {
+      const baseFrequency = clampDrumValue(frequency, 90, 360, 180);
+      const duration = clampDrumValue(decay, 0.04, 0.8, 0.2);
+      const noiseAmount = clampDrumValue(snap, 0, 1, 0.75);
+      const toneAmount = clampDrumValue(tone, 0, 1, 0.55);
+      const noise = audioContext.createBufferSource();
+      const noiseFilter = audioContext.createBiquadFilter();
+      const noiseEnvelope = audioContext.createGain();
+      const oscillator = audioContext.createOscillator();
+      const oscillatorEnvelope = audioContext.createGain();
+
+      noise.buffer = getDrumNoiseBuffer(audioContext);
+      noiseFilter.type = "highpass";
+      noiseFilter.frequency.setValueAtTime(700 + (toneAmount * 2400), startTime);
+      noiseFilter.Q.setValueAtTime(0.7, startTime);
+      noiseEnvelope.gain.setValueAtTime(Math.max(0.0001, noiseAmount), startTime);
+      noiseEnvelope.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+      noise.connect(noiseFilter);
+      noiseFilter.connect(noiseEnvelope);
+      noiseEnvelope.connect(output.input);
+
+      oscillator.type = "triangle";
+      oscillator.frequency.setValueAtTime(baseFrequency, startTime);
+      oscillator.frequency.exponentialRampToValueAtTime(baseFrequency * 0.72, startTime + duration);
+      oscillatorEnvelope.gain.setValueAtTime(Math.max(0.0001, 0.65 * (1 - (noiseAmount * 0.55))), startTime);
+      oscillatorEnvelope.gain.exponentialRampToValueAtTime(0.0001, startTime + Math.min(duration, 0.16));
+      oscillator.connect(oscillatorEnvelope);
+      oscillatorEnvelope.connect(output.input);
+
+      noise.start(startTime);
+      noise.stop(startTime + duration);
+      oscillator.start(startTime);
+      oscillator.stop(startTime + duration + 0.01);
+
+      sources.push(noise, oscillator);
+      nodes.push(noise, noiseFilter, noiseEnvelope, oscillator, oscillatorEnvelope);
+      stopTime = startTime + duration + 0.01;
+    } else if (selectedVoice === "hat") {
+      const cutoff = clampDrumValue(frequency, 3000, 14000, 8000);
+      const duration = clampDrumValue(decay, 0.015, 0.5, 0.06);
+      const toneAmount = clampDrumValue(tone, 0, 1, 0.75);
+      const noise = audioContext.createBufferSource();
+      const highPass = audioContext.createBiquadFilter();
+      const bandPass = audioContext.createBiquadFilter();
+      const envelope = audioContext.createGain();
+
+      noise.buffer = getDrumNoiseBuffer(audioContext);
+      highPass.type = "highpass";
+      highPass.frequency.setValueAtTime(Math.max(2500, cutoff * 0.58), startTime);
+      bandPass.type = "bandpass";
+      bandPass.frequency.setValueAtTime(cutoff, startTime);
+      bandPass.Q.setValueAtTime(0.35 + toneAmount, startTime);
+      envelope.gain.setValueAtTime(0.85, startTime);
+      envelope.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+      noise.connect(highPass);
+      highPass.connect(bandPass);
+      bandPass.connect(envelope);
+      envelope.connect(output.input);
+      noise.start(startTime);
+      noise.stop(startTime + duration);
+
+      sources.push(noise);
+      nodes.push(noise, highPass, bandPass, envelope);
+      stopTime = startTime + duration;
+    } else {
+      const baseFrequency = clampDrumValue(frequency, 120, 2400, 620);
+      const duration = clampDrumValue(decay, 0.025, 0.8, 0.14);
+      const toneAmount = clampDrumValue(tone, 0, 1, 0.6);
+      const oscillator = audioContext.createOscillator();
+      const envelope = audioContext.createGain();
+      const filter = audioContext.createBiquadFilter();
+
+      oscillator.type = toneAmount > 0.66 ? "square" : "triangle";
+      oscillator.frequency.setValueAtTime(baseFrequency * 1.35, startTime);
+      oscillator.frequency.exponentialRampToValueAtTime(baseFrequency, startTime + Math.min(0.06, duration * 0.5));
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(1200 + (toneAmount * 9000), startTime);
+      envelope.gain.setValueAtTime(0.8, startTime);
+      envelope.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+      oscillator.connect(filter);
+      filter.connect(envelope);
+      envelope.connect(output.input);
+      oscillator.start(startTime);
+      oscillator.stop(startTime + duration + 0.01);
+
+      sources.push(oscillator);
+      nodes.push(oscillator, filter, envelope);
+      stopTime = startTime + duration + 0.01;
+    }
+
+    releaseDrumNodes(sources, nodes);
+    return { sources, stopTime, voice: selectedVoice };
+  };
 
   window.playTransientSound = function (options = {}) {
     const {

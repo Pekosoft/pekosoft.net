@@ -22,7 +22,11 @@ The following tools are listed on `beta.php` as tests, experiments, and works in
 - **Player**
 - **Visualizer**
 - **BPM Circle**
+- **BPM Curve**
+- **Circle Of Fifths**
+- **Drum Machine**
 - **Reference**
+- **Tuner**
 - **Notepad**
 - **Audio Calculator**
 - **Piano**

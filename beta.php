@@ -78,6 +78,17 @@
 
     <div class="beta-link-row">
       <svg class="icons">
+        <use href="/icons.svg#drum_machine" />
+      </svg>
+      <div class="beta-link-title">
+        <a href="/drum_machine" title="Drum Machine" aria-label="Drum Machine">
+          DRUM MACHINE
+        </a>
+      </div>
+    </div>
+
+    <div class="beta-link-row">
+      <svg class="icons">
           <use href="/icons.svg#reference" />
       </svg>
       <div class="beta-link-title">

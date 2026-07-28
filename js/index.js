@@ -216,6 +216,67 @@ function ensurePekosoftFilename(filename) {
 
 window.ensurePekosoftFilename = ensurePekosoftFilename;
 
+function bindPekosoftRangeButtons(slider, decreaseButton, increaseButton, options = {}) {
+  if (!slider || !decreaseButton || !increaseButton) return null;
+
+  const holdDelay = Math.max(0, Number(options.holdDelay) || 350);
+  const repeatDelay = Math.max(16, Number(options.repeatDelay) || 80);
+  let holdTimer = null;
+  let repeatTimer = null;
+  let didRepeat = false;
+
+  function step(direction) {
+    direction > 0 ? slider.stepUp() : slider.stepDown();
+    slider.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
+  function stopRepeating() {
+    clearTimeout(holdTimer);
+    clearInterval(repeatTimer);
+    holdTimer = null;
+    repeatTimer = null;
+  }
+
+  function bind(button, direction) {
+    button.addEventListener('pointerdown', function (event) {
+      if (event.button !== 0 || button.disabled) return;
+      didRepeat = false;
+      try {
+        button.setPointerCapture?.(event.pointerId);
+      } catch (_) {
+        // Capture may be unavailable for synthetic or accessibility pointers.
+      }
+      holdTimer = setTimeout(function () {
+        didRepeat = true;
+        step(direction);
+        repeatTimer = setInterval(function () {
+          step(direction);
+        }, repeatDelay);
+      }, holdDelay);
+    });
+
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (eventName) {
+      button.addEventListener(eventName, stopRepeating);
+    });
+
+    button.addEventListener('click', function (event) {
+      if (didRepeat) {
+        event.preventDefault();
+        didRepeat = false;
+        return;
+      }
+      step(direction);
+    });
+  }
+
+  bind(decreaseButton, -1);
+  bind(increaseButton, 1);
+
+  return { destroy: stopRepeating };
+}
+
+window.bindPekosoftRangeButtons = bindPekosoftRangeButtons;
+
 function triggerDownloadFromCanvas(canvas, filename) {
   if (!canvas) return;
 
@@ -506,6 +567,8 @@ const SITE_PLAY_SEQUENCE = [
   '/visualizer',
   '/bpm_circle',
   '/bpm_curve',
+  '/circle_of_fifths',
+  '/drum_machine',
   '/reference',
   '/tuner',
   '/notepad',
@@ -521,6 +584,8 @@ const SITE_PLAY_SEQUENCE = [
   '/help.php?r=visualizer',
   '/help.php?r=bpm_circle',
   '/help.php?r=bpm_curve',
+  '/help.php?r=circle_of_fifths',
+  '/help.php?r=drum_machine',
   '/help.php?r=reference',
   '/help.php?r=tuner',
   '/help.php?r=notepad',
@@ -537,6 +602,8 @@ const SITE_PLAY_SEQUENCE = [
   '/history.php?r=visualizer',
   '/history.php?r=bpm_circle',
   '/history.php?r=bpm_curve',
+  '/history.php?r=circle_of_fifths',
+  '/history.php?r=drum_machine',
   '/history.php?r=reference',
   '/history.php?r=tuner',
   '/history.php?r=notepad',
@@ -553,6 +620,8 @@ const SITE_PLAY_SEQUENCE = [
   '/about.php?r=visualizer',
   '/about.php?r=bpm_circle',
   '/about.php?r=bpm_curve',
+  '/about.php?r=circle_of_fifths',
+  '/about.php?r=drum_machine',
   '/about.php?r=reference',
   '/about.php?r=tuner',
   '/about.php?r=notepad',

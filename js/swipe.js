@@ -113,6 +113,7 @@ function buildPageUrl(page) {
     "bpm_circle",
     "bpm_curve",
     "circle_of_fifths",
+    "drum_machine",
     "player",
     "piano",
     "audio_calculator",

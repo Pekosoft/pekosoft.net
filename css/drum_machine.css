@@ -1,0 +1,178 @@
+/* Pekosoft Drum Machine */
+/* pekosoft.net/css/drum_machine.css */
+
+.drum-machine-view {
+  padding: 0;
+  background: var(--black);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.sequencer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr));
+  grid-auto-rows: minmax(196px, 1fr);
+  gap: 4px;
+  width: 100%;
+  min-height: 100%;
+  background: var(--grey1);
+}
+
+.sequence-bank {
+  display: grid;
+  grid-template-columns: minmax(58px, 72px) 32px repeat(8, minmax(24px, 1fr));
+  grid-template-rows: 20px repeat(4, minmax(42px, 1fr));
+  gap: 2px;
+  min-width: 0;
+  min-height: 196px;
+  background: var(--black);
+}
+
+.sequence-heading,
+.step-number {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--grey2);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.step-number.beat-start {
+  color: var(--white);
+}
+
+.voice-trigger,
+.voice-mute,
+.step-button {
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--grey2);
+  background: var(--black);
+  touch-action: none;
+}
+
+.voice-trigger {
+  padding: 0 4px;
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 900;
+  overflow: hidden;
+}
+
+.voice-trigger.voice-hit,
+.voice-trigger.voice-hit:hover {
+  color: var(--black);
+  background: var(--color1);
+}
+
+.voice-trigger.selected-voice {
+  border-color: var(--color1);
+}
+
+.voice-mute {
+  display: grid;
+  place-items: center;
+}
+
+.voice-mute .icons {
+  width: 20px;
+  height: 20px;
+}
+
+.step-button {
+  position: relative;
+}
+
+.step-button.beat-start {
+  border-left-width: 3px;
+}
+
+.step-button.velocity-1,
+.step-button.velocity-1:hover {
+  background: var(--grey2);
+}
+
+.step-button.velocity-2,
+.step-button.velocity-2:hover {
+  background: var(--color1);
+}
+
+.step-mark {
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin: auto;
+  background: transparent;
+}
+
+.step-button.velocity-1 .step-mark {
+  background: var(--white);
+}
+
+.step-button.velocity-2 .step-mark {
+  width: 14px;
+  height: 14px;
+  background: var(--white);
+}
+
+.step-button.current-step {
+  outline: 2px solid var(--white);
+  outline-offset: -4px;
+}
+
+.step-button:focus-visible,
+.voice-trigger:focus-visible,
+.voice-mute:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: -3px;
+}
+
+.step-button.muted-step,
+.voice-trigger.muted-step {
+  opacity: 0.45;
+}
+
+.step-button:disabled {
+  border-color: var(--grey1);
+  background: var(--black);
+  cursor: default;
+  opacity: 0.35;
+}
+
+#controls-container .controls-slider-block:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+#pattern-text.pattern-error {
+  color: var(--color2);
+}
+
+#undo-button:disabled,
+#redo-button:disabled {
+  color: var(--grey2);
+  cursor: default;
+}
+
+#undo-button:disabled .icons,
+#redo-button:disabled .icons {
+  fill: var(--grey2);
+}
+
+@media (max-width: 380px) {
+  .sequence-bank {
+    grid-template-columns: 54px 30px repeat(8, minmax(22px, 1fr));
+  }
+
+  .voice-trigger {
+    font-size: 11px;
+  }
+}
+
+/* END OF FILE */
