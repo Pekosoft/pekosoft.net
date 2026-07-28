@@ -169,6 +169,26 @@
 </div>
 
 <div class="feature-row module">
+  <svg class="standard-image-help"><use href="/icons.svg#timeline"></use></svg>
+  <div class="justify"><h1>Timeline <span class="object">module</span></h1>Shows an eight-second rolling view of played kick, snare, hi-hat and percussion hits. Block height shows normal or accent velocity, and block width follows voice decay.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#guides"></use></svg>
+  <div class="justify"><h1>GUIDES <span class="object">button</span></h1>Toggles horizontal drum-lane guides. The initial state follows the global Guides setting.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#download"></use></svg>
+  <div class="justify"><h1>SAVE <span class="object">button</span></h1>Saves the Timeline canvas as a PNG image.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#copy"></use></svg>
+  <div class="justify"><h1>COPY <span class="object">button</span></h1>Copies the Timeline canvas as a PNG image to clipboard.</div>
+</div>
+
+<div class="feature-row module">
   <svg class="standard-image-help"><use href="/icons.svg#panel"></use></svg>
   <div class="justify"><h1>Panel <span class="object">module</span></h1>Shows editable JSON containing the current pattern, tempo, voice settings, mutes and other Drum Machine settings.</div>
 </div>

@@ -1,4 +1,4 @@
 <h1>1.0
 28-07-2026
 </h1>
-Introducing: Pekosoft Drum Machine. A four-voice, 16-step rhythm sequencer with velocity accents, pattern and kit presets, swing, voice shaping, live meters, pattern editing and JSON import and export. Initial release.
+Introducing: Pekosoft Drum Machine. A four-voice, 16-step rhythm sequencer with velocity accents, pattern and kit presets, swing, voice shaping, rolling playback timeline, live meters, pattern editing and JSON import and export. Initial release.

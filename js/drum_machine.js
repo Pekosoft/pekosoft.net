@@ -6,6 +6,7 @@
   const STEP_COUNT = 16;
   const SCHEDULE_AHEAD_SEC = 0.1;
   const SCHEDULER_DELAY_MS = 25;
+  const TIMELINE_WINDOW_MS = 8000;
 
   const VOICES = [
     { id: "kick", label: "KICK" },
@@ -131,6 +132,7 @@
       volume: 80,
       sound: true,
       haptic: localStorage.getItem("global.haptics") === "true",
+      timelineGuides: localStorage.getItem("global.guides") === "true",
       length: STEP_COUNT,
       patternName: "basic",
       kitName: "classic",
@@ -162,6 +164,7 @@
       volume: Math.round(clamp(raw.volume, 0, 100, defaults.volume)),
       sound: raw.sound === undefined ? defaults.sound : !!raw.sound,
       haptic: raw.haptic === undefined ? defaults.haptic : !!raw.haptic,
+      timelineGuides: raw.timelineGuides === undefined ? defaults.timelineGuides : !!raw.timelineGuides,
       length: [4, 8, 12, 16].includes(Number(raw.length)) ? Number(raw.length) : defaults.length,
       patternName: patternNames.includes(raw.patternName) ? raw.patternName : defaults.patternName,
       kitName: kitNames.includes(raw.kitName) ? raw.kitName : defaults.kitName,
@@ -197,6 +200,8 @@
       this.redoStack = [];
       this.tapTimes = [];
       this.tapFlashTimer = null;
+      this.timelineEvents = [];
+      this.timelineAnimationFrame = null;
 
       this.elements = {
         grid: document.getElementById("sequencer-grid"),
@@ -226,6 +231,8 @@
         toneInput: document.getElementById("tone-input"),
         levelInput: document.getElementById("level-input"),
         panInput: document.getElementById("pan-input"),
+        timelineCanvas: document.getElementById("drum-roll"),
+        timelineGuides: document.getElementById("timeline-guides-button"),
         patternText: document.getElementById("pattern-text"),
         open: document.getElementById("open-button"),
         save: document.getElementById("save-button"),
@@ -235,6 +242,7 @@
       };
 
       this.buildGrid();
+  this.setupTimeline();
       this.setupAudio();
       this.bindEvents();
       this.updateAll();
@@ -281,6 +289,92 @@
       this.masterGain.gain.setValueAtTime(gain, now);
     }
 
+    setupTimeline() {
+      this.timelineContext = this.elements.timelineCanvas.getContext("2d");
+      this.elements.timelineGuides.addEventListener("click", () => {
+        this.state.timelineGuides = !this.state.timelineGuides;
+        this.saveState();
+        this.updateTimelineButton();
+        this.updatePanel();
+      });
+      this.drawTimeline();
+    }
+
+    syncTimelineCanvas() {
+      const canvas = this.elements.timelineCanvas;
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      if (width <= 0 || height <= 0) return null;
+
+      const dpr = window.devicePixelRatio || 1;
+      const pixelWidth = Math.max(1, Math.round(width * dpr));
+      const pixelHeight = Math.max(1, Math.round(height * dpr));
+      if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+        canvas.width = pixelWidth;
+        canvas.height = pixelHeight;
+      }
+      this.timelineContext.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { width, height };
+    }
+
+    drawTimeline() {
+      this.timelineAnimationFrame = requestAnimationFrame(() => this.drawTimeline());
+      const size = this.syncTimelineCanvas();
+      if (!size) return;
+
+      const { width, height } = size;
+      const context = this.timelineContext;
+      const now = performance.now();
+      const windowStart = now - TIMELINE_WINDOW_MS;
+      const rowHeight = height / VOICES.length;
+      const rootStyles = getComputedStyle(document.documentElement);
+      const primaryColor = rootStyles.getPropertyValue("--color1").trim();
+      const guideColor = rootStyles.getPropertyValue("--grey2").trim();
+
+      this.timelineEvents = this.timelineEvents.filter((event) => event.endTime >= windowStart);
+      context.clearRect(0, 0, width, height);
+
+      if (this.state.timelineGuides) {
+        context.lineWidth = 1;
+        context.strokeStyle = guideColor;
+        for (let row = 0; row <= VOICES.length; row++) {
+          const y = Math.min(height - 0.5, Math.max(0.5, row * rowHeight));
+          context.beginPath();
+          context.moveTo(0, y);
+          context.lineTo(width, y);
+          context.stroke();
+        }
+      }
+
+      context.fillStyle = primaryColor;
+      this.timelineEvents.forEach((event) => {
+        if (event.startTime > now) return;
+
+        const eventStart = Math.max(event.startTime, windowStart);
+        const eventEnd = Math.min(event.endTime, now);
+        if (eventEnd <= eventStart) return;
+
+        const x = ((eventStart - windowStart) / TIMELINE_WINDOW_MS) * width;
+        const eventWidth = ((eventEnd - eventStart) / TIMELINE_WINDOW_MS) * width;
+        const row = VOICES.findIndex(({ id }) => id === event.voice);
+        const blockHeight = Math.max(6, rowHeight * (event.velocity === 2 ? 0.58 : 0.34));
+        const y = (row * rowHeight) + ((rowHeight - blockHeight) / 2);
+        context.fillRect(x, y, Math.max(3, eventWidth), blockHeight);
+      });
+    }
+
+    recordTimelineHit(voice, velocity, when, stopTime) {
+      const delayMs = Math.max(0, (when - this.audioContext.currentTime) * 1000);
+      const durationMs = Math.max(40, (stopTime - when) * 1000);
+      const startTime = performance.now() + delayMs;
+      this.timelineEvents.push({
+        voice,
+        velocity,
+        startTime,
+        endTime: startTime + durationMs
+      });
+    }
+
     buildGrid() {
       this.elements.grid.textContent = "";
 
@@ -290,12 +384,12 @@
         bank.dataset.bank = String(bankIndex);
 
         const voiceHeading = document.createElement("div");
-        voiceHeading.className = "sequence-heading";
+        voiceHeading.className = "sequence-heading bank-leading";
         voiceHeading.textContent = "VOICE";
         bank.appendChild(voiceHeading);
 
         const muteHeading = document.createElement("div");
-        muteHeading.className = "sequence-heading";
+        muteHeading.className = "sequence-heading bank-leading";
         muteHeading.textContent = "M";
         bank.appendChild(muteHeading);
 
@@ -310,7 +404,7 @@
         VOICES.forEach(({ id, label }) => {
           const trigger = document.createElement("button");
           trigger.type = "button";
-          trigger.className = "voice-trigger";
+          trigger.className = "voice-trigger bank-leading";
           trigger.dataset.voice = id;
           trigger.textContent = label;
           trigger.title = `Play ${label.toLowerCase()}`;
@@ -319,7 +413,7 @@
 
           const mute = document.createElement("button");
           mute.type = "button";
-          mute.className = "voice-mute";
+          mute.className = "voice-mute bank-leading";
           mute.dataset.voice = id;
           mute.title = `Mute ${label.toLowerCase()}`;
           mute.setAttribute("aria-label", `Mute ${label.toLowerCase()}`);
@@ -571,6 +665,7 @@
       });
 
       if (!result) return;
+      this.recordTimelineHit(voice, velocity, when, result.stopTime);
       this.lastMetersActivitySec = Math.max(this.lastMetersActivitySec, result.stopTime);
       result.sources.forEach((source) => this.activeSources.add(source));
       const cleanupDelay = Math.max(0, (result.stopTime - this.audioContext.currentTime) * 1000) + 100;
@@ -660,6 +755,10 @@
         }
       });
       this.activeSources.clear();
+      const timelineNow = performance.now();
+      this.timelineEvents = this.timelineEvents
+        .filter((event) => event.startTime <= timelineNow)
+        .map((event) => ({ ...event, endTime: Math.min(event.endTime, timelineNow) }));
       document.querySelectorAll(".voice-trigger.voice-hit").forEach((trigger) => {
         trigger.classList.remove("voice-hit");
       });
@@ -845,6 +944,7 @@
       this.undoStack = [];
       this.redoStack = [];
       this.tapTimes = [];
+      this.timelineEvents = [];
       this.applyMasterGain();
       this.saveAndRender();
     }
@@ -858,6 +958,7 @@
         volume: this.state.volume,
         sound: this.state.sound,
         haptic: this.state.haptic,
+        timelineGuides: this.state.timelineGuides,
         length: this.state.length,
         patternName: this.state.patternName,
         kitName: this.state.kitName,
@@ -936,6 +1037,7 @@
       this.updateGrid();
       this.updateControls();
       this.updateToggleButtons();
+      this.updateTimelineButton();
       this.updateHistoryButtons();
       this.updatePanel();
     }
@@ -1008,6 +1110,11 @@
       this.elements.sound.setAttribute("aria-pressed", this.state.sound ? "true" : "false");
       this.elements.haptic.classList.toggle("button-on", this.state.haptic);
       this.elements.haptic.setAttribute("aria-pressed", this.state.haptic ? "true" : "false");
+    }
+
+    updateTimelineButton() {
+      this.elements.timelineGuides.classList.toggle("button-on", this.state.timelineGuides);
+      this.elements.timelineGuides.setAttribute("aria-pressed", this.state.timelineGuides ? "true" : "false");
     }
 
     updateHistoryButtons() {

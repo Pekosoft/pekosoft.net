@@ -4,6 +4,7 @@
 .drum-machine-view {
   padding: 0;
   background: var(--black);
+  container-type: inline-size;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
@@ -27,6 +28,24 @@
   min-width: 0;
   min-height: 196px;
   background: var(--black);
+}
+
+@container (min-width: 884px) {
+  .sequencer-grid {
+    grid-template-columns: minmax(0, calc(50% + 52px)) minmax(0, calc(50% - 56px));
+  }
+
+  .sequence-bank {
+    grid-template-columns: 72px 32px repeat(8, minmax(24px, 1fr));
+  }
+
+  .sequence-bank[data-bank="1"] {
+    grid-template-columns: repeat(8, minmax(24px, 1fr));
+  }
+
+  .sequence-bank[data-bank="1"] > .bank-leading {
+    display: none;
+  }
 }
 
 .sequence-heading,
@@ -96,7 +115,7 @@
 
 .step-button.velocity-1,
 .step-button.velocity-1:hover {
-  background: var(--grey2);
+  background: var(--color1);
 }
 
 .step-button.velocity-2,
@@ -134,9 +153,28 @@
   outline-offset: -3px;
 }
 
-.step-button.muted-step,
 .voice-trigger.muted-step {
-  opacity: 0.45;
+  color: var(--grey2);
+  border-color: var(--grey2);
+}
+
+.voice-trigger.selected-voice.muted-step {
+  border-color: var(--grey2);
+}
+
+.step-button.muted-step {
+  border-color: var(--grey1);
+}
+
+.step-button.velocity-1.muted-step,
+.step-button.velocity-1.muted-step:hover,
+.step-button.velocity-2.muted-step,
+.step-button.velocity-2.muted-step:hover {
+  background: var(--grey2);
+}
+
+.step-button.muted-step .step-mark {
+  background: var(--grey1);
 }
 
 .step-button:disabled {
@@ -148,6 +186,35 @@
 
 #controls-container .controls-slider-block:last-child:nth-child(odd) {
   grid-column: 1 / -1;
+}
+
+#timeline-container #drum-roll {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 256px;
+}
+
+#timeline-container .canvas-container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
+  justify-content: stretch;
+  align-content: stretch;
+}
+
+#timeline-container.module-maximized .canvas-container {
+  height: 100%;
+  min-height: 0;
+}
+
+#timeline-container.module-maximized #drum-roll {
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+  margin: 0;
+  border: none;
 }
 
 #pattern-text.pattern-error {

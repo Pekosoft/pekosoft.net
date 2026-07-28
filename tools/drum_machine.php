@@ -7,7 +7,7 @@
   $release = "drum_machine";
   $releaseName = "Drum Machine";
   $releasePage = "";
-  $availableModules = ["tool", "controls", "panel", "meters"];
+  $availableModules = ["tool", "controls", "timeline", "panel", "meters"];
   ?>
   <meta name="keywords" content="drum machine, step sequencer, beat maker, rhythm machine, online drum machine">
   <link rel="stylesheet" type="text/css" href="/css/<?php echo $release; ?>.css?v=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/css/' . $release . '.css'); ?>">
@@ -182,6 +182,18 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div id="timeline-container" class="container">
+    <div class="module-body canvas-container border">
+      <canvas id="drum-roll" role="img" aria-label="Drum Machine playback timeline"></canvas>
+    </div>
+    <div class="module-footer wrapper colored">
+      <button id="timeline-guides-button" title="Toggle playback guides">
+        <svg class="icons" role="img"><use href="/icons.svg#guides" /></svg>
+        <span class="button-text">GUIDES</span>
+      </button>
     </div>
   </div>
 
