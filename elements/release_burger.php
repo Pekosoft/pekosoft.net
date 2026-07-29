@@ -104,6 +104,15 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
 
       <?php endif; ?>
 
+      <?php if (in_array('history', $availableModules, true)): ?>
+      <button class="toc-button" id="history-toggle-toc-button" title="History module" aria-label="History module">
+        <svg class="icons" role="img">
+          <use href="/icons.svg#undo"></use>
+        </svg>
+        History
+      </button>
+      <?php endif; ?>
+
       <?php if (in_array('panel', $availableModules, true)): ?>
       <button class="toc-button" id="panel-toggle-toc-button" title="Panel" aria-label="Panel">
         <svg class="icons" role="img">

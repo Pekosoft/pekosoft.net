@@ -217,18 +217,133 @@
   border: none;
 }
 
-#pattern-text.pattern-error {
-  color: var(--color2);
+#playlist-container .standard {
+  padding: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-#undo-button:disabled,
-#redo-button:disabled {
+#playlist-container.module-maximized .standard {
+  height: 100%;
+}
+
+#playlist-container .playlist-table {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow: auto;
+}
+
+.recording-playlist-data {
+  min-width: 900px;
+  margin: 0;
+}
+
+.recording-playlist-data tbody tr {
+  cursor: pointer;
+}
+
+.recording-playlist-data tbody tr.active {
+  background: var(--color1);
+}
+
+.recording-playlist-data th,
+.recording-playlist-data td {
+  padding: 4px 8px;
+}
+
+.recording-playlist-data tfoot td {
+  text-align: left;
+  background: var(--black);
+}
+
+.recording-col-index,
+.recording-col-hits,
+.recording-col-bpm {
+  width: 64px;
+}
+
+.recording-col-name {
+  width: 180px;
+  text-align: left;
+}
+
+.recording-col-preview {
+  width: 180px;
+}
+
+.recording-col-duration {
+  width: 104px;
+}
+
+.recording-col-added {
+  width: 160px;
+}
+
+.recording-col-actions {
+  width: 88px;
+}
+
+.recording-preview-canvas {
+  display: block;
+  width: 160px;
+  height: 24px;
+  margin: auto;
+}
+
+.recording-playlist-actions {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.recording-playlist-actions button {
+  min-width: var(--size2);
+}
+
+.recording-playlist-summary {
+  display: inline-block;
+  margin-right: 20px;
+  white-space: nowrap;
+}
+
+#record-button.recording,
+#record-button.recording .icons {
+  color: var(--color2);
+  fill: var(--color2);
+}
+
+#playback-button:disabled,
+#playlist-previous-button:disabled,
+#playlist-next-button:disabled,
+#playlist-clear-button:disabled,
+#playlist-save-button:disabled {
   color: var(--grey2);
   cursor: default;
 }
 
-#undo-button:disabled .icons,
-#redo-button:disabled .icons {
+#playback-button:disabled .icons,
+#playlist-previous-button:disabled .icons,
+#playlist-next-button:disabled .icons,
+#playlist-clear-button:disabled .icons,
+#playlist-save-button:disabled .icons {
+  fill: var(--grey2);
+}
+
+#pattern-text.pattern-error {
+  color: var(--color2);
+}
+
+#history-undo-button:disabled,
+#history-redo-button:disabled {
+  color: var(--grey2);
+  cursor: default;
+}
+
+#history-undo-button:disabled .icons,
+#history-redo-button:disabled .icons {
   fill: var(--grey2);
 }
 

@@ -1,7 +1,7 @@
 // Modules Toggles
 // pekosoft.net/js/modules.js
 
-const moduleIds = ["tool", "controls", "timeline", "playlist", "panel", "meters"];
+const moduleIds = ["tool", "controls", "timeline", "playlist", "history", "panel", "meters"];
 const legacyModuleIds = ["tool", "meters", "controls", "timeline", "playlist", "panel"];
 const moduleOrderStorageKey = "global.module_order";
 
@@ -11,6 +11,7 @@ const moduleConfig = {
   controls: { icon: "controls", title: "Controls" },
   timeline: { icon: "timeline", title: "Timeline" },
   playlist: { icon: "view_list", title: "Playlist" },
+  history:  { icon: "undo",     title: "History" },
   panel:    { icon: "panel",    title: "Panel" }
 };
 
@@ -59,6 +60,16 @@ function normalizeModuleOrder(order) {
     }
   });
 
+  if (!seen.has("history")) {
+    const playlistIndex = normalized.indexOf("playlist");
+    const panelIndex = normalized.indexOf("panel");
+    const insertIndex = playlistIndex >= 0
+      ? playlistIndex + 1
+      : panelIndex >= 0 ? panelIndex : normalized.length;
+    normalized.splice(insertIndex, 0, "history");
+    seen.add("history");
+  }
+
   moduleIds.forEach((id) => {
     if (!seen.has(id)) {
       seen.add(id);
@@ -82,7 +93,11 @@ function loadModuleOrder() {
       saveModuleOrder(moduleIds);
       return normalizeModuleOrder(moduleIds);
     }
-    return normalizeModuleOrder(saved);
+    const normalized = normalizeModuleOrder(saved);
+    if (Array.isArray(saved) && JSON.stringify(saved) !== JSON.stringify(normalized)) {
+      saveModuleOrder(normalized);
+    }
+    return normalized;
   } catch (_) {
     return normalizeModuleOrder(moduleIds);
   }
@@ -765,6 +780,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "controls-toggle-toc-button": () => toggleModule("controls"),
     "timeline-toggle-toc-button": () => toggleModule("timeline"),
     "playlist-toggle-toc-button": () => toggleModule("playlist"),
+    "history-toggle-toc-button": () => toggleModule("history"),
     "panel-toggle-toc-button": () => toggleModule("panel")
   };
 

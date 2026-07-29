@@ -2,7 +2,7 @@
   <svg class="standard-image-help"><use href="/icons.svg#release"></use></svg>
   <div class="justify">
     <h1>General</h1>
-    Pekosoft Drum Machine is a four-voice, 16-step rhythm sequencer. Program kick, snare, hi-hat and percussion patterns, shape each voice and play the pattern through the shared meters.
+    Pekosoft Drum Machine is a four-voice, 16-step rhythm sequencer. Program kick, snare, hi-hat and percussion patterns, record performances into Playlist, shape each voice and play through the shared Timeline and Meters modules.
   </div>
 </div>
 
@@ -28,16 +28,6 @@
     <h1>Mute <span class="object">buttons</span></h1>
     Toggle playback mute for each voice. Muted steps stay visible and remain in saved pattern data. <span class="default">Default: all voices audible.</span>
   </div>
-</div>
-
-<div class="feature-row border">
-  <svg class="standard-image-help"><use href="/icons.svg#undo"></use></svg>
-  <div class="justify"><h1>UNDO <span class="object">button</span></h1>Restores the previous pattern edit.</div>
-</div>
-
-<div class="feature-row border">
-  <svg class="standard-image-help"><use href="/icons.svg#redo"></use></svg>
-  <div class="justify"><h1>REDO <span class="object">button</span></h1>Restores the next pattern edit after Undo.</div>
 </div>
 
 <div class="feature-row border">
@@ -74,8 +64,18 @@
 </div>
 
 <div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#record"></use></svg>
+  <div class="justify"><h1>RECORD <span class="object">button</span></h1>Starts or stops performance recording. Captures audible sequencer hits and manually auditioned voices with their timing, velocity and voice settings. A completed take is added to Playlist automatically. <span class="default">Default: off.</span></div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#play"></use></svg>
+  <div class="justify"><h1>PLAYBACK <span class="object">button</span></h1>Starts or stops the selected Playlist recording. If RECORD contains hits, PLAYBACK first completes the take and then plays it. Recording playback does not change the current pattern. <span class="default">Default: off.</span></div>
+</div>
+
+<div class="feature-row border">
   <svg class="standard-image-help"><use href="/icons.svg#stop"></use></svg>
-  <div class="justify"><h1>STOP <span class="object">button</span></h1>Stops playback and returns the playhead to the beginning.</div>
+  <div class="justify"><h1>STOP <span class="object">button</span></h1>Stops sequencer and recording playback, completes an active recording, and returns the playhead to the beginning.</div>
 </div>
 
 <div class="feature-row border">
@@ -95,7 +95,7 @@
 
 <div class="feature-row border">
   <svg class="standard-image-help"><use href="/icons.svg#reset"></use></svg>
-  <div class="justify"><h1>RESET <span class="object">button</span></h1>Stops playback and restores Drum Machine settings, voices and pattern to defaults.</div>
+  <div class="justify"><h1>RESET <span class="object">button</span></h1>Stops playback, completes an active recording, and restores Drum Machine settings, voices and pattern to defaults. Playlist recordings remain available.</div>
 </div>
 
 <div class="feature-row border">
@@ -186,6 +186,81 @@
 <div class="feature-row border">
   <svg class="standard-image-help"><use href="/icons.svg#copy"></use></svg>
   <div class="justify"><h1>COPY <span class="object">button</span></h1>Copies the Timeline canvas as a PNG image to clipboard.</div>
+</div>
+
+<div class="feature-row module">
+  <svg class="standard-image-help"><use href="/icons.svg#view_list"></use></svg>
+  <div class="justify"><h1>Playlist <span class="object">module</span></h1>Stores completed recordings in order. Each row shows the recording name, four-lane preview, duration, hit count, recorded BPM, added time and actions. Recordings persist between visits.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#view_list"></use></svg>
+  <div class="justify"><h1>Recording <span class="object">rows</span></h1>Click a row to select its recording. Double click a row to start playback. The selected row uses the primary color.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#play"></use></svg>
+  <div class="justify"><h1>PLAY <span class="object">row button</span></h1>Starts or stops playback of that recording and selects its row.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#delete"></use></svg>
+  <div class="justify"><h1>REMOVE <span class="object">row button</span></h1>Removes that recording from Playlist.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#skip_left"></use></svg>
+  <div class="justify"><h1>PREVIOUS <span class="object">button</span></h1>Selects and plays the previous recording, wrapping from the first recording to the last.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#skip_right"></use></svg>
+  <div class="justify"><h1>NEXT <span class="object">button</span></h1>Selects and plays the next recording, wrapping from the last recording to the first.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#delete"></use></svg>
+  <div class="justify"><h1>CLEAR <span class="object">button</span></h1>Removes all Playlist recordings after confirmation.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#open"></use></svg>
+  <div class="justify"><h1>OPEN <span class="object">button</span></h1>Replaces Playlist with valid recordings imported from a Drum Machine recordings JSON file.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#download"></use></svg>
+  <div class="justify"><h1>SAVE <span class="object">button</span></h1>Exports all Playlist recordings as a JSON file.</div>
+</div>
+
+<div class="feature-row module">
+  <svg class="standard-image-help"><use href="/icons.svg#undo"></use></svg>
+  <div class="justify"><h1>History <span class="object">module</span></h1>Shows the current session's labeled pattern-edit history. The highlighted row is the current pattern state.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#undo"></use></svg>
+  <div class="justify"><h1>History <span class="object">entries</span></h1>Each entry shows its position, action icon, label and time. Click an entry to undo or redo directly to that pattern state. A new edit after Undo replaces the future branch.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#sort_az"></use></svg>
+  <div class="justify"><h1>SORT <span class="object">button</span></h1>Changes History display order between descending and ascending. Undo chronology does not change. <span class="default">Default: descending.</span></div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#js"></use></svg>
+  <div class="justify"><h1>VIEW <span class="object">button</span></h1>Changes History between the action list, JSON and JavaScript views. The selected view persists between visits. <span class="default">Default: List.</span></div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#undo"></use></svg>
+  <div class="justify"><h1>UNDO <span class="object">button</span></h1>Restores the previous pattern edit.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#redo"></use></svg>
+  <div class="justify"><h1>REDO <span class="object">button</span></h1>Restores the next pattern edit after Undo.</div>
 </div>
 
 <div class="feature-row module">

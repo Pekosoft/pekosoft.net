@@ -1269,6 +1269,7 @@ body.release-toc-active #controls-container,
 body.release-toc-active #meters-container,
 body.release-toc-active #timeline-container,
 body.release-toc-active #playlist-container,
+body.release-toc-active #history-container,
 body.release-toc-active #panel-container {
   visibility: hidden;
 }
@@ -1959,6 +1960,7 @@ body > #meters-container.module-minimized > *:not(.module-header),
 body > #controls-container.module-minimized > *:not(.module-header),
 body > #timeline-container.module-minimized > *:not(.module-header),
 body > #playlist-container.module-minimized > *:not(.module-header),
+body > #history-container.module-minimized > *:not(.module-header),
 body > #panel-container.module-minimized > *:not(.module-header) {
   display: none;
 }
@@ -2025,6 +2027,7 @@ body > #meters-container.module-maximized > .module-body,
 body > #controls-container.module-maximized > .module-body,
 body > #timeline-container.module-maximized > .module-body,
 body > #playlist-container.module-maximized > .module-body,
+body > #history-container.module-maximized > .module-body,
 body > #panel-container.module-maximized > .module-body {
   flex: 1 1 auto;
   min-height: 0;
@@ -2033,6 +2036,104 @@ body > #panel-container.module-maximized > .module-body {
   margin: 0;
   overflow: auto;
   scrollbar-width: none;
+}
+
+.module-history-body {
+  padding: 4px;
+}
+
+.module-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 100%;
+}
+
+.module-history-code {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: none;
+  min-height: 100%;
+  margin: 0;
+}
+
+.module-history-list[hidden],
+.module-history-code[hidden] {
+  display: none;
+}
+
+.module-history-entry {
+  display: grid;
+  grid-template-columns: 40px 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  height: auto;
+  padding: 4px 8px;
+  border: 1px solid var(--grey2);
+  text-align: left;
+}
+
+.module-history-entry.button-on {
+  color: var(--black);
+  background: var(--color1);
+}
+
+.module-history-number,
+.module-history-time {
+  color: var(--grey2);
+  white-space: nowrap;
+}
+
+.module-history-entry.button-on .module-history-number,
+.module-history-entry.button-on .module-history-time {
+  color: var(--black);
+}
+
+.module-history-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+}
+
+.module-history-icon .icons {
+  width: 24px;
+  height: 24px;
+}
+
+.module-history-entry.button-on .module-history-icon .icons {
+  fill: var(--black);
+}
+
+.module-history-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .module-history-entry {
+    grid-template-columns: 32px 32px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 8px;
+    row-gap: 0;
+    min-height: 56px;
+  }
+
+  .module-history-number,
+  .module-history-icon {
+    grid-row: 1 / 3;
+  }
+
+  .module-history-time {
+    grid-column: 3;
+    font-size: 12px;
+    line-height: 16px;
+  }
 }
 
 /* Keep module footer pinned to the bottom edge of maximized modules. */

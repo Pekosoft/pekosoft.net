@@ -3,6 +3,7 @@
 
 (() => {
   const STORAGE_KEY = "drum_machine.state";
+  const PLAYLIST_STORAGE_KEY = "drum_machine.playlist";
   const STEP_COUNT = 16;
   const SCHEDULE_AHEAD_SEC = 0.1;
   const SCHEDULER_DELAY_MS = 25;
@@ -184,10 +185,56 @@
     }
   }
 
+  function normalizeRecordingEvent(event) {
+    if (!event || typeof event !== "object") return null;
+    const voice = VOICES.some((item) => item.id === event.voice) ? event.voice : null;
+    if (!voice) return null;
+
+    const timestampMs = Math.max(0, Number(event.timestampMs) || 0);
+    const durationMs = Math.max(8, Number(event.durationMs) || 50);
+    const velocity = Math.round(clamp(event.velocity, 1, 2, 1));
+    const settings = normalizeVoices({ [voice]: event.settings })[voice];
+    return { voice, velocity, timestampMs, durationMs, settings };
+  }
+
+  function normalizeRecording(recording, index = 0) {
+    if (!recording || typeof recording !== "object") return null;
+    const events = (Array.isArray(recording.events) ? recording.events : [])
+      .map(normalizeRecordingEvent)
+      .filter(Boolean)
+      .sort((left, right) => left.timestampMs - right.timestampMs);
+    if (!events.length) return null;
+
+    const eventEnd = Math.max(...events.map((event) => event.timestampMs + event.durationMs));
+    const createdAt = Number.isFinite(Number(recording.createdAt)) ? Number(recording.createdAt) : Date.now();
+    const fallbackId = `${createdAt}-${index}`;
+    return {
+      id: String(recording.id || fallbackId),
+      name: String(recording.name || `Recording ${index + 1}`).trim() || `Recording ${index + 1}`,
+      createdAt,
+      durationMs: Math.max(eventEnd, Number(recording.durationMs) || 0),
+      bpm: Math.round(clamp(recording.bpm, 30, 320, 120)),
+      swing: Math.round(clamp(recording.swing, 0, 50, 0)),
+      events
+    };
+  }
+
   class DrumMachine {
     constructor() {
       this.state = loadState();
+      const savedPlaylist = this.loadRecordingPlaylist();
+      this.recordings = savedPlaylist.recordings;
+      this.selectedRecordingIndex = savedPlaylist.selectedRecordingIndex;
       this.isPlaying = false;
+      this.isRecording = false;
+      this.isRecordingPlayback = false;
+      this.playingRecordingIndex = -1;
+      this.recordingStartTime = 0;
+      this.recordingStartedAt = 0;
+      this.recordingEvents = [];
+      this.recordingSessionId = 0;
+      this.recordingCaptureTimers = new Map();
+      this.recordingPlaybackEndTimer = null;
       this.currentStep = -1;
       this.nextStep = 0;
       this.nextStepTime = 0;
@@ -196,8 +243,6 @@
       this.activeSources = new Set();
       this.lastMetersActivitySec = 0;
       this.paintGesture = null;
-      this.undoStack = [];
-      this.redoStack = [];
       this.tapTimes = [];
       this.tapFlashTimer = null;
       this.timelineEvents = [];
@@ -206,13 +251,19 @@
       this.elements = {
         grid: document.getElementById("sequencer-grid"),
         play: document.getElementById("play-button"),
+        record: document.getElementById("record-button"),
+        playback: document.getElementById("playback-button"),
         stop: document.getElementById("stop-button"),
         tap: document.getElementById("tap-button"),
         sound: document.getElementById("toggle-sound-button"),
         haptic: document.getElementById("haptic-button"),
         reset: document.getElementById("reset-button"),
-        undo: document.getElementById("undo-button"),
-        redo: document.getElementById("redo-button"),
+        historyList: document.getElementById("pattern-history-list"),
+        historyCode: document.getElementById("pattern-history-code"),
+        historySort: document.getElementById("history-sort-button"),
+        historyView: document.getElementById("history-view-button"),
+        historyUndo: document.getElementById("history-undo-button"),
+        historyRedo: document.getElementById("history-redo-button"),
         shiftLeft: document.getElementById("shift-left-button"),
         shiftRight: document.getElementById("shift-right-button"),
         random: document.getElementById("random-button"),
@@ -233,6 +284,16 @@
         panInput: document.getElementById("pan-input"),
         timelineCanvas: document.getElementById("drum-roll"),
         timelineGuides: document.getElementById("timeline-guides-button"),
+        playlistItems: document.getElementById("recording-playlist-items"),
+        playlistCount: document.getElementById("recording-playlist-count"),
+        playlistDuration: document.getElementById("recording-playlist-duration"),
+        playlistHits: document.getElementById("recording-playlist-hits"),
+        playlistPrevious: document.getElementById("playlist-previous-button"),
+        playlistNext: document.getElementById("playlist-next-button"),
+        playlistClear: document.getElementById("playlist-clear-button"),
+        playlistLoad: document.getElementById("playlist-load-button"),
+        playlistSave: document.getElementById("playlist-save-button"),
+        playlistFileInput: document.getElementById("playlist-file-input"),
         patternText: document.getElementById("pattern-text"),
         open: document.getElementById("open-button"),
         save: document.getElementById("save-button"),
@@ -241,12 +302,271 @@
         fileInput: document.getElementById("file-input")
       };
 
+      this.history = new window.PekosoftHistory({
+        list: this.elements.historyList,
+        codeView: this.elements.historyCode,
+        sortButton: this.elements.historySort,
+        viewButton: this.elements.historyView,
+        undoButton: this.elements.historyUndo,
+        redoButton: this.elements.historyRedo,
+        initialLabel: "Initial pattern",
+        initialIcon: "reset",
+        sortStorageKey: "drum_machine.history_sort",
+        viewStorageKey: "drum_machine.history_view",
+        limit: 50,
+        restore: (snapshot) => {
+          this.state.pattern = normalizePattern(JSON.parse(snapshot));
+          this.state.patternName = "custom";
+          this.saveAndRender();
+        }
+      });
       this.buildGrid();
-  this.setupTimeline();
+        this.setupTimeline();
       this.setupAudio();
       this.bindEvents();
       this.updateAll();
+        this.renderRecordingPlaylist();
     }
+
+      loadRecordingPlaylist() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(PLAYLIST_STORAGE_KEY) || "null");
+          const source = Array.isArray(saved) ? saved : saved?.recordings;
+          const recordings = (Array.isArray(source) ? source : [])
+            .map(normalizeRecording)
+            .filter(Boolean);
+          const selectedId = Array.isArray(saved) ? null : saved?.selectedId;
+          const selectedIndex = recordings.findIndex((recording) => recording.id === selectedId);
+          return {
+            recordings,
+            selectedRecordingIndex: selectedIndex >= 0 ? selectedIndex : (recordings.length ? recordings.length - 1 : -1)
+          };
+        } catch (error) {
+          console.warn("Drum Machine recordings could not be loaded:", error);
+          return { recordings: [], selectedRecordingIndex: -1 };
+        }
+      }
+
+      saveRecordingPlaylist() {
+        const selected = this.recordings[this.selectedRecordingIndex] || null;
+        const data = {
+          version: 1,
+          selectedId: selected?.id || null,
+          recordings: this.recordings
+        };
+        try {
+          localStorage.setItem(PLAYLIST_STORAGE_KEY, JSON.stringify(data));
+        } catch (error) {
+          this.reportStorageError("Recordings", error);
+        }
+      }
+
+      reportStorageError(subject, error) {
+        const status = document.querySelector('#controls-container [data-status-text]');
+        if (status) status.textContent = `ERROR: ${subject} could not be saved.`;
+        console.error(`Drum Machine ${subject.toLowerCase()} could not be saved:`, error);
+      }
+
+      formatRecordingDuration(durationMs) {
+        const total = Math.max(0, Math.round(Number(durationMs) || 0));
+        const minutes = Math.floor(total / 60000);
+        const seconds = Math.floor((total % 60000) / 1000);
+        const milliseconds = total % 1000;
+        return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}:${String(milliseconds).padStart(3, "0")}`;
+      }
+
+      formatRecordingAdded(timestamp) {
+        const date = new Date(timestamp);
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const seconds = String(date.getSeconds()).padStart(2, "0");
+        return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+      }
+
+      drawRecordingPreview(canvas, recording, isActive) {
+        const context = canvas.getContext("2d");
+        const width = canvas.width;
+        const height = canvas.height;
+        const rowHeight = height / VOICES.length;
+        const styles = getComputedStyle(document.documentElement);
+        context.clearRect(0, 0, width, height);
+        context.fillStyle = styles.getPropertyValue(isActive ? "--black" : "--color1").trim();
+
+        recording.events.forEach((event) => {
+          const row = VOICES.findIndex((item) => item.id === event.voice);
+          if (row < 0) return;
+          const x = recording.durationMs > 0 ? (event.timestampMs / recording.durationMs) * width : 0;
+          const blockHeight = event.velocity === 2 ? rowHeight - 1 : Math.max(2, rowHeight * 0.55);
+          const y = (row * rowHeight) + ((rowHeight - blockHeight) / 2);
+          context.fillRect(Math.min(width - 1, x), y, 2, blockHeight);
+        });
+      }
+
+      renderRecordingPlaylist() {
+        if (!this.elements.playlistItems) return;
+        this.elements.playlistItems.textContent = "";
+
+        this.recordings.forEach((recording, index) => {
+          const row = document.createElement("tr");
+          row.dataset.index = String(index);
+          row.classList.toggle("active", index === this.selectedRecordingIndex);
+          row.addEventListener("click", (event) => {
+            if (event.target.closest("button")) return;
+            this.selectRecording(index);
+          });
+          row.addEventListener("dblclick", () => this.startRecordingPlayback(index));
+
+          const indexCell = document.createElement("td");
+          indexCell.className = "recording-col-index";
+          indexCell.textContent = String(index + 1);
+
+          const nameCell = document.createElement("td");
+          nameCell.className = "recording-col-name";
+          nameCell.textContent = recording.name;
+          nameCell.title = recording.name;
+
+          const previewCell = document.createElement("td");
+          previewCell.className = "recording-col-preview";
+          const preview = document.createElement("canvas");
+          preview.className = "recording-preview-canvas";
+          preview.width = 160;
+          preview.height = 24;
+          preview.setAttribute("aria-label", `${recording.name} preview`);
+          this.drawRecordingPreview(preview, recording, index === this.selectedRecordingIndex);
+          previewCell.appendChild(preview);
+
+          const durationCell = document.createElement("td");
+          durationCell.className = "recording-col-duration";
+          durationCell.textContent = this.formatRecordingDuration(recording.durationMs);
+
+          const hitsCell = document.createElement("td");
+          hitsCell.className = "recording-col-hits";
+          hitsCell.textContent = String(recording.events.length);
+
+          const bpmCell = document.createElement("td");
+          bpmCell.className = "recording-col-bpm";
+          bpmCell.textContent = String(recording.bpm);
+
+          const addedCell = document.createElement("td");
+          addedCell.className = "recording-col-added";
+          addedCell.textContent = this.formatRecordingAdded(recording.createdAt);
+
+          const actionsCell = document.createElement("td");
+          actionsCell.className = "recording-col-actions";
+          const actions = document.createElement("div");
+          actions.className = "recording-playlist-actions";
+
+          const playButton = document.createElement("button");
+          playButton.type = "button";
+          playButton.className = "square icon-only";
+          playButton.classList.toggle("button-on", this.isRecordingPlayback && index === this.playingRecordingIndex);
+          playButton.title = "Toggle recording playback";
+          playButton.setAttribute("aria-label", `Play ${recording.name}`);
+          playButton.innerHTML = '<svg class="icons" role="img"><use href="/icons.svg#play" /></svg>';
+          playButton.addEventListener("click", () => this.toggleRecordingPlayback(index));
+
+          const removeButton = document.createElement("button");
+          removeButton.type = "button";
+          removeButton.className = "square icon-only";
+          removeButton.title = "Remove recording";
+          removeButton.setAttribute("aria-label", `Remove ${recording.name}`);
+          removeButton.innerHTML = '<svg class="icons" role="img"><use href="/icons.svg#delete" /></svg>';
+          removeButton.addEventListener("click", () => this.removeRecording(index));
+
+          actions.append(playButton, removeButton);
+          actionsCell.appendChild(actions);
+          row.append(indexCell, nameCell, previewCell, durationCell, hitsCell, bpmCell, addedCell, actionsCell);
+          this.elements.playlistItems.appendChild(row);
+        });
+
+        const totalDuration = this.recordings.reduce((sum, recording) => sum + recording.durationMs, 0);
+        const totalHits = this.recordings.reduce((sum, recording) => sum + recording.events.length, 0);
+        this.elements.playlistCount.textContent = String(this.recordings.length);
+        this.elements.playlistDuration.textContent = this.formatRecordingDuration(totalDuration);
+        this.elements.playlistHits.textContent = String(totalHits);
+        this.updateRecordingControls();
+      }
+
+      selectRecording(index) {
+        if (index < 0 || index >= this.recordings.length) return;
+        if (this.isRecordingPlayback && index !== this.playingRecordingIndex) {
+          this.stopRecordingPlayback();
+        }
+        this.selectedRecordingIndex = index;
+        this.saveRecordingPlaylist();
+        this.renderRecordingPlaylist();
+      }
+
+      removeRecording(index) {
+        if (index < 0 || index >= this.recordings.length) return;
+        if (index === this.playingRecordingIndex) this.stopRecordingPlayback();
+        this.recordings.splice(index, 1);
+        if (index < this.playingRecordingIndex) this.playingRecordingIndex--;
+        if (!this.recordings.length) {
+          this.selectedRecordingIndex = -1;
+        } else if (index < this.selectedRecordingIndex) {
+          this.selectedRecordingIndex--;
+        } else if (this.selectedRecordingIndex >= this.recordings.length) {
+          this.selectedRecordingIndex = this.recordings.length - 1;
+        }
+        this.saveRecordingPlaylist();
+        this.renderRecordingPlaylist();
+      }
+
+      clearRecordingPlaylist() {
+        if (!this.recordings.length) return;
+        if (!confirm("Clear all Drum Machine recordings?")) return;
+        this.stopRecordingPlayback();
+        this.recordings = [];
+        this.selectedRecordingIndex = -1;
+        this.saveRecordingPlaylist();
+        this.renderRecordingPlaylist();
+      }
+
+      playAdjacentRecording(direction) {
+        if (!this.recordings.length) return;
+        const start = this.selectedRecordingIndex >= 0 ? this.selectedRecordingIndex : 0;
+        const index = (start + direction + this.recordings.length) % this.recordings.length;
+        this.startRecordingPlayback(index);
+      }
+
+      exportRecordingPlaylist() {
+        if (!this.recordings.length) return;
+        const data = JSON.stringify({ release: "drum_machine", version: 1, recordings: this.recordings }, null, 2);
+        const blob = new Blob([data], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = window.ensurePekosoftFilename("drum_machine_recordings.json");
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      async importRecordingPlaylist() {
+        const file = this.elements.playlistFileInput.files[0];
+        if (!file) return;
+        try {
+          const data = JSON.parse(await file.text());
+          const source = Array.isArray(data) ? data : data?.recordings;
+          if (!Array.isArray(source)) throw new Error("Recordings array is missing");
+          const imported = source.map(normalizeRecording).filter(Boolean);
+          if (!imported.length) throw new Error("No valid recordings found");
+          this.stopRecordingPlayback();
+          this.recordings = imported;
+          this.selectedRecordingIndex = 0;
+          this.saveRecordingPlaylist();
+          this.renderRecordingPlaylist();
+        } catch (error) {
+          console.warn("Drum Machine recordings could not be imported:", error);
+        } finally {
+          this.elements.playlistFileInput.value = "";
+        }
+      }
 
     setupAudio() {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -270,7 +590,7 @@
         channelCount: 2,
         sampleRate: this.audioContext.sampleRate,
         isActive: () => {
-          return this.isPlaying || (this.audioContext.currentTime - this.lastMetersActivitySec) < 0.25;
+          return this.isPlaying || this.isRecordingPlayback || (this.audioContext.currentTime - this.lastMetersActivitySec) < 0.25;
         }
       };
     }
@@ -363,7 +683,7 @@
       });
     }
 
-    recordTimelineHit(voice, velocity, when, stopTime) {
+    recordTimelineHit(voice, velocity, when, stopTime, settings) {
       const delayMs = Math.max(0, (when - this.audioContext.currentTime) * 1000);
       const durationMs = Math.max(40, (stopTime - when) * 1000);
       const startTime = performance.now() + delayMs;
@@ -371,7 +691,8 @@
         voice,
         velocity,
         startTime,
-        endTime: startTime + durationMs
+        endTime: startTime + durationMs,
+        settings: { ...settings }
       });
     }
 
@@ -445,7 +766,9 @@
       document.addEventListener("pointercancel", (event) => this.endPaintGesture(event), true);
 
       this.elements.play.addEventListener("click", () => this.togglePlayback());
-      this.elements.stop.addEventListener("click", () => this.pausePlayback(true));
+      this.elements.record.addEventListener("click", () => this.toggleRecording());
+      this.elements.playback.addEventListener("click", () => this.toggleRecordingPlayback());
+      this.elements.stop.addEventListener("click", () => this.stopAll(true));
       this.elements.tap.addEventListener("click", () => this.tapTempo());
       this.elements.sound.addEventListener("click", () => {
         this.state.sound = !this.state.sound;
@@ -462,8 +785,13 @@
       });
       this.elements.reset.addEventListener("click", () => this.reset());
 
-      this.elements.undo.addEventListener("click", () => this.undo());
-      this.elements.redo.addEventListener("click", () => this.redo());
+      this.elements.playlistPrevious.addEventListener("click", () => this.playAdjacentRecording(-1));
+      this.elements.playlistNext.addEventListener("click", () => this.playAdjacentRecording(1));
+      this.elements.playlistClear.addEventListener("click", () => this.clearRecordingPlaylist());
+      this.elements.playlistLoad.addEventListener("click", () => this.elements.playlistFileInput.click());
+      this.elements.playlistSave.addEventListener("click", () => this.exportRecordingPlaylist());
+      this.elements.playlistFileInput.addEventListener("change", () => this.importRecordingPlaylist());
+
       this.elements.shiftLeft.addEventListener("click", () => this.shiftPattern(-1));
       this.elements.shiftRight.addEventListener("click", () => this.shiftPattern(1));
       this.elements.random.addEventListener("click", () => this.randomizePattern());
@@ -535,7 +863,7 @@
       });
 
       document.addEventListener("keydown", (event) => this.handleGlobalKeyDown(event));
-      window.addEventListener("pagehide", () => this.pausePlayback(false));
+      window.addEventListener("pagehide", () => this.stopAll(false));
     }
 
     handleGridPointerDown(event) {
@@ -577,8 +905,10 @@
     endPaintGesture(event) {
       if (!this.paintGesture || event.pointerId !== this.paintGesture.pointerId) return;
       const before = this.paintGesture.before;
+      const changedSteps = this.paintGesture.visited.size;
       this.paintGesture = null;
-      this.commitPatternChange(before, true);
+      const label = changedSteps === 1 ? "Changed step" : `Painted ${changedSteps} steps`;
+      this.commitPatternChange(before, true, label, "pen");
     }
 
     handleGridClick(event) {
@@ -607,7 +937,8 @@
       const voice = button.dataset.voice;
       const step = Number(button.dataset.step);
       this.state.pattern[voice][step] = (this.state.pattern[voice][step] + 1) % 3;
-      this.commitPatternChange(before, true);
+      const voiceLabel = VOICES.find((item) => item.id === voice)?.label || voice;
+      this.commitPatternChange(before, true, `Changed ${voiceLabel} step ${step + 1}`, "pen");
     }
 
     handleGlobalKeyDown(event) {
@@ -648,8 +979,202 @@
       this.vibrate(8);
     }
 
-    playVoice(voice, velocity, when) {
-      const settings = this.state.voices[voice];
+    async toggleRecording() {
+      if (this.isRecording) {
+        this.finishRecording();
+        return;
+      }
+      await this.startRecording();
+    }
+
+    async startRecording() {
+      this.stopRecordingPlayback();
+      await this.ensureAudioReady();
+      this.recordingSessionId++;
+      this.recordingCaptureTimers.forEach((pending, timer) => window.clearTimeout(timer));
+      this.recordingCaptureTimers.clear();
+      this.recordingEvents = [];
+      this.recordingStartTime = this.audioContext.currentTime;
+      this.recordingStartedAt = Date.now();
+      this.isRecording = true;
+
+      if (this.isPlaying) {
+        const performanceNow = performance.now();
+        const audioNow = this.audioContext.currentTime;
+        this.timelineEvents
+          .filter((event) => event.startTime >= performanceNow)
+          .forEach((event) => {
+            const when = audioNow + ((event.startTime - performanceNow) / 1000);
+            this.queueRecordingEvent(
+              event.voice,
+              event.velocity,
+              when,
+              event.endTime - event.startTime,
+              event.settings || this.state.voices[event.voice]
+            );
+          });
+      }
+      this.updateRecordingControls();
+    }
+
+    commitRecordedEvent(pending) {
+      if (!this.isRecording || pending.sessionId !== this.recordingSessionId) return;
+      const timestampMs = Math.max(0, (pending.when - this.recordingStartTime) * 1000);
+      this.recordingEvents.push({
+        voice: pending.voice,
+        velocity: pending.velocity,
+        timestampMs,
+        durationMs: pending.durationMs,
+        settings: { ...pending.settings }
+      });
+      this.updateRecordingControls();
+    }
+
+    queueRecordingEvent(voice, velocity, when, durationMs, settings) {
+      if (!this.isRecording) return;
+      const pending = {
+        sessionId: this.recordingSessionId,
+        voice,
+        velocity,
+        when,
+        durationMs,
+        settings: { ...settings }
+      };
+      const delayMs = Math.max(0, (when - this.audioContext.currentTime) * 1000);
+      if (delayMs <= 2) {
+        this.commitRecordedEvent(pending);
+        return;
+      }
+
+      const timer = window.setTimeout(() => {
+        this.recordingCaptureTimers.delete(timer);
+        this.commitRecordedEvent(pending);
+      }, delayMs);
+      this.recordingCaptureTimers.set(timer, pending);
+    }
+
+    getNextRecordingName() {
+      const names = new Set(this.recordings.map((recording) => recording.name));
+      let number = 1;
+      while (names.has(`Recording ${number}`)) number++;
+      return `Recording ${number}`;
+    }
+
+    finishRecording() {
+      if (!this.isRecording) return null;
+      const audioNow = this.audioContext.currentTime;
+      this.recordingCaptureTimers.forEach((pending, timer) => {
+        window.clearTimeout(timer);
+        if (pending.when <= audioNow + 0.002) this.commitRecordedEvent(pending);
+      });
+      this.recordingCaptureTimers.clear();
+      this.isRecording = false;
+
+      if (!this.recordingEvents.length) {
+        this.updateRecordingControls();
+        return null;
+      }
+
+      const eventEnd = Math.max(...this.recordingEvents.map((event) => event.timestampMs + event.durationMs));
+      const elapsedMs = Math.max(0, (audioNow - this.recordingStartTime) * 1000);
+      const recording = normalizeRecording({
+        id: `${this.recordingStartedAt}-${Math.random().toString(36).slice(2, 8)}`,
+        name: this.getNextRecordingName(),
+        createdAt: this.recordingStartedAt,
+        durationMs: Math.max(elapsedMs, eventEnd),
+        bpm: this.state.bpm,
+        swing: this.state.swing,
+        events: this.recordingEvents
+      }, this.recordings.length);
+
+      this.recordingEvents = [];
+      if (!recording) {
+        this.updateRecordingControls();
+        return null;
+      }
+
+      this.recordings.push(recording);
+      this.selectedRecordingIndex = this.recordings.length - 1;
+      this.saveRecordingPlaylist();
+      this.renderRecordingPlaylist();
+      return recording;
+    }
+
+    async toggleRecordingPlayback(index = null) {
+      const targetIndex = index === null ? this.selectedRecordingIndex : index;
+      if (this.isRecordingPlayback && targetIndex === this.playingRecordingIndex) {
+        this.stopRecordingPlayback();
+        return;
+      }
+      await this.startRecordingPlayback(index);
+    }
+
+    async startRecordingPlayback(index = null) {
+      if (this.isRecording) {
+        const completed = this.finishRecording();
+        if (index === null && completed) index = this.selectedRecordingIndex;
+      }
+      if (index === null) index = this.selectedRecordingIndex;
+      if (index < 0 || index >= this.recordings.length) return;
+      const recordingId = this.recordings[index]?.id;
+      if (!recordingId) return;
+      this.stopRecordingPlayback();
+      this.pausePlayback(true);
+      await this.ensureAudioReady();
+
+      index = this.recordings.findIndex((recording) => recording.id === recordingId);
+      if (index < 0) return;
+      const recording = this.recordings[index];
+      this.selectedRecordingIndex = index;
+      this.playingRecordingIndex = index;
+      this.isRecordingPlayback = true;
+      const startTime = this.audioContext.currentTime + 0.03;
+
+      recording.events.forEach((event) => {
+        const when = startTime + (event.timestampMs / 1000);
+        this.playVoice(event.voice, event.velocity, when, event.settings, false);
+        this.flashVoice(event.voice, Math.max(0, (when - this.audioContext.currentTime) * 1000));
+      });
+
+      this.recordingPlaybackEndTimer = window.setTimeout(() => {
+        this.stopRecordingPlayback();
+      }, recording.durationMs + 80);
+
+      this.saveRecordingPlaylist();
+      this.renderRecordingPlaylist();
+      this.updateToggleButtons();
+    }
+
+    stopRecordingPlayback() {
+      window.clearTimeout(this.recordingPlaybackEndTimer);
+      this.recordingPlaybackEndTimer = null;
+      if (!this.isRecordingPlayback && this.playingRecordingIndex < 0) return;
+      this.isRecordingPlayback = false;
+      this.playingRecordingIndex = -1;
+      this.visualTimers.forEach((timer) => window.clearTimeout(timer));
+      this.visualTimers.clear();
+      this.activeSources.forEach((source) => {
+        try {
+          source.stop(this.audioContext.currentTime);
+        } catch (_) {
+          // Source may already have ended.
+        }
+      });
+      this.activeSources.clear();
+      document.querySelectorAll(".voice-trigger.voice-hit").forEach((trigger) => trigger.classList.remove("voice-hit"));
+      this.pruneTimelineAt(performance.now());
+      this.updateRecordingControls();
+      this.renderRecordingPlaylist();
+    }
+
+    stopAll(resetPlayhead) {
+      this.finishRecording();
+      this.pausePlayback(resetPlayhead);
+      this.stopRecordingPlayback();
+    }
+
+    playVoice(voice, velocity, when, settingsOverride = null, captureEvent = true) {
+      const settings = settingsOverride || this.state.voices[voice];
       const result = window.playDrumSound({
         audioContext: this.audioContext,
         destinationNode: this.analyser,
@@ -665,13 +1190,17 @@
       });
 
       if (!result) return;
-      this.recordTimelineHit(voice, velocity, when, result.stopTime);
+      if (captureEvent) {
+        this.queueRecordingEvent(voice, velocity, when, Math.max(8, (result.stopTime - when) * 1000), settings);
+      }
+      this.recordTimelineHit(voice, velocity, when, result.stopTime, settings);
       this.lastMetersActivitySec = Math.max(this.lastMetersActivitySec, result.stopTime);
       result.sources.forEach((source) => this.activeSources.add(source));
       const cleanupDelay = Math.max(0, (result.stopTime - this.audioContext.currentTime) * 1000) + 100;
       window.setTimeout(() => {
         result.sources.forEach((source) => this.activeSources.delete(source));
       }, cleanupDelay);
+      return result;
     }
 
     async togglePlayback() {
@@ -680,6 +1209,7 @@
         return;
       }
 
+      this.stopRecordingPlayback();
       await this.ensureAudioReady();
       this.isPlaying = true;
       this.nextStep = this.currentStep >= 0 ? (this.currentStep + 1) % this.state.length : 0;
@@ -755,15 +1285,18 @@
         }
       });
       this.activeSources.clear();
-      const timelineNow = performance.now();
-      this.timelineEvents = this.timelineEvents
-        .filter((event) => event.startTime <= timelineNow)
-        .map((event) => ({ ...event, endTime: Math.min(event.endTime, timelineNow) }));
+      this.pruneTimelineAt(performance.now());
       document.querySelectorAll(".voice-trigger.voice-hit").forEach((trigger) => {
         trigger.classList.remove("voice-hit");
       });
       if (resetPlayhead) this.setCurrentStep(-1);
       this.updateToggleButtons();
+    }
+
+    pruneTimelineAt(timelineNow) {
+      this.timelineEvents = this.timelineEvents
+        .filter((event) => event.startTime <= timelineNow)
+        .map((event) => ({ ...event, endTime: Math.min(event.endTime, timelineNow) }));
     }
 
     setCurrentStep(step) {
@@ -855,7 +1388,8 @@
         this.saveAndRender();
         return;
       }
-      this.commitPatternChange(before, false);
+      const label = this.elements.patternSelect.selectedOptions[0]?.textContent || name;
+      this.commitPatternChange(before, false, `Loaded ${label} pattern`, "open");
     }
 
     loadKitPreset(name) {
@@ -875,7 +1409,7 @@
           this.state.pattern[id][index] = value;
         });
       });
-      this.commitPatternChange(before, true);
+      this.commitPatternChange(before, true, direction < 0 ? "Shifted pattern left" : "Shifted pattern right", direction < 0 ? "chevron_left" : "chevron_right");
     }
 
     randomizePattern() {
@@ -896,53 +1430,40 @@
       this.state.pattern.kick[0] = 2;
       if (this.state.length > 4) this.state.pattern.snare[4] = 2;
       if (this.state.length > 12) this.state.pattern.snare[12] = 2;
-      this.commitPatternChange(before, true);
+      this.commitPatternChange(before, true, "Randomized pattern", "random");
     }
 
     clearPattern() {
       const before = this.patternSnapshot();
       VOICES.forEach(({ id }) => this.state.pattern[id].fill(0));
-      this.commitPatternChange(before, true);
+      this.commitPatternChange(before, true, "Cleared pattern", "close");
     }
 
     patternSnapshot() {
       return JSON.stringify(this.state.pattern);
     }
 
-    commitPatternChange(before, markCustom) {
+    commitPatternChange(before, markCustom, label = "Changed pattern", icon = "undo") {
       const after = this.patternSnapshot();
       if (before === after) return;
-      this.undoStack.push(before);
-      this.undoStack = this.undoStack.slice(-50);
-      this.redoStack = [];
       if (markCustom) this.state.patternName = "custom";
+      this.history.record(label, before, after, { icon });
       this.saveAndRender();
     }
 
     undo() {
-      const snapshot = this.undoStack.pop();
-      if (!snapshot) return;
-      this.redoStack.push(this.patternSnapshot());
-      this.state.pattern = normalizePattern(JSON.parse(snapshot));
-      this.state.patternName = "custom";
-      this.saveAndRender();
+      this.history.undo();
     }
 
     redo() {
-      const snapshot = this.redoStack.pop();
-      if (!snapshot) return;
-      this.undoStack.push(this.patternSnapshot());
-      this.state.pattern = normalizePattern(JSON.parse(snapshot));
-      this.state.patternName = "custom";
-      this.saveAndRender();
+      this.history.redo();
     }
 
     reset() {
-      this.pausePlayback(true);
+      this.stopAll(true);
       localStorage.removeItem(STORAGE_KEY);
       this.state = createDefaultState();
-      this.undoStack = [];
-      this.redoStack = [];
+      this.history.clear();
       this.tapTimes = [];
       this.timelineEvents = [];
       this.applyMasterGain();
@@ -983,7 +1504,7 @@
         const before = this.patternSnapshot();
         this.state = normalizeState({ ...this.state, ...data }, false);
         this.applyMasterGain();
-        this.commitPatternChange(before, false);
+        this.commitPatternChange(before, false, "Applied pattern data", "check");
         this.saveAndRender();
         this.showPanelSuccess(this.elements.apply);
       } catch (error) {
@@ -1025,7 +1546,11 @@
     }
 
     saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
+      } catch (error) {
+        this.reportStorageError("Pattern", error);
+      }
     }
 
     saveAndRender() {
@@ -1038,7 +1563,6 @@
       this.updateControls();
       this.updateToggleButtons();
       this.updateTimelineButton();
-      this.updateHistoryButtons();
       this.updatePanel();
     }
 
@@ -1110,6 +1634,22 @@
       this.elements.sound.setAttribute("aria-pressed", this.state.sound ? "true" : "false");
       this.elements.haptic.classList.toggle("button-on", this.state.haptic);
       this.elements.haptic.setAttribute("aria-pressed", this.state.haptic ? "true" : "false");
+      this.updateRecordingControls();
+    }
+
+    updateRecordingControls() {
+      const hasRecording = this.selectedRecordingIndex >= 0 && this.selectedRecordingIndex < this.recordings.length;
+      const canFinalizeAndPlay = this.isRecording && this.recordingEvents.length > 0;
+      this.elements.record.classList.toggle("recording", this.isRecording);
+      this.elements.record.setAttribute("aria-pressed", this.isRecording ? "true" : "false");
+      this.elements.record.title = this.isRecording ? "Stop recording" : "Start recording";
+      this.elements.playback.classList.toggle("button-on", this.isRecordingPlayback);
+      this.elements.playback.setAttribute("aria-pressed", this.isRecordingPlayback ? "true" : "false");
+      this.elements.playback.disabled = !hasRecording && !canFinalizeAndPlay;
+      this.elements.playlistPrevious.disabled = this.recordings.length < 2;
+      this.elements.playlistNext.disabled = this.recordings.length < 2;
+      this.elements.playlistClear.disabled = this.recordings.length === 0;
+      this.elements.playlistSave.disabled = this.recordings.length === 0;
     }
 
     updateTimelineButton() {
@@ -1117,10 +1657,6 @@
       this.elements.timelineGuides.setAttribute("aria-pressed", this.state.timelineGuides ? "true" : "false");
     }
 
-    updateHistoryButtons() {
-      this.elements.undo.disabled = this.undoStack.length === 0;
-      this.elements.redo.disabled = this.redoStack.length === 0;
-    }
   }
 
   document.addEventListener("DOMContentLoaded", () => {
