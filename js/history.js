@@ -14,12 +14,15 @@
       this.limit = Math.max(1, Number(options.limit) || 50);
       this.initialLabel = String(options.initialLabel || "Initial state");
       this.initialIcon = String(options.initialIcon || "reset");
+      this.historyStartLabel = String(options.historyStartLabel || "History start");
+      this.historyStartIcon = String(options.historyStartIcon || "undo");
       this.sortStorageKey = String(options.sortStorageKey || "");
       this.viewStorageKey = String(options.viewStorageKey || "");
       this.sortDirection = options.sortDirection === "asc" ? "asc" : "desc";
       this.viewMode = ["list", "json", "javascript"].includes(options.viewMode) ? options.viewMode : "list";
       this.entries = [];
       this.position = 0;
+      this.hasTrimmed = false;
 
       if (this.sortStorageKey) {
         try {
@@ -63,6 +66,7 @@
 
       if (this.entries.length > this.limit) {
         this.entries.shift();
+        this.hasTrimmed = true;
       }
 
       this.position = this.entries.length;
@@ -97,6 +101,7 @@
     clear() {
       this.entries = [];
       this.position = 0;
+      this.hasTrimmed = false;
       this.render();
     }
 
@@ -156,6 +161,7 @@
       return {
         position: this.position,
         sort: this.sortDirection,
+        initialLabel: this.hasTrimmed ? this.historyStartLabel : this.initialLabel,
         initial: this.entries.length ? this.parseSnapshot(this.entries[0].before) : null,
         entries
       };
@@ -177,7 +183,7 @@
       button.classList.toggle("button-on", position === this.position);
       button.setAttribute("role", "option");
       button.setAttribute("aria-selected", position === this.position ? "true" : "false");
-      button.title = position === 0 ? this.initialLabel : label;
+      button.title = label;
 
       const number = document.createElement("span");
       number.className = "module-history-number";
@@ -185,7 +191,7 @@
 
       const text = document.createElement("span");
       text.className = "module-history-label";
-      text.textContent = position === 0 ? this.initialLabel : label;
+      text.textContent = label;
 
       const iconContainer = document.createElement("span");
       iconContainer.className = "module-history-icon";
@@ -205,7 +211,12 @@
       if (this.list) {
         this.list.textContent = "";
         const rows = [
-          { position: 0, label: this.initialLabel, timestamp: null, icon: this.initialIcon },
+          {
+            position: 0,
+            label: this.hasTrimmed ? this.historyStartLabel : this.initialLabel,
+            timestamp: null,
+            icon: this.hasTrimmed ? this.historyStartIcon : this.initialIcon
+          },
           ...this.entries.map((entry, index) => ({ ...entry, position: index + 1 }))
         ];
         if (this.sortDirection === "desc") rows.reverse();
