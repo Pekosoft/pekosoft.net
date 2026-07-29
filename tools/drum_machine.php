@@ -254,7 +254,19 @@
 
   <div id="history-container" class="container">
     <div class="module-body module-history-body border">
-      <div id="pattern-history-list" class="module-history-list" role="listbox" aria-label="Pattern edit history"></div>
+      <div id="pattern-history-table" class="playlist-table scrollable" role="region" aria-label="Pattern edit history">
+        <table class="recording-playlist-data history-playlist-data">
+          <thead>
+            <tr>
+              <th class="recording-col-index">#</th>
+              <th class="history-col-icon">Type</th>
+              <th class="history-col-label">Change</th>
+              <th class="history-col-time">Time</th>
+            </tr>
+          </thead>
+          <tbody id="pattern-history-list" role="listbox" aria-label="Pattern edit history"></tbody>
+        </table>
+      </div>
       <textarea id="pattern-history-code" class="module-history-code" aria-label="Pattern history code" readonly hidden></textarea>
     </div>
     <div class="module-footer wrapper colored">

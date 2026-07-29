@@ -6,6 +6,7 @@
     constructor(options = {}) {
       this.list = options.list || null;
       this.codeView = options.codeView || null;
+      this.listContainer = options.listContainer || this.list?.closest(".playlist-table") || this.list || null;
       this.undoButton = options.undoButton || null;
       this.redoButton = options.redoButton || null;
       this.sortButton = options.sortButton || null;
@@ -177,34 +178,37 @@
     }
 
     createEntry(position, label, timestamp, icon) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "module-history-entry";
-      button.classList.toggle("button-on", position === this.position);
-      button.setAttribute("role", "option");
-      button.setAttribute("aria-selected", position === this.position ? "true" : "false");
-      button.title = label;
+      const row = document.createElement("tr");
+      row.className = "module-history-entry";
+      row.classList.toggle("active", position === this.position);
+      row.setAttribute("role", "option");
+      row.setAttribute("aria-selected", position === this.position ? "true" : "false");
+      row.title = label;
 
-      const number = document.createElement("span");
-      number.className = "module-history-number";
+      const number = document.createElement("td");
+      number.className = "module-history-number recording-col-index";
       number.textContent = String(position);
 
-      const text = document.createElement("span");
-      text.className = "module-history-label";
+      const text = document.createElement("td");
+      text.className = "module-history-label history-col-label";
       text.textContent = label;
 
+      const iconCell = document.createElement("td");
+      iconCell.className = "history-col-icon";
+
       const iconContainer = document.createElement("span");
-      iconContainer.className = "module-history-icon";
+      iconContainer.className = "module-history-icon history-entry-icon";
       iconContainer.setAttribute("aria-hidden", "true");
       iconContainer.innerHTML = `<svg class="icons"><use href="/icons.svg#${icon}" /></svg>`;
+      iconCell.appendChild(iconContainer);
 
-      const time = document.createElement("span");
-      time.className = "module-history-time";
+      const time = document.createElement("td");
+      time.className = "module-history-time history-col-time";
       time.textContent = timestamp ? this.formatTime(timestamp) : "";
 
-      button.append(number, iconContainer, text, time);
-      button.addEventListener("click", () => this.goTo(position));
-      return button;
+      row.append(number, iconCell, text, time);
+      row.addEventListener("click", () => this.goTo(position));
+      return row;
     }
 
     render() {
@@ -225,7 +229,7 @@
         });
       }
 
-      if (this.list) this.list.hidden = this.viewMode !== "list";
+      if (this.listContainer) this.listContainer.hidden = this.viewMode !== "list";
       if (this.codeView) {
         this.codeView.hidden = this.viewMode === "list";
         this.codeView.value = this.viewMode === "javascript" ? this.toJavaScript() : this.toJSON();

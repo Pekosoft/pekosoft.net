@@ -304,6 +304,7 @@
 
       this.history = new window.PekosoftHistory({
         list: this.elements.historyList,
+        listContainer: document.getElementById("pattern-history-table"),
         codeView: this.elements.historyCode,
         sortButton: this.elements.historySort,
         viewButton: this.elements.historyView,
