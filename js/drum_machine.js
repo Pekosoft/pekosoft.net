@@ -264,8 +264,6 @@
         historyView: document.getElementById("history-view-button"),
         historyUndo: document.getElementById("history-undo-button"),
         historyRedo: document.getElementById("history-redo-button"),
-        shiftLeft: document.getElementById("shift-left-button"),
-        shiftRight: document.getElementById("shift-right-button"),
         random: document.getElementById("random-button"),
         clear: document.getElementById("clear-button"),
         bpmInput: document.getElementById("bpm-input"),
@@ -737,8 +735,8 @@
           mute.type = "button";
           mute.className = "voice-mute bank-leading";
           mute.dataset.voice = id;
-          mute.title = `Mute ${label.toLowerCase()}`;
-          mute.setAttribute("aria-label", `Mute ${label.toLowerCase()}`);
+          mute.title = `Toggle sound ${label.toLowerCase()}`;
+          mute.setAttribute("aria-label", `Toggle sound ${label.toLowerCase()}`);
           mute.innerHTML = '<svg class="icons" role="img"><use href="/icons.svg#sound" /></svg>';
           bank.appendChild(mute);
 
@@ -793,8 +791,6 @@
       this.elements.playlistSave.addEventListener("click", () => this.exportRecordingPlaylist());
       this.elements.playlistFileInput.addEventListener("change", () => this.importRecordingPlaylist());
 
-      this.elements.shiftLeft.addEventListener("click", () => this.shiftPattern(-1));
-      this.elements.shiftRight.addEventListener("click", () => this.shiftPattern(1));
       this.elements.random.addEventListener("click", () => this.randomizePattern());
       this.elements.clear.addEventListener("click", () => this.clearPattern());
 
@@ -1400,19 +1396,6 @@
       this.auditionVoice(this.state.selectedVoice);
     }
 
-    shiftPattern(direction) {
-      const before = this.patternSnapshot();
-      VOICES.forEach(({ id }) => {
-        const active = this.state.pattern[id].slice(0, this.state.length);
-        if (direction < 0) active.push(active.shift());
-        else active.unshift(active.pop());
-        active.forEach((value, index) => {
-          this.state.pattern[id][index] = value;
-        });
-      });
-      this.commitPatternChange(before, true, direction < 0 ? "Shifted pattern left" : "Shifted pattern right", direction < 0 ? "chevron_left" : "chevron_right");
-    }
-
     randomizePattern() {
       const before = this.patternSnapshot();
       const probabilities = { kick: 0.3, snare: 0.2, hat: 0.68, perc: 0.16 };
@@ -1580,8 +1563,9 @@
 
       document.querySelectorAll(".voice-mute").forEach((button) => {
         const muted = this.state.mutes[button.dataset.voice];
-        button.classList.toggle("button-on", muted);
-        button.setAttribute("aria-pressed", muted ? "true" : "false");
+        const soundEnabled = !muted;
+        button.classList.toggle("button-on", soundEnabled);
+        button.setAttribute("aria-pressed", soundEnabled ? "true" : "false");
       });
     }
 

@@ -162,6 +162,7 @@ Pekosoft uses one consistent SOUND button rule across tools:
 - SOUND should not cancel timing state or playback state.
 - In BPM Calculator, table row PLAY buttons keep running when SOUND is toggled; only audible output is muted/unmuted.
 - For very short transients (for example tick/kick), mid-note gain ramping is not required.
+- Voice-level mute buttons in sequencer tools should behave like SOUND buttons: they toggle sound on/off for that voice and use the same blue active state as other Pekosoft toggle buttons.
 
 The site is meant to be usable quickly, even by someone opening a tool for the first time.
 

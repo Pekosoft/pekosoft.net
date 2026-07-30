@@ -105,6 +105,12 @@
   height: 20px;
 }
 
+.voice-mute.button-on {
+  border-color: var(--color1);
+  color: var(--color1);
+  background: var(--black);
+}
+
 .step-button {
   position: relative;
 }
