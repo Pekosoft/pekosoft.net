@@ -865,6 +865,11 @@ function startTone() {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     ensureMetersAnalyserNode();
   }
+  if (audioContext.state === 'suspended') {
+    audioContext.resume().catch(() => {
+      // Resume is best-effort; the next gesture can retry.
+    });
+  }
   referenceFrequency = rpmToReferenceHz(state.rpm);
   if (typeof window.createSustainedToneVoice === 'function') {
     toneVoice = window.createSustainedToneVoice({
@@ -979,6 +984,11 @@ toneTypeSelect.addEventListener('change', () => {
 toggleSoundButton.addEventListener('click', () => {
   isTonePlaying = !isTonePlaying;
   toggleSoundButton.classList.toggle('button-on', isTonePlaying);
+  if (audioContext && audioContext.state === 'suspended') {
+    audioContext.resume().catch(() => {
+      // Resume is best-effort; the next gesture can retry.
+    });
+  }
   const muteGain = ensureMasterMuteGainNode();
   if (muteGain && audioContext) {
     const now = audioContext.currentTime;

@@ -870,6 +870,11 @@ class Piano {
     const button = document.getElementById('sound-master-button');
     button.classList.toggle('button-on', this.isSoundEnabled);
     button.addEventListener('click', () => {
+      if (this.audioContext.state === 'suspended') {
+        this.audioContext.resume().catch(() => {
+          // Resume is best-effort; the next gesture can retry.
+        });
+      }
       this.isSoundEnabled = !this.isSoundEnabled;
       button.classList.toggle('button-on', this.isSoundEnabled);
       // Mute or unmute master output
@@ -1113,7 +1118,11 @@ class Piano {
 
   playNote(key, options = {}) {
     const { persistLastNote = true, allowHaptic = true } = options;
-    this.audioContext.resume();
+    if (this.audioContext.state === 'suspended') {
+      this.audioContext.resume().catch(() => {
+        // Resume is best-effort; the next gesture can retry.
+      });
+    }
     if (allowHaptic) {
       this.vibrate();
     }

@@ -925,6 +925,11 @@ togglePlayButton.addEventListener('click', () => {
 toggleSoundButton.addEventListener('click', () => {
   isSoundOn = !isSoundOn;
   updateSoundButton();
+  if (audioContext.state === 'suspended') {
+    audioContext.resume().catch(() => {
+      // Resume is best-effort; the next gesture can retry.
+    });
+  }
   const muteGain = ensureMasterMuteGainNode();
   if (muteGain && audioContext) {
     const now = audioContext.currentTime;

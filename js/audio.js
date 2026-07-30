@@ -27,6 +27,16 @@
     return allowed.includes(tone) ? tone : "sine";
   }
 
+  function wakeAudioContext(audioContext) {
+    if (!audioContext) return null;
+    if (audioContext.state === "suspended") {
+      audioContext.resume().catch(() => {
+        // Ignore transient resume failures; the next user gesture can try again.
+      });
+    }
+    return audioContext;
+  }
+
   function getClickNoiseBuffer(audioContext) {
     if (!audioContext) return null;
     const cached = clickNoiseBuffers.get(audioContext);
@@ -132,6 +142,7 @@
     } = options;
 
     if (!audioContext) return null;
+    wakeAudioContext(audioContext);
 
     const selectedVoice = ["kick", "snare", "hat", "perc"].includes(voice) ? voice : "kick";
     const startTime = Math.max(when ?? audioContext.currentTime, audioContext.currentTime + 0.001);
@@ -267,6 +278,7 @@
     } = options;
 
     if (!audioContext) return null;
+    wakeAudioContext(audioContext);
 
     const gainValue = Math.max(0, Number(gain) || 0);
     if (gainValue <= 0) return null;
@@ -486,6 +498,7 @@
     } = options;
 
     if (!audioContext) return null;
+    wakeAudioContext(audioContext);
 
     if (!enabled) {
       window.stopContinuousToneVoice(voiceState);
@@ -546,6 +559,7 @@
     } = options;
 
     if (!audioContext) return null;
+    wakeAudioContext(audioContext);
 
     const selectedTone = normalizeSustainedTone(tone);
     const oscillator = audioContext.createOscillator();
