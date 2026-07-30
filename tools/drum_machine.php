@@ -22,14 +22,6 @@
       <div id="sequencer-grid" class="sequencer-grid" role="group" aria-label="16-step drum sequencer"></div>
     </div>
     <div class="module-footer wrapper colored">
-      <button id="shift-left-button" class="square" title="Shift pattern left" aria-label="Shift pattern left">
-        <svg class="icons" role="img"><use href="/icons.svg#chevron_left" /></svg>
-        <span class="button-text">LEFT</span>
-      </button>
-      <button id="shift-right-button" class="square" title="Shift pattern right" aria-label="Shift pattern right">
-        <svg class="icons" role="img"><use href="/icons.svg#chevron_right" /></svg>
-        <span class="button-text">RIGHT</span>
-      </button>
       <button id="random-button" class="square" title="Randomize pattern" aria-label="Randomize pattern">
         <svg class="icons" role="img"><use href="/icons.svg#random" /></svg>
         <span class="button-text">RANDOM</span>
