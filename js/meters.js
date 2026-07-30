@@ -75,6 +75,7 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
+  const colorGrey1 = getComputedStyle(document.documentElement).getPropertyValue('--grey1').trim() || '#222';
   const colorGrey2 = getComputedStyle(document.documentElement).getPropertyValue('--grey2').trim() || '#444';
 
   function drawToolGuideLabel(ctx, text, x, y, align = 'left', bounds = null) {
@@ -122,7 +123,7 @@
   function drawToolGuidesForOscilloscope(ctx, width, height) {
     const gridYs = [0.25, 0.5, 0.75];
     ctx.save();
-    ctx.strokeStyle = colorGrey2;
+    ctx.strokeStyle = colorGrey1;
     ctx.lineWidth = 1;
     gridYs.forEach((ratio) => {
       const y = Math.round(height * ratio) + 0.5;
@@ -144,7 +145,7 @@
     const gap = channelCount > 1 ? 4 : 0;
     const barH = Math.floor((height - gap * (channelCount - 1)) / channelCount);
     ctx.save();
-    ctx.strokeStyle = colorGrey2;
+    ctx.strokeStyle = colorGrey1;
     ctx.lineWidth = 1;
 
     ctx.font = '10px Arial';
@@ -187,7 +188,7 @@
     const freqs = [20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000];
     const dBMarks = [-60, -48, -36, -24, -12, 0];
     ctx.save();
-    ctx.strokeStyle = colorGrey2;
+    ctx.strokeStyle = colorGrey1;
     ctx.lineWidth = 1;
 
     dBMarks.forEach((db) => {
@@ -718,7 +719,7 @@
       const isStereo = (source?.channelCount || 1) > 1;
       const guideYs = isStereo ? [0.25, 0.5, 0.75] : [0.25, 0.5, 0.75];
       ctx.save();
-      ctx.strokeStyle = colorGrey2;
+      ctx.strokeStyle = colorGrey1;
       ctx.lineWidth = 1;
       guideYs.forEach((ratio) => {
         const y = Math.round(height * ratio) + 0.5;

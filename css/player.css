@@ -117,7 +117,7 @@ canvas {
   width: 100%;
   max-width: 100%;
   height: auto;
-  border: 1px solid var(--grey2);
+  border: 1px solid var(--grey1);
   display: block;
   margin: 8px auto 0;
 }
@@ -182,7 +182,7 @@ canvas {
   border-left: none;
   border-right: none;
   border-top: none;
-  border-bottom: 1px solid var(--grey2);
+  border-bottom: 1px solid var(--grey1);
   touch-action: none;
 }
 
@@ -194,7 +194,7 @@ canvas {
   margin: 0;
   border-left: none;
   border-right: none;
-  border-top: 1px solid var(--grey2);
+  border-top: 1px solid var(--grey1);
   border-bottom: none;
   touch-action: none;
 }
@@ -303,13 +303,13 @@ canvas {
   text-align: center;
   font-weight: bold;
   color: var(--white);
-  border-bottom: 1px solid var(--grey2);
+  border-bottom: 1px solid var(--grey1);
   white-space: nowrap;
 }
 
 .playlist-data td {
   padding: 8px;
-  border-bottom: 1px solid var(--grey2);
+  border-bottom: 1px solid var(--grey1);
   color: var(--white);
 }
 
@@ -326,11 +326,11 @@ canvas {
 }
 
 .playlist-data tbody tr:last-child td {
-  border-bottom: 1px solid var(--grey2);
+  border-bottom: 1px solid var(--grey1);
 }
 
 .playlist-data tfoot td {
-  border-top: 1px solid var(--grey2);
+  border-top: 1px solid var(--grey1);
   border-bottom: none;
   background: var(--black);
   padding: 8px;

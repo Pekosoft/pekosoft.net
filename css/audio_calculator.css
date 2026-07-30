@@ -30,7 +30,7 @@
 }
 
 .grid-line {
-  stroke: var(--grey2);
+  stroke: var(--grey1);
   stroke-width: 1;
 }
 

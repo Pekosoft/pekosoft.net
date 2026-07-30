@@ -334,7 +334,7 @@ tr {
 td,
 th {
   padding: 0 8px;
-  border: 1px solid var(--grey2);
+  border: 1px solid var(--grey1);
   overflow: hidden;
   white-space: nowrap;
   text-align: center;
@@ -1340,8 +1340,8 @@ html.show-grid {
 
 html.show-grid.show-grid-white {
   background-image:
-    linear-gradient(to right, var(--grey2) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grey2) 1px, transparent 1px);
+    linear-gradient(to right, var(--grey1) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grey1) 1px, transparent 1px);
 }
 
 .large-icon {
@@ -1915,7 +1915,7 @@ body.module-order-dragging .module-maximized .module-header * {
   padding: 8px;
   overflow: hidden;
   background-color: var(--grey1);
-  border: 1px solid var(--grey2);
+  border: 1px solid var(--grey1);
   color: var(--white);
   font-size: var(--font-size);
   line-height: 16px;
@@ -2072,7 +2072,7 @@ body > #panel-container.module-maximized > .module-body {
   min-height: 40px;
   height: auto;
   padding: 4px 8px;
-  border: 1px solid var(--grey2);
+  border: 1px solid var(--grey1);
   text-align: left;
 }
 

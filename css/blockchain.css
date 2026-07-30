@@ -30,7 +30,7 @@
   flex-shrink: 0;
   width: 116px;
   background: var(--black);
-  border: 1px solid var(--grey2);
+  border: 1px solid var(--grey1);
   padding: 8px;
   cursor: pointer;
   user-select: none;
@@ -38,7 +38,7 @@
 }
 
 .block-card:hover {
-  border-color: var(--grey2);
+  border-color: var(--grey1);
 }
 
 .block-card.block-selected {
