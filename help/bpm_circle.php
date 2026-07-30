@@ -104,7 +104,7 @@
   </svg>
   <div class="justify">
     <h1>Beat <span class="object">menu</span></h1>
-    Chooses the beat sound for playback: Click, Kick, Sine, Square, Sawtooth, Triangle or Piano. <span class="default">Default: Click.</span>
+    Chooses the beat sound for playback: Click, Kick, Hi-hat, Sine, Square, Sawtooth, Triangle or Piano. <span class="default">Default: Click.</span>
   </div>
 </div>
 

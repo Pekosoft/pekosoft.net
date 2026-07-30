@@ -478,7 +478,7 @@ class BPMCurve {
   }
 
   normalizeBeatTone(tone) {
-    const allowed = ['click', 'kick', 'sine', 'square', 'sawtooth', 'triangle', 'piano'];
+    const allowed = ['click', 'kick', 'hat', 'sine', 'square', 'sawtooth', 'triangle', 'piano'];
     return allowed.includes(tone) ? tone : this.defaultBeatTone;
   }
 

@@ -80,7 +80,7 @@
   </svg>
   <div class="justify">
     <h1>Beat <span class="object">menu</span></h1>
-    Sets tick beat sound to Click, Kick, Sine, Square, Sawtooth, Triangle or Piano. <span class="default">Default: Click.</span>
+    Sets tick beat sound to Click, Kick, Hi-hat, Sine, Square, Sawtooth, Triangle or Piano. <span class="default">Default: Click.</span>
   </div>
 </div>
 

@@ -3,6 +3,7 @@ $selectedBeatSound = $selectedBeatSound ?? 'click';
 $beatSounds = [
   'click' => 'Click',
   'kick' => 'Kick',
+  'hat' => 'Hi-hat',
   'sine' => 'Sine',
   'square' => 'Square',
   'sawtooth' => 'Sawtooth',

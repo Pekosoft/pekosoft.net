@@ -6,7 +6,7 @@
   const drumNoiseBuffers = new WeakMap();
 
   function normalizeTone(tone) {
-    const allowed = ["click", "kick", "sine", "square", "sawtooth", "triangle", "piano"];
+    const allowed = ["click", "kick", "hat", "sine", "square", "sawtooth", "triangle", "piano"];
     return allowed.includes(tone) ? tone : "click";
   }
 
@@ -370,6 +370,28 @@
       snapSource.onended = () => { snapSource.disconnect(); snapHp.disconnect(); snapGain.disconnect(); };
 
       return { stopNode: kickOsc, gainNode: kickGain, stopTime };
+    }
+
+    if (selectedTone === "hat") {
+      const hatEvent = window.playDrumSound({
+        audioContext,
+        destinationNode: outputNode,
+        voice: "hat",
+        when: startTime,
+        velocity: Math.min(gainValue, 1),
+        level: 1,
+        pan: 0,
+        frequency: Math.max(3000, Math.min(14000, 8000 * ratio)),
+        decay: Math.max(0.015, Math.min(0.5, Math.max(Number(durationSec) || 0.06, 0.02))),
+        tone: 0.78
+      });
+
+      if (!hatEvent) return null;
+      return {
+        stopNode: hatEvent.sources?.[0] || null,
+        gainNode: null,
+        stopTime: hatEvent.stopTime
+      };
     }
 
     const oscillator = audioContext.createOscillator();

@@ -293,7 +293,7 @@ function getSoundGain() {
 }
 
 function normalizeTone(tone) {
-  const allowed = ['click', 'kick', 'sine', 'square', 'sawtooth', 'triangle', 'piano'];
+  const allowed = ['click', 'kick', 'hat', 'sine', 'square', 'sawtooth', 'triangle', 'piano'];
   return allowed.includes(tone) ? tone : 'click';
 }
 

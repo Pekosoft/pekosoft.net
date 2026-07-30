@@ -394,7 +394,7 @@
   </svg>
   <div class="justify">
     <h1>Tone <span class="object">menu</span></h1>
-    Chooses the preview tone: Click, Kick, Sine, Square, Sawtooth, Triangle or Piano. <span class="default">Default: Sine.</span>
+    Chooses the preview tone: Click, Kick, Hi-hat, Sine, Square, Sawtooth, Triangle or Piano. <span class="default">Default: Sine.</span>
   </div>
 </div>
 
