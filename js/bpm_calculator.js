@@ -1591,7 +1591,9 @@ function updateVisualMarkers() {
 function startPlayback() {
   initAudioContext();
   if (audioContext.state === 'suspended') {
-    audioContext.resume();
+    audioContext.resume().catch(() => {
+      // Resume is best-effort; the next gesture can retry.
+    });
   }
 
   if (!state.isPlaying) {
@@ -1835,6 +1837,11 @@ if (stopButton) {
 if (toggleSoundButton) {
   toggleSoundButton.addEventListener('click', () => {
     state.isSoundOn = !state.isSoundOn;
+    if (audioContext && audioContext.state === 'suspended') {
+      audioContext.resume().catch(() => {
+        // Resume is best-effort; the next gesture can retry.
+      });
+    }
     // SOUND is master output mute/unmute; keep playback timing/state running.
     updateMasterOutputMute();
     updateSoundButton();

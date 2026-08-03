@@ -215,6 +215,11 @@
       this.playDimButton?.addEventListener("click", () => this.focusMode("dim"));
       this.soundButton?.addEventListener("click", () => {
         this.soundEnabled = !this.soundEnabled;
+        if (this.audioContext && this.audioContext.state === "suspended") {
+          this.audioContext.resume().catch(() => {
+            // Resume is best-effort; the next gesture can retry.
+          });
+        }
         this.updateMasterGain();
         this.updateControls();
         this.saveSettings();

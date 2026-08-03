@@ -165,6 +165,11 @@ class BPMCurve {
       this.isSoundEnabled = !this.isSoundEnabled;
       this.syncButtonStates();
       this.updateContinuousTone();
+      if (this.audioContext && this.audioContext.state === 'suspended') {
+        this.audioContext.resume().catch(() => {
+          // Resume is best-effort; the next gesture can retry.
+        });
+      }
       if (this.masterMuteGainNode && this.audioContext) {
         const now = this.audioContext.currentTime;
         this.masterMuteGainNode.gain.cancelScheduledValues(now);
@@ -1913,6 +1918,12 @@ class BPMCurve {
     if (this.isPlaying) {
       this.stopPlayback();
       return;
+    }
+
+    if (this.audioContext && this.audioContext.state === 'suspended') {
+      this.audioContext.resume().catch(() => {
+        // Resume is best-effort; the next gesture can retry.
+      });
     }
 
     this.isPlaying = true;

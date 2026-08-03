@@ -164,6 +164,19 @@ Pekosoft uses one consistent SOUND button rule across tools:
 - For very short transients (for example tick/kick), mid-note gain ramping is not required.
 - Voice-level mute buttons in sequencer tools should behave like SOUND buttons: they toggle sound on/off for that voice and use the same blue active state as other Pekosoft toggle buttons.
 
+## Audio routing convention
+
+Pekosoft audio tools should follow one simple signal path unless a tool has a clear reason to differ:
+
+- Route audible voices through an analyser first, then through a master output gain, then to destination.
+- Use the master output gain as SOUND control (`1` on, `0` off), not by rewiring/disconnecting graph nodes.
+- Keep `window.__pekosoftMetersSource` pointed at the analyser so meters keep one shared contract.
+- On any user gesture that starts sound or unmutes SOUND, perform a best-effort `AudioContext.resume()`.
+
+Reference path:
+
+- `voice/source -> analyser -> master output gain -> audioContext.destination`
+
 The site is meant to be usable quickly, even by someone opening a tool for the first time.
 
 ## Tooltip grammar rule

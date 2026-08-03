@@ -63,7 +63,7 @@ let tapPlaybackBpm = 0;
 let tapPlaybackTimer = null;
 let tapPlaybackNextBeatTime = 0;
 let tapPlaybackEvents = [];
-let isSoundOn = readBoolFromStorage("tap_pad.sound_on", false);
+let isSoundOn = readBoolFromStorage("tap_pad.sound_on", true);
 let soundVolume = clampVolume(parseInt(localStorage.getItem("tap_pad.volume"), 10));
 let beatSound = normalizeTone(localStorage.getItem("tap_pad.beat_sound") || "click");
 
@@ -186,10 +186,21 @@ if (toggleSoundButton) {
   toggleSoundButton.addEventListener("click", () => {
     isSoundOn = !isSoundOn;
     localStorage.setItem("tap_pad.sound_on", isSoundOn ? "1" : "0");
-    if (tapMasterMuteGainNode && tapAudioContext) {
-      const now = tapAudioContext.currentTime;
-      tapMasterMuteGainNode.gain.cancelScheduledValues(now);
-      tapMasterMuteGainNode.gain.setValueAtTime(isSoundOn ? 1 : 0, now);
+    if (tapAudioContext && tapAudioContext.state === "suspended") {
+      tapAudioContext.resume().catch(() => {
+        // Resume is best-effort; the next gesture can retry.
+      });
+    }
+    if (tapAudioContext) {
+      const muteNode = ensureTapMasterMuteGainNode(tapAudioContext);
+      if (muteNode) {
+        const now = tapAudioContext.currentTime;
+        muteNode.gain.cancelScheduledValues(now);
+        muteNode.gain.setValueAtTime(isSoundOn ? 1 : 0, now);
+      }
+    }
+    if (!isSoundOn) {
+      stopTapPlaybackEvents();
     }
     applySoundButtonUI();
   });
@@ -273,7 +284,7 @@ document.getElementById("reset-button").addEventListener("click", () => {
   showGuides = false;
   hapticMode = false;
   blinkMode = false;
-  isSoundOn = false;
+  isSoundOn = true;
   beatSound = "click";
   soundVolume = 100;
 
@@ -464,6 +475,10 @@ function stopTapPlayback() {
 function scheduleTapPlayback() {
   tapPlaybackTimer = null;
   if (!isTapPlaybackOn || !tapAudioContext) return;
+  if (!isSoundOn) {
+    stopTapPlayback();
+    return;
+  }
 
   const context = tapAudioContext;
   const beatIntervalSec = 60 / tapPlaybackBpm;
@@ -547,7 +562,7 @@ function clampVolume(value) {
 }
 
 function playTapSound() {
-  if (typeof window.playTransientSound !== "function") return;
+  if (!isSoundOn || typeof window.playTransientSound !== "function") return;
 
   ensureTapAudioContextReady().then((context) => {
     if (!context) return;
@@ -556,7 +571,7 @@ function playTapSound() {
 }
 
 function playTapTransient(context, when, durationSec = TAP_CLICK_DURATION_SEC) {
-  if (typeof window.playTransientSound !== "function" || !context) return null;
+  if (!isSoundOn || typeof window.playTransientSound !== "function" || !context) return null;
 
   const now = context.currentTime;
   const startTime = Math.max(when ?? now, now + 0.001);

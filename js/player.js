@@ -2513,6 +2513,11 @@ toggleLoop.addEventListener('click', () => {
 // Toggle sound (master output only; meters keep running)
 toggleSound.addEventListener('click', () => {
     const nowMuted = masterGain.gain.value > 0;
+    if (mainAudioContext && mainAudioContext.state === 'suspended') {
+        mainAudioContext.resume().catch(() => {
+            // Resume is best-effort; the next gesture can retry.
+        });
+    }
     masterGain.gain.value = nowMuted ? 0 : 1;
     localStorage.setItem(STORAGE.sound, nowMuted);
     toggleSound.classList.toggle('button-on', !nowMuted);

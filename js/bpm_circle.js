@@ -641,6 +641,11 @@ class BPMVisualizer {
     this.toggleButton.classList.toggle('button-on', this.isPlaying);
     
     if (this.isPlaying) {
+      if (this.audioContext && this.audioContext.state === 'suspended') {
+        this.audioContext.resume().catch(() => {
+          // Resume is best-effort; the next gesture can retry.
+        });
+      }
       this.lastTickTime = performance.now();
       this.tick();
       this.updateBPM(true);
@@ -762,6 +767,11 @@ class BPMVisualizer {
   toggleSoundMaster() {
     this.isSoundMasterEnabled = !this.isSoundMasterEnabled;
     this.setToggleButtonState(this.soundMasterButton, this.isSoundMasterEnabled);
+    if (this.audioContext && this.audioContext.state === 'suspended') {
+      this.audioContext.resume().catch(() => {
+        // Resume is best-effort; the next gesture can retry.
+      });
+    }
     const muteGain = this.ensureMasterMuteGainNode();
     if (muteGain && this.audioContext) {
       const now = this.audioContext.currentTime;
