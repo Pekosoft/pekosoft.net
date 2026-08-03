@@ -291,7 +291,7 @@
   </svg>
   <div class="justify">
     <h1>FLATTEN <span class="object">button</span></h1>
-    Flattens selected elements into one path.
+    Flattens selected elements into one path. Imported SVGs are flattened automatically.
   </div>
 </div>
 

@@ -220,17 +220,30 @@ function normalizeSvgToSymbolCode(fileText) {
   const symbol = doc.querySelector("symbol");
   const rootSvg = doc.querySelector("svg");
   const fallbackViewBox = "0 0 512 512";
+  const imported = symbol || rootSvg;
+
+  if (!imported) return null;
+
+  const importedViewBox = (symbol?.getAttribute("viewBox") || rootSvg?.getAttribute("viewBox") || fallbackViewBox)
+    .trim()
+    .split(/\s+/)
+    .map(Number);
+  const sourceX = Number.isFinite(importedViewBox[0]) ? importedViewBox[0] : 0;
+  const sourceY = Number.isFinite(importedViewBox[1]) ? importedViewBox[1] : 0;
+  const sourceWidth = Number.isFinite(importedViewBox[2]) && importedViewBox[2] > 0 ? importedViewBox[2] : 512;
+  const sourceHeight = Number.isFinite(importedViewBox[3]) && importedViewBox[3] > 0 ? importedViewBox[3] : 512;
+  const scale = Math.min(512 / sourceWidth, 512 / sourceHeight);
+  const offsetX = ((512 - (sourceWidth * scale)) / 2) - (sourceX * scale);
+  const offsetY = ((512 - (sourceHeight * scale)) / 2) - (sourceY * scale);
+  const transform = `matrix(${formatNumber(scale)} 0 0 ${formatNumber(scale)} ${formatNumber(offsetX)} ${formatNumber(offsetY)})`;
 
   if (symbol) {
     const importedId = symbol.getAttribute("id") || "";
     const targetId = iconIds.includes(importedId) ? importedId : currentId;
-    const viewBox = symbol.getAttribute("viewBox") || rootSvg?.getAttribute("viewBox") || fallbackViewBox;
-    return `<symbol id="${targetId}" viewBox="${viewBox}">\n${symbol.innerHTML}\n</symbol>`;
+    return `<symbol id="${targetId}" viewBox="${fallbackViewBox}">\n<g transform="${transform}">\n${symbol.innerHTML}\n</g>\n</symbol>`;
   }
 
-  if (!rootSvg) return null;
-  const viewBox = rootSvg.getAttribute("viewBox") || fallbackViewBox;
-  return `<symbol id="${currentId}" viewBox="${viewBox}">\n${rootSvg.innerHTML}\n</symbol>`;
+  return `<symbol id="${currentId}" viewBox="${fallbackViewBox}">\n<g transform="${transform}">\n${rootSvg.innerHTML}\n</g>\n</symbol>`;
 }
 
 function renderPreviewFromSymbolCode(symbolCode) {
@@ -705,7 +718,7 @@ function pathFromEllipse(element, matrix) {
 
 function splitPathDataSubpaths(pathData) {
   const starts = [];
-  const matcher = /[Mm]/g;
+  const matcher = /M/g;
   let match;
   while ((match = matcher.exec(pathData)) !== null) {
     starts.push(match.index);
@@ -819,6 +832,21 @@ function flattenElementsToPath() {
   selectElement(path);
   updateCurrentPanelFromPreview();
   rememberEditFromSnapshot(beforeSnapshot);
+}
+
+function fitPreviewContentToCanvas() {
+  const elements = Array.from(previewIcon.querySelectorAll("path, rect, circle, ellipse, line, polyline, polygon"));
+  const box = getSelectionBox(elements);
+  if (!box || box.width <= 0 || box.height <= 0) return false;
+
+  const scale = 512 / Math.max(box.width, box.height);
+  const offsetX = ((512 - (box.width * scale)) / 2) - (box.x * scale);
+  const offsetY = ((512 - (box.height * scale)) / 2) - (box.y * scale);
+  elements.forEach((element) => {
+    const existing = element.getAttribute("transform") || "";
+    element.setAttribute("transform", `${existing} matrix(${formatNumber(scale)} 0 0 ${formatNumber(scale)} ${formatNumber(offsetX)} ${formatNumber(offsetY)})`.trim());
+  });
+  return true;
 }
 
 function startDrawing(event, point) {
@@ -1713,6 +1741,11 @@ if (openButton && openFileInput) {
       }
 
       editedSymbolCodes.set(parsed.id, normalized);
+      renderPreviewFromSymbolCode(normalized);
+      flattenElementsToPath();
+      if (fitPreviewContentToCanvas()) {
+        flattenElementsToPath();
+      }
       renderTimelineIcon(parsed.id);
       stopPlaying();
       setPanelMode("current");

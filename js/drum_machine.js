@@ -16,6 +16,13 @@
     { id: "perc", label: "PERC" }
   ];
 
+  const VOICE_ICONS = {
+    kick: "beat",
+    snare: "snare",
+    hat: "hi_hat",
+    perc: "bongos"
+  };
+
   const VOICE_LIMITS = {
     kick: { frequency: [35, 180], decay: [0.06, 1.2] },
     snare: { frequency: [90, 360], decay: [0.04, 0.8] },
@@ -703,10 +710,10 @@
         bank.className = "sequence-bank";
         bank.dataset.bank = String(bankIndex);
 
-        const voiceHeading = document.createElement("div");
-        voiceHeading.className = "sequence-heading bank-leading";
-        voiceHeading.textContent = "VOICE";
-        bank.appendChild(voiceHeading);
+        const voiceSpacer = document.createElement("div");
+        voiceSpacer.className = "sequence-heading bank-leading";
+        voiceSpacer.setAttribute("aria-hidden", "true");
+        bank.appendChild(voiceSpacer);
 
         const muteHeading = document.createElement("div");
         muteHeading.className = "sequence-heading bank-leading";
@@ -726,7 +733,10 @@
           trigger.type = "button";
           trigger.className = "voice-trigger bank-leading";
           trigger.dataset.voice = id;
-          trigger.textContent = label;
+          const iconId = VOICE_ICONS[id];
+          trigger.innerHTML = iconId
+            ? `<svg class="voice-icon" viewBox="0 0 512 512" aria-hidden="true"><use href="/icons.svg#${iconId}" /></svg>`
+            : label;
           trigger.title = `Play ${label.toLowerCase()}`;
           trigger.setAttribute("aria-label", `Play ${label.toLowerCase()}`);
           bank.appendChild(trigger);
