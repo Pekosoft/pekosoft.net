@@ -226,6 +226,70 @@
     };
   }
 
+  function writeStringToDataView(view, offset, text) {
+    for (let index = 0; index < text.length; index++) {
+      view.setUint8(offset + index, text.charCodeAt(index));
+    }
+  }
+
+  function encodeAudioBufferToWavBlob(audioBuffer) {
+    const channelCount = audioBuffer.numberOfChannels;
+    const sampleRate = audioBuffer.sampleRate;
+    const frameCount = audioBuffer.length;
+    const interleaved = new Float32Array(frameCount * channelCount);
+    const channelData = [];
+
+    for (let channel = 0; channel < channelCount; channel++) {
+      channelData.push(audioBuffer.getChannelData(channel));
+    }
+
+    let cursor = 0;
+    for (let frame = 0; frame < frameCount; frame++) {
+      for (let channel = 0; channel < channelCount; channel++) {
+        interleaved[cursor++] = channelData[channel][frame];
+      }
+    }
+
+    const bytesPerSample = 2;
+    const dataChunkSize = interleaved.length * bytesPerSample;
+    const arrayBuffer = new ArrayBuffer(44 + dataChunkSize);
+    const view = new DataView(arrayBuffer);
+
+    writeStringToDataView(view, 0, "RIFF");
+    view.setUint32(4, 36 + dataChunkSize, true);
+    writeStringToDataView(view, 8, "WAVE");
+    writeStringToDataView(view, 12, "fmt ");
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, channelCount, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * channelCount * bytesPerSample, true);
+    view.setUint16(32, channelCount * bytesPerSample, true);
+    view.setUint16(34, 16, true);
+    writeStringToDataView(view, 36, "data");
+    view.setUint32(40, dataChunkSize, true);
+
+    let offset = 44;
+    for (let index = 0; index < interleaved.length; index++) {
+      const sample = Math.max(-1, Math.min(1, interleaved[index]));
+      const intSample = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+      view.setInt16(offset, intSample, true);
+      offset += bytesPerSample;
+    }
+
+    return new Blob([arrayBuffer], { type: "audio/wav" });
+  }
+
+  function formatPekosoftTimestamp(date = new Date()) {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = String(date.getFullYear());
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+    return `${day}-${month}-${year}_${hours}-${minutes}-${seconds}`;
+  }
+
   class DrumMachine {
     constructor() {
       this.state = loadState();
@@ -261,6 +325,7 @@
         record: document.getElementById("record-button"),
         playback: document.getElementById("playback-button"),
         stop: document.getElementById("stop-button"),
+        saveWav: document.getElementById("save-wav-button"),
         tap: document.getElementById("tap-button"),
         sound: document.getElementById("toggle-sound-button"),
         haptic: document.getElementById("haptic-button"),
@@ -778,6 +843,7 @@
       this.elements.record.addEventListener("click", () => this.toggleRecording());
       this.elements.playback.addEventListener("click", () => this.toggleRecordingPlayback());
       this.elements.stop.addEventListener("click", () => this.stopAll(true));
+      this.elements.saveWav.addEventListener("click", () => this.savePatternAsWav());
       this.elements.tap.addEventListener("click", () => this.tapTempo());
       this.elements.sound.addEventListener("click", () => {
         this.state.sound = !this.state.sound;
@@ -1523,6 +1589,67 @@
       link.remove();
       window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
       this.showPanelSuccess(this.elements.save);
+    }
+
+    async savePatternAsWav() {
+      if (typeof window.OfflineAudioContext !== "function") {
+        console.warn("Drum Machine WAV export is not supported in this browser.");
+        return;
+      }
+
+      const sampleRate = 44100;
+      const stepStartTimes = [];
+      let totalDuration = 0;
+
+      for (let step = 0; step < this.state.length; step++) {
+        stepStartTimes.push(totalDuration);
+        totalDuration += this.getStepDuration(step);
+      }
+
+      const longestDecay = VOICES.reduce((max, { id }) => {
+        const decay = Number(this.state.voices[id]?.decay) || 0;
+        return Math.max(max, decay);
+      }, 0);
+      const renderDuration = Math.max(1, totalDuration + longestDecay + 0.35);
+      const offlineContext = new OfflineAudioContext(2, Math.ceil(renderDuration * sampleRate), sampleRate);
+
+      for (let step = 0; step < this.state.length; step++) {
+        const when = stepStartTimes[step] + 0.02;
+        VOICES.forEach(({ id }) => {
+          const velocity = this.state.pattern[id][step];
+          if (!velocity || this.state.mutes[id]) return;
+          const settings = this.state.voices[id];
+          window.playDrumSound({
+            audioContext: offlineContext,
+            destinationNode: offlineContext.destination,
+            voice: id,
+            when,
+            velocity: velocity === 2 ? 1 : 0.68,
+            level: (settings.level || 0) * (this.state.volume / 100),
+            pan: settings.pan,
+            frequency: settings.frequency,
+            decay: settings.decay,
+            tone: settings.tone,
+            snap: settings.tone
+          });
+        });
+      }
+
+      const audioBuffer = await offlineContext.startRendering();
+      const blob = encodeAudioBufferToWavBlob(audioBuffer);
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const filename = `drum_machine_pattern_${formatPekosoftTimestamp()}.wav`;
+
+      link.href = objectUrl;
+      link.download = typeof window.ensurePekosoftFilename === "function"
+        ? window.ensurePekosoftFilename(filename)
+        : `pekosoft_${filename}`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+      this.showPanelSuccess(this.elements.saveWav);
     }
 
     async openPatternFile() {

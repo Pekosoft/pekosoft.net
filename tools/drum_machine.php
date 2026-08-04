@@ -52,6 +52,10 @@
           <svg class="icons"><use href="/icons.svg#stop" /></svg>
           <span class="button-text">STOP</span>
         </button>
+        <button id="save-wav-button" class="square" title="Save WAV" aria-label="Save WAV">
+          <svg class="icons"><use href="/icons.svg#download" /></svg>
+          <span class="button-text">SAVE</span>
+        </button>
         <button id="tap-button" class="square" title="Tap tempo">
           <svg class="icons"><use href="/icons.svg#tap_pad" /></svg>
           <span class="button-text">TAP</span>
