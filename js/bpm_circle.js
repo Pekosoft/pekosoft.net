@@ -1006,17 +1006,11 @@ class BPMVisualizer {
       applyVolume(parseInt(this.volumeSlider.value, 10) || 0);
     });
 
-    if (this.volumeDownButton) {
-      this.volumeDownButton.addEventListener('click', () => {
-        applyVolume((parseInt(this.volumeSlider.value, 10) || 0) - 1);
-      });
-    }
-
-    if (this.volumeUpButton) {
-      this.volumeUpButton.addEventListener('click', () => {
-        applyVolume((parseInt(this.volumeSlider.value, 10) || 0) + 1);
-      });
-    }
+    window.bindPekosoftRangeButtons(
+      this.volumeSlider,
+      this.volumeDownButton,
+      this.volumeUpButton
+    );
   }
 
   initCopyButton() {

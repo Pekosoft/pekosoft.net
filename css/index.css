@@ -95,6 +95,12 @@ canvas {
   }
 }
 
+button[id$="decrease-button"]:focus,
+button[id$="increase-button"]:focus {
+  outline: 1px solid var(--color1);
+  outline-offset: -1px;
+}
+
 /* LINKS */
 
 a {

@@ -216,6 +216,16 @@ function ensurePekosoftFilename(filename) {
 
 window.ensurePekosoftFilename = ensurePekosoftFilename;
 
+document.addEventListener('pointerdown', function (event) {
+  const target = event.target;
+  if (!(target instanceof Element)) return;
+
+  const button = target.closest('button[id$="decrease-button"], button[id$="increase-button"]');
+  if (button && !button.disabled) {
+    button.focus({ preventScroll: true });
+  }
+}, true);
+
 function bindPekosoftRangeButtons(slider, decreaseButton, increaseButton, options = {}) {
   if (!slider || !decreaseButton || !increaseButton) return null;
 
