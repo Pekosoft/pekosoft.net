@@ -107,8 +107,8 @@
 }
 
 .voice-trigger.selected-voice {
-  color: var(--color1);
-  background: var(--grey1);
+  color: var(--white);
+  background: var(--black);
 }
 
 .voice-mute {
@@ -123,7 +123,7 @@
 
 .voice-mute.button-on {
   color: var(--color1);
-  background: var(--grey1);
+  background: var(--black);
 }
 
 .step-button {
@@ -177,12 +177,13 @@
 }
 
 .voice-trigger.muted-step {
-  color: var(--grey2);
-  background: var(--grey1);
+  color: var(--white);
+  background: var(--black);
 }
 
 .voice-trigger.selected-voice.muted-step {
-  background: var(--grey1);
+  color: var(--white);
+  background: var(--black);
 }
 
 .step-button.muted-step {
