@@ -720,7 +720,7 @@
       const rowHeight = height / VOICES.length;
       const rootStyles = getComputedStyle(document.documentElement);
       const primaryColor = rootStyles.getPropertyValue("--color1").trim();
-      const guideColor = rootStyles.getPropertyValue("--grey2").trim();
+      const guideColor = rootStyles.getPropertyValue("--grey1").trim();
 
       this.timelineEvents = this.timelineEvents.filter((event) => event.endTime >= windowStart);
       context.clearRect(0, 0, width, height);

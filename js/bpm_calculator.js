@@ -744,7 +744,7 @@ function drawCanvas() {
   timelineSvg.appendChild(layer);
   if (state.showGuides) {
     const middleY = (h / 2) + 0.5;
-    layer.appendChild(createTimelineLine(0, middleY, w, middleY, getCssVariable('--grey2')));
+    layer.appendChild(createTimelineLine(0, middleY, w, middleY, getCssVariable('--grey1')));
   }
 
   if (state.showPlayhead) {
