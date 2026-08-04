@@ -17,7 +17,7 @@
   gap: 1px;
   width: 100%;
   min-height: 100%;
-  background: var(--grey2);
+  background: var(--grey1);
 }
 
 .sequence-bank {
@@ -28,7 +28,7 @@
   padding: 1px;
   min-width: 0;
   min-height: 196px;
-  background: var(--grey2);
+  background: var(--grey1);
 }
 
 @container (min-width: 884px) {
@@ -131,7 +131,6 @@
 }
 
 .step-button.beat-start {
-  box-shadow: inset 1px 0 0 var(--grey2);
 }
 
 .step-button.velocity-1,

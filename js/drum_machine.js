@@ -782,7 +782,7 @@
 
         const muteHeading = document.createElement("div");
         muteHeading.className = "sequence-heading bank-leading";
-        muteHeading.textContent = "M";
+        muteHeading.setAttribute("aria-hidden", "true");
         bank.appendChild(muteHeading);
 
         for (let localStep = 0; localStep < 8; localStep++) {
