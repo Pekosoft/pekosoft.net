@@ -712,7 +712,7 @@ tbody tr:hover {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   white-space: nowrap;
   min-width: 180px;
   width: 100%;
@@ -750,12 +750,18 @@ tbody tr:hover {
 
 .controls-values.wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
   width: 100%;
   max-width: var(--maxwidth);
   margin: 0 auto;
   border-bottom: 4px solid var(--grey1);
+}
+
+@container controls (min-width: 900px) {
+  .controls-values.wrapper {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
@@ -983,6 +989,7 @@ li h1 img {
   max-width: var(--maxwidth);
   margin-left: auto;
   margin-right: auto;
+  container: controls / inline-size;
 }
 
 @media (min-width: 960px) {
@@ -1426,12 +1433,12 @@ a:has(> svg.icons) {
 }
 
 .controls-sliders {
+  --controls-slider-gap: 4px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 8px;
-  border-top: 4px solid var(--grey1);
+  gap: var(--controls-slider-gap);
   border-bottom: 4px solid var(--grey1);
-  padding: 4px 4px;
+  padding: var(--controls-slider-gap);
   background-color: var(--black);
 }
 
@@ -1452,6 +1459,7 @@ a:has(> svg.icons) {
 
 .controls-slider-block input[type="range"] {
   min-width: 0;
+  margin: 0 var(--controls-slider-gap);
 }
 
 @media (min-width: 769px) {
