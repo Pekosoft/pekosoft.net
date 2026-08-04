@@ -361,6 +361,18 @@ th:last-child {
   border-right: none;
 }
 
+td:has(> input[type="number"]) {
+  padding: 0;
+}
+
+td > input[type="number"] {
+  display: block;
+  width: 100%;
+  height: var(--size3);
+  background-color: transparent;
+  border: 0;
+}
+
 tbody tr:hover {
   background: var(--grey1);
 }
