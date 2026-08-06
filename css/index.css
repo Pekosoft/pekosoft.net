@@ -145,6 +145,10 @@ button {
   /* Center vertically */
 }
 
+button:not(.square):not(.pad) {
+  background: var(--grey1);
+}
+
 select,
 input[type="number"],
 input[type="text"],
@@ -1448,6 +1452,41 @@ a:has(> svg.icons) {
 .controls-buttons {
   /* separator between buttons and values */
   border-bottom: 4px solid var(--grey1);
+}
+
+.show-button-text .controls-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.show-button-text .module-footer:not(.statusbar) {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+}
+
+.show-button-text .controls-buttons > button:not(.transparent):not(.icon-only):not(.knob-control) {
+  width: 100%;
+  min-width: 0;
+}
+
+.show-button-text .module-footer > button:not(.transparent):not(.icon-only):not(.knob-control) {
+  width: 100%;
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+@container controls (min-width: 900px) {
+  .show-button-text .controls-buttons {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 380px) {
+  .show-button-text .controls-buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .controls-sliders {
