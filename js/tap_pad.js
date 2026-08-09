@@ -475,10 +475,6 @@ function stopTapPlayback() {
 function scheduleTapPlayback() {
   tapPlaybackTimer = null;
   if (!isTapPlaybackOn || !tapAudioContext) return;
-  if (!isSoundOn) {
-    stopTapPlayback();
-    return;
-  }
 
   const context = tapAudioContext;
   const beatIntervalSec = 60 / tapPlaybackBpm;
@@ -496,6 +492,7 @@ function scheduleTapPlayback() {
 
   let scheduledCount = 0;
   while (tapPlaybackNextBeatTime < now + TAP_PLAYBACK_SCHEDULE_AHEAD_SEC && scheduledCount < 128) {
+    // playTapTransient silences itself when sound is off; blink still fires
     const event = playTapTransient(context, tapPlaybackNextBeatTime, TAP_CLICK_DURATION_SEC);
     schedulePadBlink(tapPlaybackNextBeatTime);
     if (event?.stopNode) {
