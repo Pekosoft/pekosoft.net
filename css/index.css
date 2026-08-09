@@ -145,7 +145,7 @@ button {
   /* Center vertically */
 }
 
-button:not(.square):not(.pad) {
+button:not(.square):not(.pad):not(.toc-button) {
   background: var(--grey1);
 }
 
