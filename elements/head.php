@@ -5,14 +5,68 @@ $toolPages = ["tap_pad.php", "bpm_calculator.php", "metronome.php", "turntable.p
 $toolSlugs = array_map(function ($toolPage) {
 	return pathinfo($toolPage, PATHINFO_FILENAME);
 }, $toolPages);
+$releaseName = isset($releaseName) ? $releaseName : '';
+$releaseTitleMap = [
+	'tap_pad' => 'Tap Pad',
+	'tap_pad.php' => 'Tap Pad',
+	'bpm_calculator' => 'BPM Calculator',
+	'bpm_calculator.php' => 'BPM Calculator',
+	'metronome' => 'Metronome',
+	'metronome.php' => 'Metronome',
+	'turntable' => 'Turntable',
+	'turntable.php' => 'Turntable',
+	'bpm_circle' => 'BPM Circle',
+	'bpm_circle.php' => 'BPM Circle',
+	'bpm_curve' => 'BPM Curve',
+	'bpm_curve.php' => 'BPM Curve',
+	'circle_of_fifths' => 'Circle Of Fifths',
+	'circle_of_fifths.php' => 'Circle Of Fifths',
+	'drum_machine' => 'Drum Machine',
+	'drum_machine.php' => 'Drum Machine',
+	'player' => 'Player',
+	'player.php' => 'Player',
+	'piano' => 'Piano',
+	'piano.php' => 'Piano',
+	'audio_calculator' => 'Audio Calculator',
+	'audio_calculator.php' => 'Audio Calculator',
+	'blockchain' => 'Blockchain',
+	'blockchain.php' => 'Blockchain',
+	'icons' => 'Icons',
+	'icons.php' => 'Icons',
+	'tuner' => 'Tuner',
+	'tuner.php' => 'Tuner',
+	'visualizer' => 'Visualizer',
+	'visualizer.php' => 'Visualizer',
+	'reference' => 'Reference',
+	'reference.php' => 'Reference',
+	'notepad' => 'Notepad',
+	'notepad.php' => 'Notepad',
+	'index' => 'Index',
+	'index.php' => 'Index',
+	'help' => 'Help',
+	'help.php' => 'Help',
+	'history' => 'History',
+	'history.php' => 'History',
+	'about' => 'About',
+	'about.php' => 'About',
+	'settings' => 'Settings',
+	'settings.php' => 'Settings',
+	'beta' => 'Beta',
+	'beta.php' => 'Beta',
+	'bitcoin' => 'Buy Us Coffee',
+	'bitcoin.php' => 'Buy Us Coffee',
+];
+
+if ($releaseName === '') {
+	$releaseName = $releaseTitleMap[$requestPath] ?? $releaseTitleMap[$currentScript] ?? '';
+}
+if ($releaseName === '' && $requestPath !== '') {
+	$releaseName = $releaseTitleMap[$requestPath . '.php'] ?? '';
+}
 if (in_array($currentScript, $toolPages, true) || in_array($requestPath, $toolSlugs, true)) {
 	echo "<script>document.documentElement.classList.add('modules-page', 'modules-loading');</script>";
 }
-?>
-<?php
-$documentTitle = isset($releaseName) && $releaseName
-  ? 'Pekosoft - ' . $releaseName
-  : 'Pekosoft';
+$documentTitle = $releaseName ? 'Pekosoft - ' . $releaseName : 'Pekosoft';
 ?>
 <script>
 try {
