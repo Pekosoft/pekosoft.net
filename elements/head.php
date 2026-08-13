@@ -67,6 +67,16 @@ if (in_array($currentScript, $toolPages, true) || in_array($requestPath, $toolSl
 	echo "<script>document.documentElement.classList.add('modules-page', 'modules-loading');</script>";
 }
 $documentTitle = $releaseName ? 'Pekosoft - ' . $releaseName : 'Pekosoft';
+$canonicalSlug = $requestPath !== '' ? $requestPath : pathinfo($currentScript, PATHINFO_FILENAME);
+$canonicalSlug = $canonicalSlug === 'index' ? '' : $canonicalSlug;
+$canonicalUrl = 'https://pekosoft.net' . ($canonicalSlug !== '' ? '/' . $canonicalSlug : '');
+$ogImage = 'https://pekosoft.net/png/index.png';
+if ($canonicalSlug !== '') {
+	$ogImagePng = $_SERVER['DOCUMENT_ROOT'] . '/png/' . $canonicalSlug . '.png';
+	if (file_exists($ogImagePng)) {
+		$ogImage = 'https://pekosoft.net/png/' . $canonicalSlug . '.png';
+	}
+}
 ?>
 <script>
 try {
@@ -79,11 +89,11 @@ try {
 <meta charset="utf-8">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" type="text/css" href="/css/index.css?v=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/css/index.css'); ?>">
-<link rel="canonical" href="https://pekosoft.net">
+<link rel="canonical" href="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8'); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <meta property="og:title" content="<?php echo htmlspecialchars($documentTitle, ENT_QUOTES, 'UTF-8'); ?>">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://pekosoft.net">
-<meta property="og:image" content="https://pekosoft.net/png/index.png">
+<meta property="og:url" content="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8'); ?>">
+<meta property="og:image" content="<?php echo htmlspecialchars($ogImage, ENT_QUOTES, 'UTF-8'); ?>">
 <meta property="og:description" content="Official website for the experimental audio software company Pekosoft.">
