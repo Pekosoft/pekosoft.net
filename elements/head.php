@@ -9,6 +9,11 @@ if (in_array($currentScript, $toolPages, true) || in_array($requestPath, $toolSl
 	echo "<script>document.documentElement.classList.add('modules-page', 'modules-loading');</script>";
 }
 ?>
+<?php
+$documentTitle = isset($releaseName) && $releaseName
+  ? 'Pekosoft - ' . $releaseName
+  : 'Pekosoft';
+?>
 <script>
 try {
 	if (localStorage.getItem('global.layout') !== 'false') {
@@ -16,14 +21,14 @@ try {
 	}
 } catch (_) {}
 </script>
-<title>Pekosoft</title>
+<title><?php echo htmlspecialchars($documentTitle, ENT_QUOTES, 'UTF-8'); ?></title>
 <meta charset="utf-8">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" type="text/css" href="/css/index.css?v=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/css/index.css'); ?>">
 <link rel="canonical" href="https://pekosoft.net">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta property="og:title" content="Pekosoft">
+<meta property="og:title" content="<?php echo htmlspecialchars($documentTitle, ENT_QUOTES, 'UTF-8'); ?>">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://pekosoft.net">
 <meta property="og:image" content="https://pekosoft.net/png/index.png">

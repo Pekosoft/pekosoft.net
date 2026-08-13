@@ -844,11 +844,13 @@ function toggleFullscreen() {
 
 async function shareCurrentPage() {
   const shareUrl = window.location.href;
+  const shareTitle = document.title || 'Pekosoft';
 
   if (navigator.share) {
     try {
       await navigator.share({
-        title: document.title || 'Pekosoft',
+        title: shareTitle,
+        text: shareTitle,
         url: shareUrl
       });
       return;
