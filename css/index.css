@@ -95,6 +95,11 @@ canvas {
   }
 }
 
+button[id$="decrease-button"],
+button[id$="increase-button"] {
+  border: 1px solid var(--grey2);
+}
+
 button[id$="decrease-button"]:focus,
 button[id$="increase-button"]:focus {
   outline: 1px solid var(--color1);
@@ -312,6 +317,7 @@ input[type="range"]::-webkit-slider-runnable-track {
   height: var(--size2);
   cursor: pointer;
   background: var(--grey1);
+  border: 1px solid var(--grey2);
 }
 
 /* TABLE */
@@ -2297,7 +2303,7 @@ body > #panel-container.module-maximized > .module-body {
 }
 
 .knob-control {
-  border: 0;
+  border: 1px solid var(--grey2);
   border-radius: 50%;
   background: var(--grey1);
   outline: none;
