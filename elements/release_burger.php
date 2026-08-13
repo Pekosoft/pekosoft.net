@@ -53,6 +53,13 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
       About
     </button>
 
+    <button id="share-release-toc-button" class="toc-button" title="Share" aria-label="Share">
+      <svg class="icons" role="img">
+        <use href="/icons.svg#share"></use>
+      </svg>
+      Share
+    </button>
+
     <?php if ($hasModules): ?>
 
       <div class="toc-spacer"></div>

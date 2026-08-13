@@ -842,12 +842,40 @@ function toggleFullscreen() {
   }
 }
 
+async function shareCurrentPage() {
+  const shareUrl = window.location.href;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: document.title || 'Pekosoft',
+        url: shareUrl
+      });
+      return;
+    } catch (error) {
+      if (error && error.name === 'AbortError') return;
+    }
+  }
+
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      return;
+    } catch (error) {
+      console.warn('Unable to copy share URL', error);
+    }
+  }
+
+  window.prompt('Copy this link:', shareUrl);
+}
+
 // Function to attach data-href buttons in release TOC
 
 document.addEventListener("DOMContentLoaded", () => {
   const releaseToggle = document.getElementById("toggle-release-button");
   const releaseToc = document.getElementById("release-toc");
   const releaseCloseButton = document.getElementById("release-close-button");
+  const shareReleaseButton = document.getElementById("share-release-toc-button");
 
   if (releaseToggle && releaseToc) {
     releaseToggle.addEventListener("click", toggleReleaseMenu);
@@ -855,6 +883,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (releaseCloseButton) {
     releaseCloseButton.addEventListener("click", toggleReleaseMenu);
+  }
+
+  if (shareReleaseButton) {
+    shareReleaseButton.addEventListener("click", async () => {
+      await shareCurrentPage();
+      if (releaseToc && releaseToc.classList.contains('release-toc-open')) {
+        releaseToc.classList.remove('release-toc-open');
+        document.body.classList.remove('release-toc-active');
+      }
+    });
   }
 
   document.querySelectorAll(".toc-button[data-href]").forEach(btn => {
