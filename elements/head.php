@@ -96,4 +96,6 @@ try {
 <meta property="og:type" content="website">
 <meta property="og:url" content="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8'); ?>">
 <meta property="og:image" content="<?php echo htmlspecialchars($ogImage, ENT_QUOTES, 'UTF-8'); ?>">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
 <meta property="og:description" content="Official website for the experimental audio software company Pekosoft.">
