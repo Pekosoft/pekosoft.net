@@ -1,3 +1,10 @@
+<?php
+$requestedRelease = isset($_GET['r']) ? basename((string) $_GET['r']) : '';
+if ($requestedRelease === 'settings') {
+  require($_SERVER['DOCUMENT_ROOT'] . '/404.php');
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 

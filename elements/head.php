@@ -49,8 +49,6 @@ $releaseTitleMap = [
 	'history.php' => 'History',
 	'about' => 'About',
 	'about.php' => 'About',
-	'settings' => 'Settings',
-	'settings.php' => 'Settings',
 	'beta' => 'Beta',
 	'beta.php' => 'Beta',
 	'bitcoin' => 'Buy Us Coffee',
@@ -98,6 +96,9 @@ if ($previewSlug !== '') {
 try {
 	if (localStorage.getItem('global.layout') !== 'false') {
 		document.documentElement.classList.add('layout-two-columns');
+	}
+	if (localStorage.getItem('global.footer') === 'false') {
+		document.documentElement.classList.add('footer-hidden');
 	}
 } catch (_) {}
 </script>

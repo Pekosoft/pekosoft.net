@@ -301,7 +301,6 @@ Examples of root-level tool and site files include:
 - `tap_pad.php`
 - `turntable.php`
 - `beta.php`
-- `settings.php`
 - `icons.php`
 - `help.php`
 - `history.php`

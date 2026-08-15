@@ -337,6 +337,121 @@
 
 <div class="feature-row module">
   <svg class="standard-image-help">
+    <use href="/icons.svg#settings"></use>
+  </svg>
+  <div class="justify">
+    <h1>Settings</h1>
+    Global customization is available from the Settings button in the top heading. Preferences are saved automatically and apply across Pekosoft.
+  </div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#moon"></use></svg>
+  <div class="justify"><h1>Dark mode <span class="object">option</span></h1>Switches the site color mode.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#full_screen"></use></svg>
+  <div class="justify"><h1>Fullscreen <span class="object">button</span></h1>Enters or exits browser fullscreen.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#play"></use></svg>
+  <div class="justify"><h1>Play <span class="object">button</span></h1>Cycles through Pekosoft pages automatically.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#bars"></use></svg>
+  <div class="justify"><h1>Status bar <span class="object">option</span></h1>Toggles the fixed tool-navigation bar at the bottom of the page.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#view_grid"></use></svg>
+  <div class="justify"><h1>Grid <span class="object">option</span></h1>Toggles the background grid.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#view_grid"></use></svg>
+  <div class="justify"><h1>Grid white <span class="object">option</span></h1>Uses white grid lines.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#guides"></use></svg>
+  <div class="justify"><h1>Guides <span class="object">option</span></h1>Toggles timeline guides across releases that support them.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#tool"></use></svg>
+  <div class="justify"><h1>Headers <span class="object">option</span></h1>Shows or hides module headers.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#view_grid"></use></svg>
+  <div class="justify"><h1>Layout <span class="object">option</span></h1>Toggles the two-module layout where supported.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#haptic"></use></svg>
+  <div class="justify"><h1>Haptics <span class="object">option</span></h1>Enables haptic feedback where supported.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#text"></use></svg>
+  <div class="justify"><h1>Text <span class="object">option</span></h1>Uses rectangular buttons with text instead of square icon buttons where supported.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#alpha"></use></svg>
+  <div class="justify"><h1>Alpha <span class="object">option</span></h1>Applies transparency to selected interface surfaces.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#bars"></use></svg>
+  <div class="justify"><h1>Bars <span class="object">option</span></h1>Toggles number-field background bars.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#wrap_text"></use></svg>
+  <div class="justify"><h1>Wrap <span class="object">option</span></h1>Toggles panel text wrapping across releases with Panel modules.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#knob"></use></svg>
+  <div class="justify"><h1>Size <span class="object">knob</span></h1>Sets the background-grid size.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#menu"></use></svg>
+  <div class="justify"><h1>Font <span class="object">menu</span></h1>Sets the default font size.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#field"></use></svg>
+  <div class="justify"><h1>BPM <span class="object">field</span></h1>Sets the default beats per minute.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#field"></use></svg>
+  <div class="justify"><h1>RPM <span class="object">field</span></h1>Sets the default rounds per minute.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#field"></use></svg>
+  <div class="justify"><h1>A4 Hz <span class="object">field</span></h1>Sets the default frequency for A4.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#field"></use></svg>
+  <div class="justify"><h1>SOS <span class="object">field</span></h1>Sets the default speed of sound.</div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#reset"></use></svg>
+  <div class="justify"><h1>Reset <span class="object">button</span></h1>Restores all global customization to factory defaults.</div>
+</div>
+
+<div class="feature-row module">
+  <svg class="standard-image-help">
     <use href="/icons.svg#notepad"></use>
   </svg>
   <div class="justify">

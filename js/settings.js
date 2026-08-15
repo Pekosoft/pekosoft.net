@@ -16,6 +16,8 @@ window.FactoryDefaults = {
   alpha: false,
   wrap: false,
   inputBackgroundsEnabled: true,
+  mode: "light",
+  footer: true,
   defaultBPM: 120,
   defaultRPM: 33.333,
   a4Hz: 440,
@@ -37,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
     fontSizeSelector: document.getElementById("font_size_selector"),
     toggleAlpha: document.getElementById("toggle-alpha"),
     toggleWrap: document.getElementById("toggle-wrap"),
-    backButton: document.getElementById("back-settings-button"),
     resetButton: document.getElementById("reset-settings-button"),
     defaultBPM: document.getElementById("default_bpm"),
     defaultBPMKnob: document.getElementById("default-bpm-knob"),
@@ -204,12 +205,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (settings.backButton) {
-    settings.backButton.addEventListener("click", () => {
-      window.history.back();
-    });
-  }
-
   if (settings.resetButton) {
     settings.resetButton.addEventListener("click", () => {
       resetSettings();
@@ -242,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
       settings.haptics.checked = (localStorage.getItem("global.haptics") ?? defaults.haptics) === "true";
     }
     if (settings.headers) {
-      settings.headers.checked = (localStorage.getItem("global.headers") ?? defaults.headers) === "true";
+      settings.headers.checked = localStorage.getItem("global.headers") !== "false";
     }
     if (settings.layout) {
       settings.layout.checked = localStorage.getItem("global.layout") !== "false";
@@ -390,6 +385,8 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("global.alpha", defaults.alpha);
     localStorage.setItem("global.wrap", defaults.wrap);
     localStorage.setItem("global.input_backgrounds_enabled", defaults.inputBackgroundsEnabled);
+    localStorage.setItem("global.mode", defaults.mode);
+    localStorage.setItem("global.footer", defaults.footer);
     localStorage.setItem("global.default_bpm", defaults.defaultBPM);
     localStorage.setItem("global.default_rpm", defaults.defaultRPM);
     localStorage.setItem("global.a4_hz", defaults.a4Hz);
@@ -404,6 +401,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const val = parseFloat(input.value) || 0;
       input.style.backgroundSize = window.enableInputBackgrounds ? `${val}px 4px` : "0px 4px";
     });
+
+    document.documentElement.classList.remove("invert-colors");
+    if (typeof updateFooterVisibility === "function") updateFooterVisibility();
+    if (typeof stopSitePlay === "function") stopSitePlay();
   }
 
   function normalizeGridSize(value) {

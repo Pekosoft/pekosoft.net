@@ -35,7 +35,28 @@ if (window.visualViewport) {
 
 function toggleMenu() {
   const toc = document.getElementById('toc');
+  const settingsPanel = document.getElementById('settings-panel');
+
+  if (settingsPanel) {
+    settingsPanel.classList.remove('settings-panel-open');
+    document.getElementById('toggle-settings-panel-button')?.setAttribute('aria-expanded', 'false');
+  }
+
   toc.classList.toggle('toc-open');
+}
+
+function toggleSettingsPanel() {
+  const settingsPanel = document.getElementById('settings-panel');
+  const settingsToggle = document.getElementById('toggle-settings-panel-button');
+  const toc = document.getElementById('toc');
+  if (!settingsPanel || !settingsToggle) return;
+
+  if (toc) {
+    toc.classList.remove('toc-open');
+  }
+
+  settingsPanel.classList.toggle('settings-panel-open');
+  settingsToggle.setAttribute('aria-expanded', String(settingsPanel.classList.contains('settings-panel-open')));
 }
 
 // Function to close the TOC when clicked outside
@@ -53,6 +74,17 @@ document.addEventListener('click', function (event) {
   }
 });
 
+document.addEventListener('click', function (event) {
+  const settingsPanel = document.getElementById('settings-panel');
+  const settingsMenu = document.querySelector('#settings-menu-container');
+  if (!settingsPanel || !settingsMenu) return;
+
+  if (!settingsPanel.contains(event.target) && !settingsMenu.contains(event.target)) {
+    settingsPanel.classList.remove('settings-panel-open');
+    document.getElementById('toggle-settings-panel-button')?.setAttribute('aria-expanded', 'false');
+  }
+});
+
 // Function to close the TOC when ESC key is pressed
 
 document.addEventListener('keydown', function (event) {
@@ -60,6 +92,12 @@ document.addEventListener('keydown', function (event) {
     const toc = document.getElementById('toc');
     if (toc.classList.contains('toc-open')) {
       toc.classList.remove('toc-open');
+    }
+
+    const settingsPanel = document.getElementById('settings-panel');
+    if (settingsPanel?.classList.contains('settings-panel-open')) {
+      settingsPanel.classList.remove('settings-panel-open');
+      document.getElementById('toggle-settings-panel-button')?.setAttribute('aria-expanded', 'false');
     }
   }
 });
@@ -204,6 +242,22 @@ function syncFooterGap() {
     const fittedGap = (contentWidth - visibleItems * itemWidth) / (visibleItems - 1);
     footer.style.setProperty('--footer-gap', `${Math.max(minimumGap, fittedGap).toFixed(3)}px`);
   });
+}
+
+function updateFooterVisibility() {
+  const footerVisible = localStorage.getItem('global.footer') !== 'false';
+  document.documentElement.classList.toggle('footer-hidden', !footerVisible);
+
+  const toggleFooterButton = document.getElementById('toggle-footer-button');
+  if (toggleFooterButton) {
+    toggleFooterButton.setAttribute('aria-pressed', String(footerVisible));
+  }
+}
+
+function toggleFooterVisibility() {
+  const footerVisible = !document.documentElement.classList.contains('footer-hidden');
+  localStorage.setItem('global.footer', String(!footerVisible));
+  updateFooterVisibility();
 }
 
 function ensurePekosoftFilename(filename) {
@@ -602,7 +656,6 @@ const SITE_PLAY_SEQUENCE = [
   '/help.php?r=audio_calculator',
   '/help.php?r=piano',
   '/help.php?r=icons',
-  '/help.php?r=settings',
   '/history.php?r=index',
   '/history.php?r=tap_pad',
   '/history.php?r=bpm_calculator',
@@ -620,7 +673,6 @@ const SITE_PLAY_SEQUENCE = [
   '/history.php?r=audio_calculator',
   '/history.php?r=piano',
   '/history.php?r=icons',
-  '/history.php?r=settings',
   '/about.php?r=index',
   '/about.php?r=tap_pad',
   '/about.php?r=bpm_calculator',
@@ -638,8 +690,6 @@ const SITE_PLAY_SEQUENCE = [
   '/about.php?r=audio_calculator',
   '/about.php?r=piano',
   '/about.php?r=icons',
-  '/about.php?r=settings',
-  '/settings.php',
   '/bitcoin.php'
 ];
 
@@ -794,8 +844,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const mode = localStorage.getItem('global.mode');
   const toggleMenuButton = document.getElementById('toggle-menu-button');
   const toggleMenuCloseButton = document.getElementById('toggle-menu-close-button');
+  const toggleSettingsPanelButton = document.getElementById('toggle-settings-panel-button');
+  const toggleSettingsPanelCloseButton = document.getElementById('toggle-settings-panel-close-button');
   const toggleModeButton = document.getElementById('toggle-mode-button');
   const toggleFullscreenButton = document.getElementById('toggle-fullscreen-button');
+  const toggleFooterButton = document.getElementById('toggle-footer-button');
 
   if (toggleMenuButton) {
     toggleMenuButton.addEventListener('click', toggleMenu);
@@ -803,6 +856,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (toggleMenuCloseButton) {
     toggleMenuCloseButton.addEventListener('click', toggleMenu);
+  }
+
+  if (toggleSettingsPanelButton) {
+    toggleSettingsPanelButton.addEventListener('click', toggleSettingsPanel);
+  }
+
+  if (toggleSettingsPanelCloseButton) {
+    toggleSettingsPanelCloseButton.addEventListener('click', toggleSettingsPanel);
   }
 
   if (toggleModeButton) {
@@ -813,11 +874,16 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleFullscreenButton.addEventListener('click', toggleFullscreen);
   }
 
+  if (toggleFooterButton) {
+    toggleFooterButton.addEventListener('click', toggleFooterVisibility);
+  }
+
   if (mode === 'dark') {
     document.documentElement.classList.add('invert-colors');
   }
 
   markActiveFooterLink();
+  updateFooterVisibility();
   syncFooterGap();
   setupTimelineSaveButton();
   ensureControlsStatusBars();

@@ -43,25 +43,11 @@
       Turntable
     </button>
 
-    <button class="toc-button" data-href="/settings.php" title="Settings" aria-label="Settings">
-      <svg class="icons" role="img">
-        <use href="/icons.svg#settings"></use>
-      </svg>
-      Settings
-    </button>
-
     <button class="toc-button" data-href="/bitcoin.php" title="Buy Us Coffee" aria-label="Buy Us Coffee">
       <svg class="icons" role="img">
         <use href="/icons.svg#qr"></use>
       </svg>
       Buy Us Coffee
-    </button>
-
-    <button id="play-site-button" class="toc-button" title="Play all pages" aria-label="Play all pages">
-      <svg class="icons" role="img">
-        <use href="/icons.svg#play"></use>
-      </svg>
-      Play
     </button>
 
     <div class="toc-footer">
