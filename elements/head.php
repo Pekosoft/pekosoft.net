@@ -86,11 +86,11 @@ $previewSlug = $releaseTitle !== '' && $sectionTitle !== ''
 if ($sectionTitle && $releaseTitle) {
 	$canonicalUrl .= '?r=' . rawurlencode($releaseSlug);
 }
-$ogImage = 'https://pekosoft.net/png/index.png';
+$ogImage = 'https://pekosoft.net/png/og/index.png';
 if ($previewSlug !== '') {
-	$ogImagePng = $_SERVER['DOCUMENT_ROOT'] . '/png/' . $previewSlug . '.png';
+	$ogImagePng = $_SERVER['DOCUMENT_ROOT'] . '/png/og/' . $previewSlug . '.png';
 	if (file_exists($ogImagePng)) {
-		$ogImage = 'https://pekosoft.net/png/' . $previewSlug . '.png';
+		$ogImage = 'https://pekosoft.net/png/og/' . $previewSlug . '.png';
 	}
 }
 ?>
@@ -112,6 +112,6 @@ try {
 <meta property="og:type" content="website">
 <meta property="og:url" content="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8'); ?>">
 <meta property="og:image" content="<?php echo htmlspecialchars($ogImage, ENT_QUOTES, 'UTF-8'); ?>">
-<meta property="og:image:width" content="512">
-<meta property="og:image:height" content="512">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:description" content="Official website for the experimental audio software company Pekosoft.">
