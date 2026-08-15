@@ -66,15 +66,31 @@ if ($releaseName === '' && $requestPath !== '') {
 if (in_array($currentScript, $toolPages, true) || in_array($requestPath, $toolSlugs, true)) {
 	echo "<script>document.documentElement.classList.add('modules-page', 'modules-loading');</script>";
 }
-$documentTitle = $releaseName ? 'Pekosoft - ' . $releaseName : 'Pekosoft';
+$sectionTitleMap = [
+	'help.php' => 'Help',
+	'history.php' => 'History',
+	'about.php' => 'About',
+];
+$sectionTitle = $sectionTitleMap[$currentScript] ?? '';
+$releaseSlug = isset($_GET['r']) ? basename((string) $_GET['r']) : '';
+$releaseTitle = $releaseTitleMap[$releaseSlug] ?? $releaseTitleMap[$releaseSlug . '.php'] ?? '';
+$documentTitle = $sectionTitle && $releaseTitle
+	? 'Pekosoft - ' . $sectionTitle . ' - ' . $releaseTitle
+	: ($releaseName ? 'Pekosoft - ' . $releaseName : 'Pekosoft');
 $canonicalSlug = $requestPath !== '' ? $requestPath : pathinfo($currentScript, PATHINFO_FILENAME);
 $canonicalSlug = $canonicalSlug === 'index' ? '' : $canonicalSlug;
 $canonicalUrl = 'https://pekosoft.net' . ($canonicalSlug !== '' ? '/' . $canonicalSlug : '');
+$previewSlug = $releaseTitle !== '' && $sectionTitle !== ''
+	? $releaseSlug
+	: pathinfo($canonicalSlug, PATHINFO_FILENAME);
+if ($sectionTitle && $releaseTitle) {
+	$canonicalUrl .= '?r=' . rawurlencode($releaseSlug);
+}
 $ogImage = 'https://pekosoft.net/png/index.png';
-if ($canonicalSlug !== '') {
-	$ogImagePng = $_SERVER['DOCUMENT_ROOT'] . '/png/' . $canonicalSlug . '.png';
+if ($previewSlug !== '') {
+	$ogImagePng = $_SERVER['DOCUMENT_ROOT'] . '/png/' . $previewSlug . '.png';
 	if (file_exists($ogImagePng)) {
-		$ogImage = 'https://pekosoft.net/png/' . $canonicalSlug . '.png';
+		$ogImage = 'https://pekosoft.net/png/' . $previewSlug . '.png';
 	}
 }
 ?>
