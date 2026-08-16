@@ -1232,14 +1232,14 @@ li h1 img {
   width: 100%;
   height: calc(var(--visual-viewport-height, 100dvh) - 40px);
   overflow-y: auto;
-  padding: 0;
+  padding: 4px 0;
 }
 
 .toc-content {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding-top: 0;
+  padding-top: 24px;
 }
 
 .toc-column {
@@ -1270,7 +1270,7 @@ li h1 img {
   width: 100%;
   height: calc(var(--visual-viewport-height, 100dvh) - 40px);
   overflow-y: auto;
-  padding: 0 0 4px;
+  padding: 24px 0 4px;
 }
 
 .settings-panel-open {
@@ -1411,18 +1411,9 @@ li h1 img {
     margin: 0;
   }
 
-  .toc-container {
-    padding: 4px 0;
-  }
-
-  .toc-content {
-    padding-top: 24px;
-  }
-
   .settings-panel {
     left: auto;
     right: var(--site-frame-offset);
-    padding: 24px 0 4px;
   }
 
   html.modules-page body.toc-sidebar-open,
