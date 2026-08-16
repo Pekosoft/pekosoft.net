@@ -1315,7 +1315,7 @@ body.settings-sidebar-open #toggle-settings-panel-button .icons {
 .settings-panel-close {
   display: flex;
   flex: 0 0 auto;
-  margin-top: auto;
+  margin-top: 24px;
   align-items: center;
   justify-content: center;
   height: 48px;
@@ -1541,7 +1541,7 @@ body.settings-sidebar-open #toggle-settings-panel-button .icons {
 .toc-close {
   display: flex;
   flex: 0 0 auto;
-  margin-top: auto;
+  margin-top: 24px;
   align-items: center;
   justify-content: center;
   height: 48px;
