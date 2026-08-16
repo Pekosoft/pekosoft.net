@@ -1425,6 +1425,7 @@ li h1 img {
     width: var(--sidebar-width);
     height: calc(var(--visual-viewport-height, 100dvh) - 40px - var(--sidebar-footer-height, 0px));
     margin: 0;
+    background-color: var(--black);
   }
 
   .settings-panel {
@@ -1525,7 +1526,7 @@ li h1 img {
 }
 
 .toc-button:hover {
-  background-color: var(--black);
+  background-color: var(--grey1);
 }
 
 .toc-button:hover .icons {
