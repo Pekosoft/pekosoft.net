@@ -1349,13 +1349,6 @@ li h1 img {
   min-width: 0;
 }
 
-.settings-panel-scroll > .toc-button,
-.settings-panel .settings-toggle-row > .toc-button {
-  flex-direction: row-reverse;
-  justify-content: flex-start;
-  text-align: right;
-}
-
 .settings-toggle-row > .toc-button.button-on {
   color: var(--color1);
 }
@@ -1455,12 +1448,22 @@ li h1 img {
     background-color: var(--black);
   }
 
+  .toc-container {
+    padding: 0;
+  }
+
+  .toc-content,
+  .settings-panel-scroll {
+    width: calc(100% + 4px);
+    margin: -4px 0 0 -4px;
+  }
+
   .toc-content {
-    padding-top: 12px;
+    padding-top: 0;
   }
 
   .settings-panel-scroll {
-    padding-top: 16px;
+    padding-top: 0;
   }
 
   .settings-panel {
