@@ -425,7 +425,7 @@ tbody tr:hover {
   background-color: var(--black);
 }
 
-html.modules-page body:not(.layout-two-columns) > #tool-container {
+html.modules-page body:not(.layout-two-columns) > .container.first-module {
   margin-top: 0;
 }
 
@@ -602,6 +602,10 @@ html.modules-page body:not(.layout-two-columns) > #tool-container {
   max-width: var(--maxwidth);
   padding: 8px;
   margin: 8px auto 0;
+}
+
+.top-heading + .standard {
+  margin-top: 0;
 }
 
 .wrapper {
@@ -922,6 +926,10 @@ li h1 img {
   grid-template-columns: minmax(0, 1fr);
   max-width: var(--maxwidth);
   margin: 16px auto 0;
+}
+
+.index-page .releases {
+  margin-top: 0;
 }
 
 @media (min-width: 320px) {

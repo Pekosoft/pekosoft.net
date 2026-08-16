@@ -46,6 +46,7 @@ function toggleModule(id) {
   }
 
   localStorage.setItem("module_" + id, isNowHidden ? "hidden" : "visible");
+  syncFirstModule();
   syncMaximizedModuleState();
 }
 
@@ -174,6 +175,14 @@ function getCurrentModuleOrder() {
     .map((container) => container.id.replace(/-container$/, ""));
 }
 
+function syncFirstModule() {
+  const containers = Array.from(document.body.children)
+    .filter((element) => element.classList?.contains("container"));
+
+  containers.forEach((container) => container.classList.remove("first-module"));
+  containers.find((container) => !container.classList.contains("hidden"))?.classList.add("first-module");
+}
+
 function applyModuleOrder(order) {
   const normalized = normalizeModuleOrder(order);
   const body = document.body;
@@ -185,6 +194,8 @@ function applyModuleOrder(order) {
       body.insertBefore(container, bodyAnchor);
     }
   });
+
+  syncFirstModule();
 
   const tocModuleItems = document.getElementById("toc-module-items");
   if (!tocModuleItems) return;
@@ -763,6 +774,7 @@ document.addEventListener("DOMContentLoaded", () => {
   moduleIds.forEach(id => setupModuleHeader(id));
   applyModuleOrder(loadModuleOrder());
   restoreModuleStates();
+  syncFirstModule();
   disableMinimizeForTwoColumnLayout();
   syncMaximizedModuleState();
   document.documentElement.classList.remove("modules-loading");
