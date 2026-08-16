@@ -279,7 +279,7 @@ function updateBaseSignatureCircles() {
   while (circles.children.length < beatsPerBar) {
     const circle = document.createElement('button');
     circle.type = 'button';
-    circle.className = 'signature-beat';
+    circle.classList.add('signature-beat');
     circles.appendChild(circle);
   }
 
@@ -292,7 +292,7 @@ function updateBaseSignatureCircles() {
     const isMutedBeat = isBeatMuted(index);
     const circle = circles.children[index];
     circle.dataset.beatIndex = String(index);
-    circle.className = 'signature-beat';
+    circle.classList.add('signature-beat');
     circle.classList.toggle('signature-beat-active', isActiveBeat);
     circle.classList.toggle('signature-beat-muted', isMutedBeat);
     circle.setAttribute('aria-label', `Toggle beat ${index + 1}`);

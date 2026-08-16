@@ -113,7 +113,7 @@
   z-index: 4;
 }
 
-.signature-beat {
+#base-signature-circles .signature-beat {
   all: unset;
   display: block;
   width: calc(16px * var(--metronome-scale, 1));
@@ -128,12 +128,12 @@
   cursor: pointer;
 }
 
-.signature-beat-active {
+#base-signature-circles .signature-beat-active {
   background-color: var(--white);
   box-shadow: none;
 }
 
-.signature-beat-muted {
+#base-signature-circles .signature-beat-muted {
   background-color: var(--grey2);
 }
 
