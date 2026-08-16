@@ -1448,13 +1448,6 @@ li h1 img {
     margin-right: calc(var(--site-frame-offset) + var(--settings-sidebar-space, 0px));
   }
 
-  html.modules-page.layout-two-columns body.toc-sidebar-open.settings-sidebar-open .container,
-  html.modules-page.layout-two-columns body.toc-sidebar-open.settings-sidebar-open .module-drag-placeholder {
-    flex: 0 1 100%;
-    width: 100%;
-    max-width: none;
-  }
-
   .settings-panel .setting-row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
@@ -1525,6 +1518,10 @@ li h1 img {
 
 .toc-button:hover {
   background-color: var(--black);
+}
+
+.toc-button:hover .icons {
+  opacity: 1;
 }
 
 .toc-button.button-on {
