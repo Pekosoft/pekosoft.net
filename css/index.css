@@ -425,11 +425,11 @@ tbody tr:hover {
   background-color: var(--black);
 }
 
-@media (min-width: 800px) {
-  html.modules-page body:not(.layout-two-columns) > #tool-container {
-    margin-top: 0;
-  }
+html.modules-page body:not(.layout-two-columns) > #tool-container {
+  margin-top: 0;
+}
 
+@media (min-width: 800px) {
   html.modules-page.layout-two-columns body {
     display: flex;
     flex-wrap: wrap;
