@@ -60,18 +60,6 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
       </svg>
       Turntable
     </button>
-
-    <div class="toc-break"></div>
-
-    <button class="toc-button" data-href="/bitcoin.php" title="Buy Us Coffee" aria-label="Buy Us Coffee">
-      <svg class="icons" role="img">
-        <use href="/icons.svg#qr"></use>
-      </svg>
-      Buy Us Coffee
-    </button>
-        <?php if ($release !== ''): ?>
-          <button id="share-toc-button" class="toc-button" title="Share" aria-label="Share"><svg class="icons" role="img"><use href="/icons.svg#share"></use></svg>Share</button>
-        <?php endif; ?>
       </div>
 
       <div class="toc-column">
@@ -106,6 +94,18 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
           <?php if (in_array('panel', $availableModules, true)): ?>
             <button class="toc-button" id="panel-toggle-toc-button" title="Panel" aria-label="Panel"><svg class="icons" role="img"><use href="/icons.svg#panel"></use></svg>Panel</button>
           <?php endif; ?>
+        <?php endif; ?>
+      </div>
+
+      <div class="toc-column">
+        <button class="toc-button" data-href="/bitcoin.php" title="Buy Us Coffee" aria-label="Buy Us Coffee">
+          <svg class="icons" role="img">
+            <use href="/icons.svg#qr"></use>
+          </svg>
+          Buy Us Coffee
+        </button>
+        <?php if ($release !== ''): ?>
+          <button id="share-toc-button" class="toc-button" title="Share" aria-label="Share"><svg class="icons" role="img"><use href="/icons.svg#share"></use></svg>Share</button>
         <?php endif; ?>
       </div>
     </div>
