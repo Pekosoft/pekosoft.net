@@ -1083,6 +1083,10 @@ li h1 img {
   height: var(--size2);
 }
 
+.top-heading .settings-panel .knob-control {
+  touch-action: none;
+}
+
 .top-heading a,
 .top-heading a *,
 .top-heading button,
