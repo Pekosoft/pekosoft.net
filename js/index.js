@@ -672,7 +672,7 @@ const SITE_PLAY_SEQUENCE = [
   '/bpm_calculator',
   '/metronome',
   '/turntable',
-  '/beta.php',
+  '/beta',
   '/player',
   '/visualizer',
   '/bpm_circle',
