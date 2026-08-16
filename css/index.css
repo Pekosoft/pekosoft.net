@@ -61,6 +61,8 @@ body {
   text-align: center;
   padding-top: 96px;
   padding-bottom: 48px;
+  container-type: inline-size;
+  container-name: site-content;
 }
 
 h1 {
@@ -1167,6 +1169,12 @@ li h1 img {
 
 /* Hide columns on medium screens */
 @media (max-width: 1800px) {
+  .hide-on-medium-screen {
+    display: none;
+  }
+}
+
+@container site-content (max-width: 1800px) {
   .hide-on-medium-screen {
     display: none;
   }
