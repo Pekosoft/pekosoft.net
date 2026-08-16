@@ -47,8 +47,6 @@ function footerHref($toolFile, $currentPage)
       </svg>
     </a>
   </div>
-
-  <div>
 </div>
 
 <script src="/js/index.js?v=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/js/index.js'); ?>"></script>

@@ -41,8 +41,8 @@ $releaseTitleMap = [
 	'reference.php' => 'Reference',
 	'notepad' => 'Notepad',
 	'notepad.php' => 'Notepad',
-	'index' => 'Index',
-	'index.php' => 'Index',
+	'index' => 'Pekosoft',
+	'index.php' => 'Pekosoft',
 	'help' => 'Help',
 	'help.php' => 'Help',
 	'history' => 'History',
@@ -73,8 +73,8 @@ $sectionTitle = $sectionTitleMap[$currentScript] ?? '';
 $releaseSlug = isset($_GET['r']) ? basename((string) $_GET['r']) : '';
 $releaseTitle = $releaseTitleMap[$releaseSlug] ?? $releaseTitleMap[$releaseSlug . '.php'] ?? '';
 $documentTitle = $sectionTitle && $releaseTitle
-	? 'Pekosoft - ' . $sectionTitle . ' - ' . $releaseTitle
-	: ($releaseName ? 'Pekosoft - ' . $releaseName : 'Pekosoft');
+	? ($releaseSlug === 'index' ? 'Pekosoft - ' . $sectionTitle : 'Pekosoft - ' . $sectionTitle . ' - ' . $releaseTitle)
+	: ($releaseName && $releaseName !== 'Pekosoft' ? 'Pekosoft - ' . $releaseName : 'Pekosoft');
 $canonicalSlug = $requestPath !== '' ? $requestPath : pathinfo($currentScript, PATHINFO_FILENAME);
 $canonicalSlug = $canonicalSlug === 'index' ? '' : $canonicalSlug;
 $canonicalUrl = 'https://pekosoft.net' . ($canonicalSlug !== '' ? '/' . $canonicalSlug : '');
@@ -94,6 +94,20 @@ if ($previewSlug !== '') {
 ?>
 <script>
 try {
+	let theme = localStorage.getItem('global.theme');
+	if (theme !== 'dark' && theme !== 'light') {
+		const legacyMode = localStorage.getItem('global.mode');
+		const legacySemantics = localStorage.getItem('global.mode_semantics');
+		theme = legacySemantics === 'dark-default-v2'
+			? (legacyMode === 'light' ? 'light' : 'dark')
+			: (legacyMode === 'dark' ? 'light' : 'dark');
+		localStorage.setItem('global.theme', theme);
+		localStorage.removeItem('global.mode');
+		localStorage.removeItem('global.mode_semantics');
+	}
+	if (theme === 'light') {
+		document.documentElement.classList.add('invert-colors');
+	}
 	if (localStorage.getItem('global.layout') !== 'false') {
 		document.documentElement.classList.add('layout-two-columns');
 	}

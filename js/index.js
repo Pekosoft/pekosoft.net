@@ -33,16 +33,57 @@ if (window.visualViewport) {
 
 // Function to toggle the TOC visibility
 
+function isDesktopSidebarLayout() {
+  return window.matchMedia("(min-width: 800px)").matches;
+}
+
+function syncSidebarState() {
+  const tocOpen = document.getElementById('toc')?.classList.contains('toc-open') || false;
+  const settingsOpen = document.getElementById('settings-panel')?.classList.contains('settings-panel-open') || false;
+
+  document.body.classList.toggle('toc-sidebar-open', tocOpen);
+  document.body.classList.toggle('settings-sidebar-open', settingsOpen);
+
+  if (isDesktopSidebarLayout()) {
+    localStorage.setItem('global.toc_sidebar_open', String(tocOpen));
+    localStorage.setItem('global.settings_sidebar_open', String(settingsOpen));
+  }
+}
+
+function restoreDesktopSidebarState() {
+  const toc = document.getElementById('toc');
+  const settingsPanel = document.getElementById('settings-panel');
+  const settingsToggle = document.getElementById('toggle-settings-panel-button');
+  if (!toc || !settingsPanel || !settingsToggle) return;
+
+  if (!isDesktopSidebarLayout()) {
+    toc.classList.remove('toc-open');
+    settingsPanel.classList.remove('settings-panel-open');
+    settingsToggle.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('toc-sidebar-open', 'settings-sidebar-open');
+    return;
+  }
+
+  const tocOpen = localStorage.getItem('global.toc_sidebar_open') === 'true';
+  const settingsOpen = localStorage.getItem('global.settings_sidebar_open') === 'true';
+
+  toc.classList.toggle('toc-open', tocOpen);
+  settingsPanel.classList.toggle('settings-panel-open', settingsOpen);
+  settingsToggle.setAttribute('aria-expanded', String(settingsOpen));
+  syncSidebarState();
+}
+
 function toggleMenu() {
   const toc = document.getElementById('toc');
   const settingsPanel = document.getElementById('settings-panel');
 
-  if (settingsPanel) {
+  if (settingsPanel && !isDesktopSidebarLayout()) {
     settingsPanel.classList.remove('settings-panel-open');
     document.getElementById('toggle-settings-panel-button')?.setAttribute('aria-expanded', 'false');
   }
 
   toc.classList.toggle('toc-open');
+  syncSidebarState();
 }
 
 function toggleSettingsPanel() {
@@ -51,12 +92,13 @@ function toggleSettingsPanel() {
   const toc = document.getElementById('toc');
   if (!settingsPanel || !settingsToggle) return;
 
-  if (toc) {
+  if (toc && !isDesktopSidebarLayout()) {
     toc.classList.remove('toc-open');
   }
 
   settingsPanel.classList.toggle('settings-panel-open');
   settingsToggle.setAttribute('aria-expanded', String(settingsPanel.classList.contains('settings-panel-open')));
+  syncSidebarState();
 }
 
 // Function to close the TOC when clicked outside
@@ -64,24 +106,35 @@ function toggleSettingsPanel() {
 document.addEventListener('click', function (event) {
   const toc = document.getElementById('toc');
   const burger = document.querySelector('#burger-container');
+  const settingsPanel = document.getElementById('settings-panel');
+  const settingsMenu = document.querySelector('#settings-menu-container');
 
   const isClickInsideToc = toc.contains(event.target);
   const isClickOnBurger = burger.contains(event.target);
+  const isDesktopSidebarInteraction = isDesktopSidebarLayout() &&
+    ((settingsPanel?.contains(event.target) || false) || (settingsMenu?.contains(event.target) || false));
 
   // If click is outside of TOC and not on the burger icon, close the TOC
-  if (!isClickInsideToc && !isClickOnBurger && toc.classList.contains('toc-open')) {
+  if (!isDesktopSidebarLayout() && !isClickInsideToc && !isClickOnBurger && !isDesktopSidebarInteraction && toc.classList.contains('toc-open')) {
     toc.classList.remove('toc-open');
+    syncSidebarState();
   }
 });
 
 document.addEventListener('click', function (event) {
   const settingsPanel = document.getElementById('settings-panel');
   const settingsMenu = document.querySelector('#settings-menu-container');
+  const toc = document.getElementById('toc');
+  const burger = document.querySelector('#burger-container');
   if (!settingsPanel || !settingsMenu) return;
 
-  if (!settingsPanel.contains(event.target) && !settingsMenu.contains(event.target)) {
+  const isDesktopSidebarInteraction = isDesktopSidebarLayout() &&
+    ((toc?.contains(event.target) || false) || (burger?.contains(event.target) || false));
+
+  if (!isDesktopSidebarLayout() && !settingsPanel.contains(event.target) && !settingsMenu.contains(event.target) && !isDesktopSidebarInteraction) {
     settingsPanel.classList.remove('settings-panel-open');
     document.getElementById('toggle-settings-panel-button')?.setAttribute('aria-expanded', 'false');
+    syncSidebarState();
   }
 });
 
@@ -99,48 +152,8 @@ document.addEventListener('keydown', function (event) {
       settingsPanel.classList.remove('settings-panel-open');
       document.getElementById('toggle-settings-panel-button')?.setAttribute('aria-expanded', 'false');
     }
-  }
-});
 
-// Function to toggle the Release TOC visibility
-
-function toggleReleaseMenu() {
-  const releaseToc = document.getElementById('release-toc');
-  if (!releaseToc) return;
-
-  releaseToc.classList.toggle('release-toc-open');
-  document.body.classList.toggle('release-toc-active', releaseToc.classList.contains('release-toc-open'));
-}
-
-// Function to close the Release TOC when clicked outside
-
-document.addEventListener('click', function (event) {
-  const releaseToc = document.getElementById('release-toc');
-  const releaseBurger = document.querySelector('#release-burger-container');
-
-  if (!releaseToc || !releaseBurger) return;
-
-  const isClickInsideReleaseToc = releaseToc.contains(event.target);
-  const isClickOnReleaseBurger = releaseBurger.contains(event.target);
-
-  // If click is outside of Release TOC and not on the burger icon, close the Release TOC
-  if (!isClickInsideReleaseToc && !isClickOnReleaseBurger && releaseToc.classList.contains('release-toc-open')) {
-    releaseToc.classList.remove('release-toc-open');
-    document.body.classList.remove('release-toc-active');
-  }
-});
-
-// Function to close the Release TOC when ESC key is pressed
-
-document.addEventListener('keydown', function (event) {
-  if (event.key === 'Escape') {
-    const releaseToc = document.getElementById('release-toc');
-    if (!releaseToc) return;
-
-    if (releaseToc.classList.contains('release-toc-open')) {
-      releaseToc.classList.remove('release-toc-open');
-      document.body.classList.remove('release-toc-active');
-    }
+    syncSidebarState();
   }
 });
 
@@ -172,17 +185,36 @@ function CountRows() {
   return rowCount;
 }
 
-// Function to toggle light mode/dark mode
+const COLOR_THEME_STORAGE_KEY = 'global.theme';
+
+function getColorTheme() {
+  return localStorage.getItem(COLOR_THEME_STORAGE_KEY) === 'light' ? 'light' : 'dark';
+}
+
+function applyColorTheme(theme) {
+  const normalizedTheme = theme === 'light' ? 'light' : 'dark';
+  localStorage.setItem(COLOR_THEME_STORAGE_KEY, normalizedTheme);
+  document.documentElement.classList.toggle('invert-colors', normalizedTheme === 'light');
+  updateModeButtonState();
+}
 
 function toggleMode() {
-  const htmlElement = document.documentElement;
-  htmlElement.classList.toggle('invert-colors');
+  applyColorTheme(getColorTheme() === 'dark' ? 'light' : 'dark');
+}
 
-  // Store mode preference in local storage
-  if (htmlElement.classList.contains('invert-colors')) {
-    localStorage.setItem('global.mode', 'dark');
-  } else {
-    localStorage.setItem('global.mode', 'light');
+function updateModeButtonState() {
+  const toggleModeButton = document.getElementById('toggle-mode-button');
+  if (toggleModeButton) {
+    const darkModeActive = getColorTheme() === 'dark';
+    toggleModeButton.classList.toggle('button-on', darkModeActive);
+    toggleModeButton.setAttribute('aria-pressed', String(darkModeActive));
+  }
+}
+
+function updateFullscreenButtonState() {
+  const toggleFullscreenButton = document.getElementById('toggle-fullscreen-button');
+  if (toggleFullscreenButton) {
+    toggleFullscreenButton.classList.toggle('button-on', Boolean(document.fullscreenElement));
   }
 }
 
@@ -251,6 +283,7 @@ function updateFooterVisibility() {
   const toggleFooterButton = document.getElementById('toggle-footer-button');
   if (toggleFooterButton) {
     toggleFooterButton.setAttribute('aria-pressed', String(footerVisible));
+    toggleFooterButton.classList.toggle('button-on', footerVisible);
   }
 }
 
@@ -841,7 +874,6 @@ function setupSitePlayMode() {
 
 // Check for mode preference on page load
 document.addEventListener('DOMContentLoaded', function () {
-  const mode = localStorage.getItem('global.mode');
   const toggleMenuButton = document.getElementById('toggle-menu-button');
   const toggleMenuCloseButton = document.getElementById('toggle-menu-close-button');
   const toggleSettingsPanelButton = document.getElementById('toggle-settings-panel-button');
@@ -878,9 +910,12 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleFooterButton.addEventListener('click', toggleFooterVisibility);
   }
 
-  if (mode === 'dark') {
-    document.documentElement.classList.add('invert-colors');
-  }
+  applyColorTheme(getColorTheme());
+
+  updateModeButtonState();
+  updateFullscreenButtonState();
+  restoreDesktopSidebarState();
+  syncSidebarState();
 
   markActiveFooterLink();
   updateFooterVisibility();
@@ -892,6 +927,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 window.addEventListener('resize', syncFooterGap);
+window.addEventListener('resize', restoreDesktopSidebarState);
 if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', syncFooterGap);
 }
@@ -907,6 +943,8 @@ function toggleFullscreen() {
     document.exitFullscreen();
   }
 }
+
+document.addEventListener('fullscreenchange', updateFullscreenButtonState);
 
 async function shareCurrentPage() {
   const shareUrl = window.location.href;
@@ -937,29 +975,16 @@ async function shareCurrentPage() {
   window.prompt('Copy this link:', shareUrl);
 }
 
-// Function to attach data-href buttons in release TOC
+// Function to attach main TOC commands
 
 document.addEventListener("DOMContentLoaded", () => {
-  const releaseToggle = document.getElementById("toggle-release-button");
-  const releaseToc = document.getElementById("release-toc");
-  const releaseCloseButton = document.getElementById("release-close-button");
-  const shareReleaseButton = document.getElementById("share-release-toc-button");
+  const toc = document.getElementById("toc");
+  const shareTocButton = document.getElementById("share-toc-button");
 
-  if (releaseToggle && releaseToc) {
-    releaseToggle.addEventListener("click", toggleReleaseMenu);
-  }
-
-  if (releaseCloseButton) {
-    releaseCloseButton.addEventListener("click", toggleReleaseMenu);
-  }
-
-  if (shareReleaseButton) {
-    shareReleaseButton.addEventListener("click", async () => {
+  if (shareTocButton) {
+    shareTocButton.addEventListener("click", async () => {
       await shareCurrentPage();
-      if (releaseToc && releaseToc.classList.contains('release-toc-open')) {
-        releaseToc.classList.remove('release-toc-open');
-        document.body.classList.remove('release-toc-active');
-      }
+      toc?.classList.remove('toc-open');
     });
   }
 

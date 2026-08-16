@@ -112,7 +112,7 @@ function isTwoColumnLayoutEnabled() {
 }
 
 function isTwoColumnLayoutActive() {
-  return isTwoColumnLayoutEnabled() && window.matchMedia("(min-width: 960px)").matches;
+  return isTwoColumnLayoutEnabled() && window.matchMedia("(min-width: 800px)").matches;
 }
 
 function syncModuleViewportHeight() {
@@ -186,14 +186,13 @@ function applyModuleOrder(order) {
     }
   });
 
-  const releaseToc = document.getElementById("release-toc");
-  if (!releaseToc) return;
+  const tocModuleItems = document.getElementById("toc-module-items");
+  if (!tocModuleItems) return;
 
-  const tocFooter = releaseToc.querySelector(".toc-footer");
   normalized.forEach((id) => {
     const button = document.getElementById(id + "-toggle-toc-button");
-    if (button && releaseToc.contains(button)) {
-      releaseToc.insertBefore(button, tocFooter);
+    if (button && tocModuleItems.contains(button)) {
+      tocModuleItems.appendChild(button);
     }
   });
 }

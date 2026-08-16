@@ -81,7 +81,7 @@ const currentIndex = getCurrentIndex();
 
 // === NEW: scope swipe area ===
 const isToolPage = swipePages.includes(current);
-const headerScope = document.querySelector(".top-heading, .heading"); // header only
+const headerScope = document.querySelector(".top-heading"); // header only
 // For tool pages: use header only if it exists; otherwise disable swipe entirely.
 // For non-tool pages: fall back to whole document as before.
 const scopeEl = isToolPage ? headerScope : document;

@@ -12,14 +12,14 @@ if (!in_array($requestPath, ['/', '/index.php'], true)) {
   <?php
   require($_SERVER['DOCUMENT_ROOT'] . "/elements/head.php");
   $release = "index";
-  $releaseName = "Index";
+  $releaseName = "Pekosoft";
   $releasePage = "";
   ?>
   <meta name="keywords" content="Pekosoft, BPM, BPM software, BPM experiments, audio software, audio web apps, audio web tools, online audio tools">
   <meta name="description" content="Official website for the experimental audio software company Pekosoft.">
 </head>
 
-<body>
+<body class="index-page">
   <?php require($_SERVER['DOCUMENT_ROOT'] . "/elements/toc.php"); ?>
 
   <div class="releases">
@@ -69,6 +69,31 @@ if (!in_array($requestPath, ['/', '/index.php'], true)) {
       <a href="/turntable" title="Turntable">Turntable - For visualizing RPM.</a>
     </h1>
 
+  </div>
+
+  <div class="index-site-info">
+    <div class="index-socials">
+      <a href="https://github.com/pekosoft" title="GitHub">
+        <svg class="icons" role="img" aria-label="GitHub"><use href="/icons.svg#github"></use></svg>
+      </a>
+      <a href="https://facebook.com/pekosoft" title="Facebook">
+        <svg class="icons" role="img" aria-label="Facebook"><use href="/icons.svg#facebook"></use></svg>
+      </a>
+      <a href="https://instagram.com/pekosoft" title="Instagram">
+        <svg class="icons" role="img" aria-label="Instagram"><use href="/icons.svg#instagram"></use></svg>
+      </a>
+    </div>
+
+    <div>Copyright &copy; <a href="https://pekosoft.net">Pekosoft</a>. All rights reserved.</div>
+    <div>Produced at <a href="https://focusstudios.no">Focus Studios</a> by <a href="https://peko.net">Ole Peko Sørensen</a>.</div>
+
+    <div class="index-focus">
+      <a href="https://focusstudios.no">
+        <svg viewBox="0 0 512 136.262" role="img" aria-label="Focus Studios" title="Focus Studios" class="assets">
+          <use href="/assets.svg#focus-studios"></use>
+        </svg>
+      </a>
+    </div>
   </div>
 
   <?php require($_SERVER['DOCUMENT_ROOT'] . "/elements/footer.php"); ?>

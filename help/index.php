@@ -371,11 +371,6 @@
 </div>
 
 <div class="feature-row border">
-  <svg class="standard-image-help"><use href="/icons.svg#view_grid"></use></svg>
-  <div class="justify"><h1>Grid white <span class="object">option</span></h1>Uses white grid lines.</div>
-</div>
-
-<div class="feature-row border">
   <svg class="standard-image-help"><use href="/icons.svg#guides"></use></svg>
   <div class="justify"><h1>Guides <span class="object">option</span></h1>Toggles timeline guides across releases that support them.</div>
 </div>

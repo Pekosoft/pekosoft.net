@@ -9,12 +9,15 @@
     <?php require($_SERVER['DOCUMENT_ROOT'] . "/elements/burger.php"); ?>
   </div>
 
-  <div>
-    <a href="/">
-      <svg class="assets" viewBox="0 0 512 101.87" role="img">
+  <div class="top-heading-title">
+    <a class="top-heading-logo" href="/" aria-label="Pekosoft">
+      <svg class="assets" viewBox="0 0 512 101.87" role="img" aria-label="Pekosoft">
         <use href="/assets.svg#logo" />
       </svg>
     </a>
+    <h1 class="release-title">
+      <?php echo $releaseName; ?><?php if ($releasePage !== ''): ?> <span><?php echo $releasePage; ?></span><?php endif; ?>
+    </h1>
   </div>
 
   <div id="settings-menu-container">
@@ -54,45 +57,42 @@
       </button>
 
       <div class="settings-panel-content">
-        <div class="setting-row"><input type="checkbox" name="grid" id="grid"><label for="grid" title="Background grid" class="checkboxGrid">Grid</label></div>
-        <div class="setting-row"><input type="checkbox" name="grid-white" id="grid-white"><label for="grid-white" title="White background grid" class="checkboxGrid">Grid white</label></div>
-        <div class="setting-row"><input type="checkbox" name="guides" id="guides"><label for="guides" title="Timeline guides" class="checkboxGrid">Guides</label></div>
-        <div class="setting-row"><input type="checkbox" name="headers" id="headers"><label for="headers" title="Module headers" class="checkboxGrid">Headers</label></div>
-        <div class="setting-row"><input type="checkbox" name="layout" id="layout"><label for="layout" title="Two modules per row" class="checkboxGrid">Layout</label></div>
-        <div class="setting-row"><input type="checkbox" name="haptics" id="haptics"><label for="haptics" title="Haptic feedback" class="checkboxGrid">Haptics</label></div>
-        <div class="setting-row"><input type="checkbox" name="toggle-button-text" id="toggle-button-text"><label for="toggle-button-text" title="Button text" class="checkboxGrid">Text</label></div>
-        <div class="setting-row"><input type="checkbox" name="toggle-alpha" id="toggle-alpha"><label for="toggle-alpha" title="Alpha transparency" class="checkboxGrid">Alpha</label></div>
-        <div class="setting-row"><input type="checkbox" name="toggle-bars" id="toggle-bars"><label for="toggle-bars" title="Number field bars" class="checkboxLabel">Bars</label></div>
-        <div class="setting-row"><input type="checkbox" name="toggle-wrap" id="toggle-wrap"><label for="toggle-wrap" title="Panel text wrap" class="checkboxLabel">Wrap</label></div>
+        <div class="settings-toggle-row"><input type="checkbox" name="grid" id="grid" hidden><button type="button" data-setting-toggle="grid" title="Background grid" class="toc-button"><svg class="icons"><use href="/icons.svg#view_grid" /></svg>Grid</button></div>
+        <div class="settings-toggle-row"><input type="checkbox" name="guides" id="guides" hidden><button type="button" data-setting-toggle="guides" title="Timeline guides" class="toc-button"><svg class="icons"><use href="/icons.svg#guides" /></svg>Guides</button></div>
+        <div class="settings-toggle-row"><input type="checkbox" name="headers" id="headers" hidden><button type="button" data-setting-toggle="headers" title="Module headers" class="toc-button"><svg class="icons"><use href="/icons.svg#tool" /></svg>Headers</button></div>
+        <div class="settings-toggle-row"><input type="checkbox" name="layout" id="layout" hidden><button type="button" data-setting-toggle="layout" title="Two modules per row" class="toc-button"><svg class="icons"><use href="/icons.svg#view_grid" /></svg>Layout</button></div>
+        <div class="settings-toggle-row"><input type="checkbox" name="haptics" id="haptics" hidden><button type="button" data-setting-toggle="haptics" title="Haptic feedback" class="toc-button"><svg class="icons"><use href="/icons.svg#haptic" /></svg>Haptics</button></div>
+        <div class="settings-toggle-row"><input type="checkbox" name="toggle-button-text" id="toggle-button-text" hidden><button type="button" data-setting-toggle="toggle-button-text" title="Button text" class="toc-button"><svg class="icons"><use href="/icons.svg#text" /></svg>Text</button></div>
+        <div class="settings-toggle-row"><input type="checkbox" name="toggle-alpha" id="toggle-alpha" hidden><button type="button" data-setting-toggle="toggle-alpha" title="Alpha transparency" class="toc-button"><svg class="icons"><use href="/icons.svg#alpha" /></svg>Alpha</button></div>
+        <div class="settings-toggle-row"><input type="checkbox" name="toggle-bars" id="toggle-bars" hidden><button type="button" data-setting-toggle="toggle-bars" title="Number field bars" class="toc-button"><svg class="icons"><use href="/icons.svg#bars" /></svg>Bars</button></div>
+        <div class="settings-toggle-row"><input type="checkbox" name="toggle-wrap" id="toggle-wrap" hidden><button type="button" data-setting-toggle="toggle-wrap" title="Panel text wrap" class="toc-button"><svg class="icons"><use href="/icons.svg#wrap_text" /></svg>Wrap</button></div>
+        <div class="settings-toggle-row settings-reset-row"><button id="reset-settings-button" class="toc-button" type="button" title="Reset to default"><svg class="icons"><use href="/icons.svg#reset" /></svg>Reset</button></div>
 
         <div class="setting-row">
-          <label title="Grid size" class="settingsLabel">Size:</label>
+          <label for="grid-size-value" title="Grid size" class="settings-control-label">Size</label>
           <div class="knob-wrap"><input type="number" id="grid-size-value" class="knob-value" value="16" readonly><button id="grid-size-knob" class="knob-control" type="button"></button></div>
         </div>
         <div class="setting-row">
-          <label for="font_size_selector" title="Default font size" class="settingsLabel">Font:</label>
+          <label for="font_size_selector" title="Default font size" class="settings-control-label">Font</label>
           <div class="knob-wrap"><select id="font_size_selector"><option value="small">Small</option><option value="medium">Medium</option><option value="large">Large</option></select><button id="font-size-knob" class="knob-control" type="button"></button></div>
         </div>
         <div class="setting-row">
-          <label for="default_bpm" title="Default Beats Per Minute" class="settingsLabel">BPM:</label>
+          <label for="default_bpm" title="Default Beats Per Minute" class="settings-control-label">BPM</label>
           <div class="knob-wrap"><input type="number" id="default_bpm" name="default_bpm" value="120" min="30" max="320" step="1"><button id="default-bpm-knob" class="knob-control" type="button"></button></div>
         </div>
         <div class="setting-row">
-          <label for="default_rpm" title="Default Rounds Per Minute" class="settingsLabel">RPM:</label>
+          <label for="default_rpm" title="Default Rounds Per Minute" class="settings-control-label">RPM</label>
           <div class="knob-wrap"><input type="number" id="default_rpm" name="default_rpm" value="33.333" min="8" max="78" step="0.001" readonly><button id="default-rpm-knob" class="knob-control" type="button"></button></div>
         </div>
         <div class="setting-row">
-          <label for="a4_hz" title="Default frequency for A4" class="settingsLabel">A4 Hz:</label>
+          <label for="a4_hz" title="Default frequency for A4" class="settings-control-label">A4 Hz</label>
           <div class="knob-wrap"><input type="number" id="a4_hz" name="a4_hz" value="440" min="400" max="480" step="1"><button id="a4-hz-knob" class="knob-control" type="button"></button></div>
         </div>
         <div class="setting-row">
-          <label for="speed_of_sound" title="Speed Of Sound in meters per second" class="settingsLabel">SOS:</label>
+          <label for="speed_of_sound" title="Speed Of Sound in meters per second" class="settings-control-label">SOS</label>
           <div class="knob-wrap"><input type="number" id="speed_of_sound" name="speed_of_sound" value="343" min="300" max="380" step="1"><button id="speed-of-sound-knob" class="knob-control" type="button"></button></div>
         </div>
 
-        <div class="settings-actions">
-          <button id="reset-settings-button" class="square" type="button" title="Reset to default"><svg class="icons"><use href="/icons.svg#reset" /></svg><span class="button-text">RESET</span></button>
-        </div>
       </div>
 
       <div class="settings-panel-close">
@@ -107,26 +107,3 @@
 
 </div>
 
-<div class="heading colored">
-
-  <div>
-    <?php if (empty($hideReleaseMenu)) require($_SERVER['DOCUMENT_ROOT'] . "/elements/release_burger.php"); ?>
-    <?php if (!empty($hideReleaseMenu) && !empty($release)): ?>
-      <span class="standalone-release-icon" aria-hidden="true">
-        <svg class="icons" role="img">
-          <use href="/icons.svg#<?php echo $release; ?>"></use>
-        </svg>
-      </span>
-    <?php endif; ?>
-  </div>
-
-  <div>
-    <h1 class="release-title">
-      <?php echo $releaseName; ?>
-      <span><?php echo $releasePage; ?></span>
-    </h1>
-  </div>
-
-  <div></div>
-
-</div>

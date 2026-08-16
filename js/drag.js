@@ -62,7 +62,7 @@ function setupModuleDrag(container, header, id) {
   };
 
   const isTwoColumnLayout = () => {
-    return (document.documentElement.classList.contains("layout-two-columns") || document.body.classList.contains("layout-two-columns")) && window.innerWidth >= 960;
+    return (document.documentElement.classList.contains("layout-two-columns") || document.body.classList.contains("layout-two-columns")) && window.innerWidth >= 800;
   };
 
   const updatePlaceholderLayoutClass = () => {

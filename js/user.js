@@ -2,7 +2,7 @@
 // pekosoft.net/js/user.js
 
 document.addEventListener("DOMContentLoaded", () => {
-  const layoutMedia = window.matchMedia("(min-width: 960px)");
+  const layoutMedia = window.matchMedia("(min-width: 800px)");
 
   applySiteSettings();
 
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.setTimeout(applySiteSettings, 100);
   window.setTimeout(applySiteSettings, 300);
 
-  const heading = document.querySelector(".heading");
+  const heading = document.querySelector(".top-heading");
   if (heading && typeof ResizeObserver === "function") {
     const headingObserver = new ResizeObserver(applySiteSettings);
     headingObserver.observe(heading);
@@ -35,9 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       document.documentElement.classList.remove("show-grid");
     }
-
-    const gridWhite = localStorage.getItem("global.grid_white") === "true";
-    document.documentElement.classList.toggle("show-grid-white", gridWhite);
 
     const allowedGridSizes = [4, 8, 16, 32, 64];
     const parsedGridSize = parseInt(localStorage.getItem("global.grid_size") || "16", 10);
@@ -147,9 +144,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Apply
     document.documentElement.style.setProperty("--grey1", finalGrey);
 
-    const heading = document.querySelector(".heading");
-    const layoutTopPadding = heading ? Math.ceil(heading.getBoundingClientRect().bottom + 16) : 114;
-    document.body.style.paddingTop = twoColumnLayoutActive ? `${layoutTopPadding}px` : "96px";
+    const heading = document.querySelector(".top-heading");
+    const layoutTopPadding = heading ? Math.ceil(heading.getBoundingClientRect().bottom + 16) : 64;
+    document.body.style.paddingTop = `${layoutTopPadding}px`;
   }
 
   function applyFontSize(size) {

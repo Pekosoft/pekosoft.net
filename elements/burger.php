@@ -1,3 +1,19 @@
+<?php
+$release = isset($release) ? $release : '';
+$currentFile = basename($_SERVER['SCRIPT_NAME']);
+$requestPath = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? '', '/');
+$toolPages = ["tap_pad.php", "bpm_calculator.php", "metronome.php", "turntable.php", "bpm_circle.php", "bpm_curve.php", "circle_of_fifths.php", "drum_machine.php", "player.php", "piano.php", "audio_calculator.php", "blockchain.php", "icons.php", "tuner.php", "visualizer.php", "reference.php", "notepad.php"];
+$toolSlugs = array_map(function ($toolPage) {
+  return pathinfo($toolPage, PATHINFO_FILENAME);
+}, $toolPages);
+$hasModules = in_array($currentFile, $toolPages, true) || in_array($requestPath, $toolSlugs, true);
+$releaseFile = $release . ".php";
+$releaseHref = is_file($_SERVER['DOCUMENT_ROOT'] . "/tools/" . $releaseFile) ? "/" . $release : "/" . $releaseFile;
+$availableModules = isset($availableModules) && is_array($availableModules)
+  ? array_values(array_unique($availableModules))
+  : ['tool', 'controls', 'timeline', 'panel'];
+$hasPlaylistModule = in_array('playlist', $availableModules, true);
+?>
 <div id="burger-container">
 
   <button id="toggle-menu-button" class="square" title="Menu" aria-label="Menu">
@@ -7,12 +23,14 @@
   </button>
 
   <div id="toc" class="toc-container">
+    <div class="toc-content">
+      <div class="toc-column">
 
-    <button class="toc-button" data-href="/index.php" title="Index" aria-label="Index">
+    <button class="toc-button" data-href="/index.php" title="Pekosoft" aria-label="Pekosoft">
       <svg class="icons" role="img">
         <use href="/icons.svg#index"></use>
       </svg>
-      Index
+      Pekosoft
     </button>
 
     <button class="toc-button" data-href="/tap_pad" title="Tap Pad" aria-label="Tap Pad">
@@ -43,59 +61,56 @@
       Turntable
     </button>
 
+    <div class="toc-break"></div>
+
     <button class="toc-button" data-href="/bitcoin.php" title="Buy Us Coffee" aria-label="Buy Us Coffee">
       <svg class="icons" role="img">
         <use href="/icons.svg#qr"></use>
       </svg>
       Buy Us Coffee
     </button>
-
-    <div class="toc-footer">
-
-      <div class="toc-icons">
-        <div>
-          <a href="https://github.com/pekosoft" title="GitHub">
-            <svg class="icons" role="img" aria-label="GitHub">
-              <use href="/icons.svg#github"></use>
-            </svg>
-          </a>
-        </div>
-
-        <div>
-          <a href="https://facebook.com/pekosoft" title="Facebook">
-            <svg class="icons" role="img" aria-label="Facebook">
-              <use href="/icons.svg#facebook"></use>
-            </svg>
-          </a>
-        </div>
-
-        <div>
-          <a href="https://instagram.com/pekosoft" title="Instagram">
-            <svg class="icons" role="img" aria-label="Instagram">
-              <use href="/icons.svg#instagram"></use>
-            </svg>
-          </a>
-        </div>
+        <?php if ($release !== ''): ?>
+          <button id="share-toc-button" class="toc-button" title="Share" aria-label="Share"><svg class="icons" role="img"><use href="/icons.svg#share"></use></svg>Share</button>
+        <?php endif; ?>
       </div>
 
-      Copyright &copy; <a href="https://pekosoft.net">Pekosoft</a>. All rights reserved.
-
-      <br>
-
-      Produced at <a href="https://focusstudios.no">Focus Studios</a> by <a href="https://peko.net">Ole Peko Sørensen</a>.
-
-      <br>
-      <br>
-
-      <div class="images icon-link">
-        <a href="https://focusstudios.no">
-          <svg viewBox="0 0 512 136.262" role="img" aria-label="Focus Studios" title="Focus Studios" class="assets">
-            <use href="/assets.svg#focus-studios"></use>
-          </svg>
-        </a>
+      <div class="toc-column">
+        <?php if (empty($hideReleaseMenu) && $release !== ''): ?>
+          <button class="toc-button" data-href="<?php echo $releaseHref; ?>" title="Release" aria-label="Release"><svg class="icons" role="img"><use href="/icons.svg#release"></use></svg>Release</button>
+          <button class="toc-button" data-href="/help.php?r=<?php echo $release; ?>" title="Help" aria-label="Help"><svg class="icons" role="img"><use href="/icons.svg#help"></use></svg>Help</button>
+          <button class="toc-button" data-href="/history.php?r=<?php echo $release; ?>" title="History" aria-label="History"><svg class="icons" role="img"><use href="/icons.svg#clock"></use></svg>History</button>
+          <button class="toc-button" data-href="/about.php?r=<?php echo $release; ?>" title="About" aria-label="About"><svg class="icons" role="img"><use href="/icons.svg#about"></use></svg>About</button>
+        <?php endif; ?>
       </div>
 
+      <div id="toc-module-items" class="toc-column">
+        <?php if ($hasModules): ?>
+          <?php if (in_array('tool', $availableModules, true)): ?>
+            <button class="toc-button" id="tool-toggle-toc-button" title="Tool" aria-label="Tool"><svg class="icons" role="img"><use href="/icons.svg#tool"></use></svg>Tool</button>
+          <?php endif; ?>
+          <?php if (in_array('controls', $availableModules, true)): ?>
+            <button class="toc-button" id="controls-toggle-toc-button" title="Controls" aria-label="Controls"><svg class="icons" role="img"><use href="/icons.svg#controls"></use></svg>Controls</button>
+          <?php endif; ?>
+          <?php if (in_array('meters', $availableModules, true)): ?>
+            <button class="toc-button" id="meters-toggle-toc-button" title="Meters" aria-label="Meters"><svg class="icons" role="img"><use href="/icons.svg#meter"></use></svg>Meters</button>
+          <?php endif; ?>
+          <?php if (in_array('timeline', $availableModules, true)): ?>
+            <button class="toc-button" id="timeline-toggle-toc-button" title="Timeline" aria-label="Timeline"><svg class="icons" role="img"><use href="/icons.svg#timeline"></use></svg>Timeline</button>
+          <?php endif; ?>
+          <?php if ((isset($hasPlaylist) && $hasPlaylist) || $hasPlaylistModule): ?>
+            <button class="toc-button" id="playlist-toggle-toc-button" title="Playlist" aria-label="Playlist"><svg class="icons" role="img"><use href="/icons.svg#view_list"></use></svg>Playlist</button>
+          <?php endif; ?>
+          <?php if (in_array('history', $availableModules, true)): ?>
+            <button class="toc-button" id="history-toggle-toc-button" title="History module" aria-label="History module"><svg class="icons" role="img"><use href="/icons.svg#undo"></use></svg>History</button>
+          <?php endif; ?>
+          <?php if (in_array('panel', $availableModules, true)): ?>
+            <button class="toc-button" id="panel-toggle-toc-button" title="Panel" aria-label="Panel"><svg class="icons" role="img"><use href="/icons.svg#panel"></use></svg>Panel</button>
+          <?php endif; ?>
+        <?php endif; ?>
+      </div>
     </div>
+
+    <div class="toc-footer"></div>
 
     <div class="toc-close">
       <button id="toggle-menu-close-button" class="square transparent" title="Close" aria-label="Close">

@@ -6,7 +6,6 @@
 window.FactoryDefaults = {
   fontSize: "medium",
   grid: false,
-  gridWhite: false,
   gridSize: 16,
   guides: false,
   headers: true,
@@ -16,7 +15,7 @@ window.FactoryDefaults = {
   alpha: false,
   wrap: false,
   inputBackgroundsEnabled: true,
-  mode: "light",
+  theme: "dark",
   footer: true,
   defaultBPM: 120,
   defaultRPM: 33.333,
@@ -27,7 +26,6 @@ window.FactoryDefaults = {
 document.addEventListener("DOMContentLoaded", () => {
   const settings = {
     grid: document.getElementById("grid"),
-    gridWhite: document.getElementById("grid-white"),
     gridSizeKnob: document.getElementById("grid-size-knob"),
     gridSizeValue: document.getElementById("grid-size-value"),
     fontSizeKnob: document.getElementById("font-size-knob"),
@@ -61,6 +59,21 @@ document.addEventListener("DOMContentLoaded", () => {
     a4Hz: { min: 400, max: 480 },
     speedOfSound: { min: 300, max: 380 }
   };
+
+  function syncToggleButtonState(input) {
+    const button = document.querySelector(`[data-setting-toggle="${input.id}"]`);
+    if (!button) return;
+
+    button.classList.toggle("button-on", input.checked);
+    button.setAttribute("aria-pressed", String(input.checked));
+  }
+
+  function syncAllToggleButtonStates() {
+    document.querySelectorAll("[data-setting-toggle]").forEach((button) => {
+      const input = document.getElementById(button.dataset.settingToggle);
+      if (input instanceof HTMLInputElement) syncToggleButtonState(input);
+    });
+  }
 
   // Load settings into the UI
   loadSettings();
@@ -101,6 +114,21 @@ document.addEventListener("DOMContentLoaded", () => {
     decimals: 0,
   });
 
+  document.querySelectorAll("[data-setting-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const input = document.getElementById(button.dataset.settingToggle);
+      if (!(input instanceof HTMLInputElement)) return;
+
+      input.checked = !input.checked;
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      syncToggleButtonState(input);
+    });
+  });
+
+  document.querySelectorAll(".settings-toggle-row input[type=checkbox]").forEach((input) => {
+    input.addEventListener("change", () => syncToggleButtonState(input));
+  });
+
   // Event listeners
   if (settings.grid) {
     settings.grid.addEventListener("change", () => {
@@ -113,13 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (settings.guides) {
     settings.guides.addEventListener("change", () => {
       saveGuidesSetting();
-      if (window.applySiteSettings) window.applySiteSettings();
-    });
-  }
-
-  if (settings.gridWhite) {
-    settings.gridWhite.addEventListener("change", () => {
-      saveGridWhiteSetting();
       if (window.applySiteSettings) window.applySiteSettings();
     });
   }
@@ -228,9 +249,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (settings.guides) {
       settings.guides.checked = (localStorage.getItem("global.guides") ?? defaults.guides) === "true";
     }
-    if (settings.gridWhite) {
-      settings.gridWhite.checked = (localStorage.getItem("global.grid_white") ?? defaults.gridWhite) === "true";
-    }
     const savedGridSize = normalizeGridSize(parseInt(localStorage.getItem("global.grid_size") ?? `${defaults.gridSize}`, 10));
     setGridSize(savedGridSize, false);
     if (settings.haptics) {
@@ -275,6 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("global.speed_of_sound", savedSpeedOfSound);
     }
     refreshNumericKnobAngles();
+    syncAllToggleButtonStates();
   }
 
   // Save to localStorage
@@ -284,10 +303,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function saveGuidesSetting() {
     localStorage.setItem("global.guides", settings.guides.checked);
-  }
-
-  function saveGridWhiteSetting() {
-    localStorage.setItem("global.grid_white", settings.gridWhite.checked);
   }
 
   function saveGridSizeSetting() {
@@ -374,7 +389,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function resetSettings() {
     localStorage.clear();
     localStorage.setItem("global.grid", defaults.grid);
-    localStorage.setItem("global.grid_white", defaults.gridWhite);
     localStorage.setItem("global.grid_size", defaults.gridSize);
     localStorage.setItem("global.guides", defaults.guides);
     localStorage.setItem("global.haptics", defaults.haptics);
@@ -385,7 +399,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("global.alpha", defaults.alpha);
     localStorage.setItem("global.wrap", defaults.wrap);
     localStorage.setItem("global.input_backgrounds_enabled", defaults.inputBackgroundsEnabled);
-    localStorage.setItem("global.mode", defaults.mode);
+    localStorage.setItem("global.theme", defaults.theme);
     localStorage.setItem("global.footer", defaults.footer);
     localStorage.setItem("global.default_bpm", defaults.defaultBPM);
     localStorage.setItem("global.default_rpm", defaults.defaultRPM);
@@ -402,7 +416,7 @@ document.addEventListener("DOMContentLoaded", () => {
       input.style.backgroundSize = window.enableInputBackgrounds ? `${val}px 4px` : "0px 4px";
     });
 
-    document.documentElement.classList.remove("invert-colors");
+    if (typeof applyColorTheme === "function") applyColorTheme(defaults.theme);
     if (typeof updateFooterVisibility === "function") updateFooterVisibility();
     if (typeof stopSitePlay === "function") stopSitePlay();
   }
