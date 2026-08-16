@@ -276,9 +276,17 @@ function syncFooterGap() {
   });
 }
 
+function syncSidebarFooterHeight() {
+  const footer = document.querySelector('.footer');
+  const footerVisible = footer && !document.documentElement.classList.contains('footer-hidden');
+  const footerHeight = footerVisible ? Math.ceil(footer.getBoundingClientRect().height) : 0;
+  document.documentElement.style.setProperty('--sidebar-footer-height', `${footerHeight}px`);
+}
+
 function updateFooterVisibility() {
   const footerVisible = localStorage.getItem('global.footer') !== 'false';
   document.documentElement.classList.toggle('footer-hidden', !footerVisible);
+  syncSidebarFooterHeight();
 
   const toggleFooterButton = document.getElementById('toggle-footer-button');
   if (toggleFooterButton) {
@@ -926,10 +934,16 @@ document.addEventListener('DOMContentLoaded', function () {
   setupSitePlayMode();
 });
 
-window.addEventListener('resize', syncFooterGap);
+window.addEventListener('resize', () => {
+  syncFooterGap();
+  syncSidebarFooterHeight();
+});
 window.addEventListener('resize', restoreDesktopSidebarState);
 if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', syncFooterGap);
+  window.visualViewport.addEventListener('resize', () => {
+    syncFooterGap();
+    syncSidebarFooterHeight();
+  });
 }
 
 // Function to toggle fullscreen mode

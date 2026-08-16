@@ -1415,7 +1415,7 @@ li h1 img {
     left: var(--site-frame-offset);
     right: auto;
     width: var(--sidebar-width);
-    height: calc(var(--visual-viewport-height, 100dvh) - 40px);
+    height: calc(var(--visual-viewport-height, 100dvh) - 40px - var(--sidebar-footer-height, 0px));
     margin: 0;
   }
 
