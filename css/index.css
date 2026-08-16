@@ -442,7 +442,7 @@ html.modules-page body:not(.layout-two-columns) > .container.first-module {
     width: 100%;
     max-width: var(--maxwidth);
     margin: 0 auto;
-    padding: 114px 0 48px;
+    padding: 114px 0 calc(var(--sidebar-footer-height, 44px) + 8px);
   }
 
   html.modules-page.layout-two-columns .container,
@@ -1176,9 +1176,18 @@ body.settings-sidebar-open #toggle-settings-panel-button .icons {
   height: 2px;
 }
 
+html.modules-page.layout-two-columns .footer-spacer {
+  display: none;
+}
+
 .footer-hidden .footer,
 .footer-hidden .footer-spacer {
   display: none;
+}
+
+.footer-hidden body,
+html.footer-hidden.modules-page.layout-two-columns body {
+  padding-bottom: 8px;
 }
 
 /* Hide columns on medium screens */
