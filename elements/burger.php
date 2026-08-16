@@ -1,5 +1,7 @@
 <?php
 $release = isset($release) ? $release : '';
+$betaReleases = ['beta', 'player', 'visualizer', 'bpm_circle', 'bpm_curve', 'circle_of_fifths', 'drum_machine', 'reference', 'tuner', 'notepad', 'audio_calculator', 'piano', 'icons'];
+$isBetaRelease = in_array($release, $betaReleases, true);
 $currentFile = basename($_SERVER['SCRIPT_NAME']);
 $requestPath = trim(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? '', '/');
 $toolPages = ["tap_pad.php", "bpm_calculator.php", "metronome.php", "turntable.php", "bpm_circle.php", "bpm_curve.php", "circle_of_fifths.php", "drum_machine.php", "player.php", "piano.php", "audio_calculator.php", "blockchain.php", "icons.php", "tuner.php", "visualizer.php", "reference.php", "notepad.php"];
@@ -33,33 +35,48 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
       Pekosoft
     </button>
 
-    <button class="toc-button" data-href="/tap_pad" title="Tap Pad" aria-label="Tap Pad">
-      <svg class="icons" role="img">
-        <use href="/icons.svg#tap_pad"></use>
-      </svg>
-      Tap Pad
-    </button>
+    <?php if ($isBetaRelease): ?>
+      <button class="toc-button" data-href="/player" title="Player" aria-label="Player"><svg class="icons" role="img"><use href="/icons.svg#player"></use></svg>Player</button>
+      <button class="toc-button" data-href="/visualizer" title="Visualizer" aria-label="Visualizer"><svg class="icons" role="img"><use href="/icons.svg#visualizer"></use></svg>Visualizer</button>
+      <button class="toc-button" data-href="/bpm_circle" title="BPM Circle" aria-label="BPM Circle"><svg class="icons" role="img"><use href="/icons.svg#bpm_circle"></use></svg>BPM Circle</button>
+      <button class="toc-button" data-href="/bpm_curve" title="BPM Curve" aria-label="BPM Curve"><svg class="icons" role="img"><use href="/icons.svg#bpm_curve"></use></svg>BPM Curve</button>
+      <button class="toc-button" data-href="/circle_of_fifths" title="Circle Of Fifths" aria-label="Circle Of Fifths"><svg class="icons" role="img"><use href="/icons.svg#circle_of_fifths"></use></svg>Circle Of Fifths</button>
+      <button class="toc-button" data-href="/drum_machine" title="Drum Machine" aria-label="Drum Machine"><svg class="icons" role="img"><use href="/icons.svg#drum_machine"></use></svg>Drum Machine</button>
+      <button class="toc-button" data-href="/reference" title="Reference" aria-label="Reference"><svg class="icons" role="img"><use href="/icons.svg#reference"></use></svg>Reference</button>
+      <button class="toc-button" data-href="/tuner" title="Tuner" aria-label="Tuner"><svg class="icons" role="img"><use href="/icons.svg#tuner"></use></svg>Tuner</button>
+      <button class="toc-button" data-href="/notepad" title="Notepad" aria-label="Notepad"><svg class="icons" role="img"><use href="/icons.svg#notepad"></use></svg>Notepad</button>
+      <button class="toc-button" data-href="/audio_calculator" title="Audio Calculator" aria-label="Audio Calculator"><svg class="icons" role="img"><use href="/icons.svg#audio_calculator"></use></svg>Audio Calculator</button>
+      <button class="toc-button" data-href="/piano" title="Piano" aria-label="Piano"><svg class="icons" role="img"><use href="/icons.svg#piano"></use></svg>Piano</button>
+      <button class="toc-button" data-href="/icons" title="Icons" aria-label="Icons"><svg class="icons" role="img"><use href="/icons.svg#icons"></use></svg>Icons</button>
+    <?php else: ?>
+      <button class="toc-button" data-href="/tap_pad" title="Tap Pad" aria-label="Tap Pad">
+        <svg class="icons" role="img">
+          <use href="/icons.svg#tap_pad"></use>
+        </svg>
+        Tap Pad
+      </button>
 
-    <button class="toc-button" data-href="/bpm_calculator" title="BPM Calculator" aria-label="BPM Calculator">
-      <svg class="icons" role="img">
-        <use href="/icons.svg#bpm_calculator"></use>
-      </svg>
-      BPM Calculator
-    </button>
+      <button class="toc-button" data-href="/bpm_calculator" title="BPM Calculator" aria-label="BPM Calculator">
+        <svg class="icons" role="img">
+          <use href="/icons.svg#bpm_calculator"></use>
+        </svg>
+        BPM Calculator
+      </button>
 
-    <button class="toc-button" data-href="/metronome" title="Metronome" aria-label="Metronome">
-      <svg class="icons" role="img">
-        <use href="/icons.svg#metronome"></use>
-      </svg>
-      Metronome
-    </button>
+      <button class="toc-button" data-href="/metronome" title="Metronome" aria-label="Metronome">
+        <svg class="icons" role="img">
+          <use href="/icons.svg#metronome"></use>
+        </svg>
+        Metronome
+      </button>
 
-    <button class="toc-button" data-href="/turntable" title="Turntable" aria-label="Turntable">
-      <svg class="icons" role="img">
-        <use href="/icons.svg#turntable"></use>
-      </svg>
-      Turntable
-    </button>
+      <button class="toc-button" data-href="/turntable" title="Turntable" aria-label="Turntable">
+        <svg class="icons" role="img">
+          <use href="/icons.svg#turntable"></use>
+        </svg>
+        Turntable
+      </button>
+    <?php endif; ?>
       </div>
 
       <div class="toc-column">
