@@ -1430,6 +1430,13 @@ li h1 img {
   }
 }
 
+@media (max-width: 799px) {
+  .toc-container,
+  .settings-panel {
+    box-shadow: 0 -16px var(--grey1), 0 8px var(--grey1);
+  }
+}
+
 @media (min-width: 800px) {
   :root {
     --sidebar-width: min(320px, 28vw);
