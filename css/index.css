@@ -465,6 +465,15 @@ html.modules-page body:not(.layout-two-columns) > .container.first-module {
   html.modules-page.layout-two-columns .module-minimize-btn:disabled {
     cursor: default;
   }
+
+  html.modules-page.layout-two-columns body.toc-sidebar-open > .container,
+  html.modules-page.layout-two-columns body.settings-sidebar-open > .container,
+  html.modules-page.layout-two-columns body.toc-sidebar-open > .module-drag-placeholder,
+  html.modules-page.layout-two-columns body.settings-sidebar-open > .module-drag-placeholder {
+    flex-basis: 100%;
+    width: 100%;
+    max-width: none;
+  }
 }
 
 .container > .module-header,
