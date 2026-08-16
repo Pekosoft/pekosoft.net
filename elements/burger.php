@@ -110,8 +110,6 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
       </div>
     </div>
 
-    <div class="toc-footer"></div>
-
     <div class="toc-close">
       <button id="toggle-menu-close-button" class="square transparent" title="Close" aria-label="Close">
         <svg class="icons" role="img">

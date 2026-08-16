@@ -28,6 +28,7 @@
     </button>
 
     <div id="settings-panel" class="settings-panel">
+      <div class="settings-panel-scroll">
       <button id="toggle-mode-button" class="toc-button" title="Toggle dark mode" aria-label="Toggle dark mode">
         <svg class="icons" role="img">
           <use href="/icons.svg#moon" />
@@ -93,6 +94,7 @@
           <div class="knob-wrap"><input type="number" id="speed_of_sound" name="speed_of_sound" value="343" min="300" max="380" step="1"><button id="speed-of-sound-knob" class="knob-control" type="button"></button></div>
         </div>
 
+      </div>
       </div>
 
       <div class="settings-panel-close">
