@@ -3,10 +3,15 @@
 
 function syncPekosoftViewport() {
   const viewport = window.visualViewport;
+  const width = viewport ? viewport.width : window.innerWidth;
   const height = viewport ? viewport.height : window.innerHeight;
   const offsetTop = viewport ? viewport.offsetTop : 0;
   const bottomGap = viewport ? window.innerHeight - viewport.offsetTop - viewport.height : 0;
   const root = document.documentElement;
+
+  if (Number.isFinite(width) && width > 0) {
+    root.style.setProperty('--visual-viewport-width', `${Math.round(width)}px`);
+  }
 
   if (Number.isFinite(height) && height > 0) {
     const roundedHeight = Math.round(height);

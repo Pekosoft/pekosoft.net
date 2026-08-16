@@ -1405,8 +1405,8 @@ li h1 img {
 @media (min-width: 800px) {
   :root {
     --sidebar-width: min(320px, 28vw);
-    --site-frame-offset: max(0px, calc((100vw - var(--maxwidth)) / 2));
-    --site-frame-width: min(100vw, var(--maxwidth));
+    --site-frame-offset: max(0px, calc((var(--visual-viewport-width, 100vw) - var(--maxwidth)) / 2));
+    --site-frame-width: min(var(--visual-viewport-width, 100vw), var(--maxwidth));
   }
 
   .toc-container,
@@ -1424,19 +1424,19 @@ li h1 img {
     right: var(--site-frame-offset);
   }
 
-  html.modules-page body.toc-sidebar-open,
-  html.modules-page body.settings-sidebar-open {
+  body.toc-sidebar-open,
+  body.settings-sidebar-open {
     width: calc(var(--site-frame-width) - var(--toc-sidebar-space, 0px) - var(--settings-sidebar-space, 0px));
     max-width: none;
     margin-left: calc(var(--site-frame-offset) + var(--toc-sidebar-space, 0px));
     margin-right: calc(var(--site-frame-offset) + var(--settings-sidebar-space, 0px));
   }
 
-  html.modules-page body.toc-sidebar-open {
+  body.toc-sidebar-open {
     --toc-sidebar-space: calc(var(--sidebar-width) + 16px);
   }
 
-  html.modules-page body.settings-sidebar-open {
+  body.settings-sidebar-open {
     --settings-sidebar-space: calc(var(--sidebar-width) + 16px);
   }
 
