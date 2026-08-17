@@ -80,7 +80,7 @@
   </svg>
   <div class="justify">
     <h1>Controls <span class="object">module</span></h1>
-    Transport, tempo, pattern, kit and voice-shaping controls are collected in the Controls module. Status bar explains the interface and provides feedback.
+    Transport, tempo, pattern, kit and voice-shaping controls are collected in the Controls module. The status bar displays control help and feedback.
   </div>
 </div>
 
@@ -503,7 +503,7 @@
     <use href="/icons.svg#meter"></use>
   </svg>
   <div class="justify">
-    <h1>Meters <span class="object">module</span></h1>Shows shared Pekosoft meter views for the generated drum signal, including while SOUND is muted.
+    <h1>Meters <span class="object">module</span></h1>Shows shared meter views for the generated drum signal, including while SOUND is muted.
   </div>
 </div>
 

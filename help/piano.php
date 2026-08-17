@@ -74,7 +74,7 @@
   </svg>
   <div class="justify">
     <h1>Meters <span class="object">module</span></h1>
-    Shows shared Pekosoft meter views: spectroscope, level meter, oscilloscope and wavescope.
+    Shows shared meter views: spectroscope, level meter, oscilloscope and wavescope.
   </div>
 </div>
 
@@ -134,7 +134,7 @@
   </svg>
   <div class="justify">
     <h1>Controls <span class="object">module</span></h1>
-    Buttons, fields, menus, knobs and sliders are collected in the Controls module. Status bar explains the interface and provides feedback.
+    Buttons, fields, menus, knobs and sliders are collected in the Controls module. The status bar displays control help and feedback.
   </div>
 </div>
 

@@ -19,7 +19,7 @@
 </div>
 
 <div class="feature-row border"><svg class="standard-image-help">
-    <use href="/icons.svg#field"></use>
+  <use href="/icons.svg#1_4"></use>
   </svg>
   <div class="justify">
     <h1>BPM <span class="object">button</span></h1>
@@ -60,7 +60,7 @@
   </svg>
   <div class="justify">
     <h1>Controls <span class="object">module</span></h1>
-    Buttons, fields, menus, knobs and sliders are collected in the Controls module. Status bar explains the interface and provides feedback.
+    Buttons, fields, menus, knobs and sliders are collected in the Controls module. The status bar displays control help and feedback.
   </div>
 </div>
 
@@ -89,7 +89,7 @@
     <use href="/icons.svg#menu"></use>
   </svg>
   <div class="justify">
-    <h1>Sig <span class="object">menu</span></h1>
+    <h1>Signature <span class="object">menu</span></h1>
     Sets time signature to 2/4, 3/4, 4/4, 5/4, 6/8, 7/8 or 9/8. This also changes accent cycle and signature circles. <span class="default">Default: 4/4.</span>
   </div>
 </div>
@@ -285,7 +285,7 @@
   </svg>
   <div class="justify">
     <h1>Meters <span class="object">module</span></h1>
-    Shows shared Pekosoft meter views: spectroscope, level meter, oscilloscope and wavescope.
+    Shows shared meter views: spectroscope, level meter, oscilloscope and wavescope.
   </div>
 </div>
 

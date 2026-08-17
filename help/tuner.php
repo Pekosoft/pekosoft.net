@@ -54,7 +54,7 @@
   </svg>
   <div class="justify">
     <h1>Meters <span class="object">module</span></h1>
-    Shows shared Pekosoft meter views: spectroscope, level meter, oscilloscope and wavescope.
+    Shows shared meter views: spectroscope, level meter, oscilloscope and wavescope.
   </div>
 </div>
 

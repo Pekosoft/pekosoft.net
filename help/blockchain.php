@@ -24,7 +24,7 @@
   </svg>
   <div class="justify">
     <h1>Controls <span class="object">module</span></h1>
-    Buttons, fields, menus, knobs and sliders are collected in the Controls module. Status bar explains the interface and provides feedback.
+    Buttons, fields, menus, knobs and sliders are collected in the Controls module. The status bar displays control help and feedback.
   </div>
 </div>
 

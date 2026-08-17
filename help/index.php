@@ -220,7 +220,7 @@
   </svg>
   <div class="justify">
     <h1>Modules</h1>
-    Each tool is made up of two or more of the following modules. They are Tool, Controls, Timeline and Panel. All modules can be toggled.
+    Each tool is made up of two or more modules. Depending on the tool, these are Tool, Controls, Timeline, Playlist, History, Panel and Meters. Modules can be toggled from Menu.
   </div>
 </div>
 
@@ -240,7 +240,7 @@
   </svg>
   <div class="justify">
     <h1>Controls <span class="object">module</span></h1>
-    Buttons, fields, menus, knobs and sliders are collected in the Controls module. Status bar explains the interface and provides feedback.
+    Buttons, fields, menus, knobs and sliders are collected in the Controls module. The status bar displays control help and feedback.
   </div>
 </div>
 

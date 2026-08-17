@@ -24,7 +24,7 @@
   </svg>
   <div class="justify">
     <h1>Meters <span class="object">module</span></h1>
-    Shows shared Pekosoft meter views: spectroscope, level meter, oscilloscope and wavescope.
+    Shows shared meter views: spectroscope, level meter, oscilloscope and wavescope.
   </div>
 </div>
 
@@ -84,7 +84,7 @@
   </svg>
   <div class="justify">
     <h1>Controls <span class="object">module</span></h1>
-    Buttons, fields, menus, knobs and sliders are collected in the Controls module. Status bar explains the interface and provides feedback.
+    Buttons, fields, menus, knobs and sliders are collected in the Controls module. The status bar displays control help and feedback.
   </div>
 </div>
 
@@ -281,10 +281,30 @@
 
 <div class="feature-row border">
   <svg class="standard-image-help">
-    <use href="/icons.svg#select"></use>
+    <use href="/icons.svg#field"></use>
   </svg>
   <div class="justify">
-    <h1>Info mode <span class="object">radio group</span></h1>
-    Switches panel mode between Selected segment, Active notes and All notes. <span class="default">Default: Selected segment.</span>
+    <h1>SELECTED <span class="object">button</span></h1>
+    Shows information for the selected segment. <span class="default">Default: on.</span>
+  </div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help">
+    <use href="/icons.svg#sound"></use>
+  </svg>
+  <div class="justify">
+    <h1>ACTIVE <span class="object">button</span></h1>
+    Shows information for active notes.
+  </div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help">
+    <use href="/icons.svg#timeline"></use>
+  </svg>
+  <div class="justify">
+    <h1>ALL <span class="object">button</span></h1>
+    Shows information for all notes.
   </div>
 </div>
