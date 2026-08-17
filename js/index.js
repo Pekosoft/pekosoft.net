@@ -223,37 +223,59 @@ function updateFullscreenButtonState() {
   }
 }
 
+function normalizeNavigationPath(pathname) {
+  const path = pathname.replace(/\/$/, '') || '/index.php';
+  return path.replace(/\.php$/, '');
+}
+
+function isCurrentNavigationUrl(candidateUrl, currentUrl) {
+  const currentPath = normalizeNavigationPath(currentUrl.pathname);
+  const candidatePath = normalizeNavigationPath(candidateUrl.pathname);
+  const contextPages = new Set(['/about', '/help', '/history']);
+
+  if (!contextPages.has(currentPath)) {
+    return candidatePath === currentPath;
+  }
+
+  return candidatePath === currentPath &&
+    (candidateUrl.searchParams.get('r') || '') === (currentUrl.searchParams.get('r') || '');
+}
+
 function markActiveFooterLink() {
   const footerLinks = document.querySelectorAll('.footer a[href]');
   if (!footerLinks.length) return;
 
-  const normalizeFooterPath = (pathname) => {
-    const path = pathname.replace(/\/$/, '') || '/index.php';
-    return path.replace(/\.php$/, '');
-  };
-
   const currentUrl = new URL(window.location.href);
-  const currentPath = normalizeFooterPath(currentUrl.pathname);
-  const contextPages = new Set(['/about', '/help', '/history']);
-  const currentRelease = currentUrl.searchParams.get('r') || '';
 
   footerLinks.forEach(link => {
     const linkUrl = new URL(link.getAttribute('href') || '', window.location.origin);
-    const linkPath = normalizeFooterPath(linkUrl.pathname);
-
-    let isCurrent = false;
-    if (contextPages.has(currentPath)) {
-      const linkRelease = linkUrl.searchParams.get('r') || '';
-      isCurrent = linkPath === currentPath && linkRelease === currentRelease;
-    } else {
-      isCurrent = linkPath === currentPath;
-    }
+    const isCurrent = isCurrentNavigationUrl(linkUrl, currentUrl);
 
     link.classList.toggle('current', isCurrent);
     if (isCurrent) {
       link.setAttribute('aria-current', 'page');
     } else {
       link.removeAttribute('aria-current');
+    }
+  });
+}
+
+function markActiveTocButton() {
+  const tocButtons = document.querySelectorAll('#toc .toc-button[data-href]');
+  if (!tocButtons.length) return;
+
+  const currentUrl = new URL(window.location.href);
+  let currentMarked = false;
+
+  tocButtons.forEach(button => {
+    const buttonUrl = new URL(button.dataset.href || '', window.location.origin);
+    const isCurrent = !currentMarked && isCurrentNavigationUrl(buttonUrl, currentUrl);
+
+    if (isCurrent) {
+      currentMarked = true;
+      button.setAttribute('aria-current', 'page');
+    } else {
+      button.removeAttribute('aria-current');
     }
   });
 }
@@ -931,6 +953,7 @@ document.addEventListener('DOMContentLoaded', function () {
   syncSidebarState();
 
   markActiveFooterLink();
+  markActiveTocButton();
   updateFooterVisibility();
   syncFooterGap();
   setupTimelineSaveButton();
