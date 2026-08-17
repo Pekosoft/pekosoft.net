@@ -1450,7 +1450,6 @@
       this.saveState();
       this.updateControls();
       this.updatePanel();
-      this.auditionVoice(voice);
     }
 
     loadPatternPreset(name) {
