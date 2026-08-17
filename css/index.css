@@ -1576,11 +1576,13 @@ body.settings-sidebar-open #toggle-settings-panel-button .icons {
   opacity: 1;
 }
 
-.toc-button.button-on {
+.toc-button.button-on,
+.toc-button[aria-current="page"] {
   color: var(--color1);
 }
 
-.toc-button.button-on .icons {
+.toc-button.button-on .icons,
+.toc-button[aria-current="page"] .icons {
   fill: var(--color1);
 }
 
