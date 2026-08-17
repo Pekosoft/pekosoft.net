@@ -96,10 +96,10 @@ class BPMCurve {
     this.isAllPointsSelected = false;
     this.panelView = localStorage.getItem('bpm_curve.panel_view') === 'curve' ? 'curve' : 'values';
     this.isGuidesVisible = localStorage.getItem('bpm_curve.guides') === null
-      ? localStorage.getItem('global.guides') === 'true'
+      ? localStorage.getItem('global.guides') !== 'false'
       : localStorage.getItem('bpm_curve.guides') === 'true';
     this.isTimelineGuidesVisible = localStorage.getItem('bpm_curve.timeline_guides') === null
-      ? localStorage.getItem('global.guides') === 'true'
+      ? localStorage.getItem('global.guides') !== 'false'
       : localStorage.getItem('bpm_curve.timeline_guides') === 'true';
     this.audioContext = null;
     this.metersAnalyser = null;
@@ -1008,8 +1008,8 @@ class BPMCurve {
     this.isBeatsVisible = false;
     this.isValuesVisible = true;
     this.isAllPointsSelected = false;
-    this.isGuidesVisible = localStorage.getItem('global.guides') === 'true';
-    this.isTimelineGuidesVisible = localStorage.getItem('global.guides') === 'true';
+    this.isGuidesVisible = localStorage.getItem('global.guides') !== 'false';
+    this.isTimelineGuidesVisible = localStorage.getItem('global.guides') !== 'false';
     this.playPosition = 0;
     this.points = this.createDefaultPoints();
     this.selectedPointId = null;

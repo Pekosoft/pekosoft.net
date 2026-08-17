@@ -165,7 +165,7 @@ let undoBufferStack = [];
 let redoBufferStack = [];
 const savedPlayerGuides = localStorage.getItem(STORAGE.showGuides);
 let showGuides = savedPlayerGuides === null
-    ? localStorage.getItem('global.guides') === 'true'
+    ? localStorage.getItem('global.guides') !== 'false'
     : savedPlayerGuides === 'true';
 const savedPlayerPan = localStorage.getItem(STORAGE.timelinePan);
 let showPanLine = savedPlayerPan === 'true';

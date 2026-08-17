@@ -372,7 +372,7 @@
 
 <div class="feature-row border">
   <svg class="standard-image-help"><use href="/icons.svg#guides"></use></svg>
-  <div class="justify"><h1>Guides <span class="object">option</span></h1>Toggles timeline guides across releases that support them.</div>
+  <div class="justify"><h1>Guides <span class="object">option</span></h1>Toggles timeline guides across releases that support them. <span class="default">Default: on.</span></div>
 </div>
 
 <div class="feature-row border">

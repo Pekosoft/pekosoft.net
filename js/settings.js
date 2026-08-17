@@ -7,7 +7,7 @@ window.FactoryDefaults = {
   fontSize: "medium",
   grid: false,
   gridSize: 16,
-  guides: false,
+  guides: true,
   headers: true,
   layout: true,
   haptics: false,

@@ -249,7 +249,7 @@
   </svg>
   <div class="justify">
     <h1>GUIDES <span class="object">button</span></h1>
-    Toggles guides in Timeline. Horizontal RPM reference lines show labeled values (8, 33, 45 and 78). <span class="default">Default: off.</span>
+    Toggles guides in Timeline. Horizontal RPM reference lines show labeled values (8, 33, 45 and 78). <span class="default">Default: on.</span>
   </div>
 </div>
 
@@ -315,7 +315,7 @@
   </svg>
   <div class="justify">
     <h1>GUIDES <span class="object">button</span></h1>
-    Toggles meter guides.
+    Toggles meter guides. <span class="default">Default: on.</span>
   </div>
 </div>
 

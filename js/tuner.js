@@ -86,7 +86,7 @@ const state = {
   },
   toneType: 'sine',
   volume: 30,
-  showGuides: false,
+  showGuides: true,
   timeline: [],
   lastTimelineTs: 0,
   lastPanelTs: 0,
@@ -897,7 +897,7 @@ function loadSettings() {
   if (savedGuides !== null) {
     state.showGuides = savedGuides === 'true';
   } else {
-    state.showGuides = localStorage.getItem('global.guides') === 'true';
+    state.showGuides = localStorage.getItem('global.guides') !== 'false';
   }
 
   if (savedPanel) {
@@ -969,7 +969,7 @@ function resetAll() {
   state.selectedIndex.bass = 0;
   state.toneType = 'sine';
   state.volume = 30;
-  state.showGuides = false;
+  state.showGuides = localStorage.getItem('global.guides') !== 'false';
   state.timeline = [];
   state.lastTimelineTs = 0;
   state.lastPanelTs = 0;

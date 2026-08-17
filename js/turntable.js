@@ -123,7 +123,7 @@ function rpmToReferenceHz(rpm) {
 
 // Defaults
 let targetSpeed = 33.333;
-let showGuides = false;
+let showGuides = localStorage.getItem('global.guides') !== 'false';
 let rpmHistory = [];
 let lastLogTime = 0;
 // Horizontal offset so data plots don't overlap guide labels
@@ -633,7 +633,7 @@ resetButton.addEventListener('click', () => {
   redrawTimeline();
 
   // Reset guides
-  showGuides = false;
+  showGuides = localStorage.getItem('global.guides') !== 'false';
   btnGuides.classList.remove("button-on");
   localStorage.setItem("turntable.show_guides", "false");
 
@@ -1119,7 +1119,7 @@ function loadSettings() {
   if (savedGuides !== null) {
     showGuides = savedGuides === "true";
   } else {
-    showGuides = localStorage.getItem('global.guides') === 'true';
+    showGuides = localStorage.getItem('global.guides') !== 'false';
   }
   btnGuides.classList.toggle("button-on", showGuides);
 

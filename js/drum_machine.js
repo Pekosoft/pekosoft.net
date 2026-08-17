@@ -140,7 +140,7 @@
       volume: 80,
       sound: true,
       haptic: localStorage.getItem("global.haptics") === "true",
-      timelineGuides: localStorage.getItem("global.guides") === "true",
+      timelineGuides: localStorage.getItem("global.guides") !== "false",
       length: STEP_COUNT,
       patternName: "basic",
       kitName: "classic",

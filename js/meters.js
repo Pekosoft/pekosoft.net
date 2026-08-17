@@ -34,7 +34,8 @@
   }
 
   function getSavedGuides() {
-    return localStorage.getItem(`${storagePrefix}.guides`) === 'on';
+    const saved = localStorage.getItem(`${storagePrefix}.guides`);
+    return saved === null ? localStorage.getItem('global.guides') !== 'false' : saved === 'on';
   }
 
   function resizeCanvasToDisplaySize(canvas, ctx) {

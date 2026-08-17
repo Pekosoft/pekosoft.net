@@ -70,7 +70,7 @@ let beatSound = normalizeTone(localStorage.getItem("tap_pad.beat_sound") || "cli
 let showCurrentLine = readBoolFromStorage("tap_pad.show_current_line", CURRENT_LINE_DEFAULT_ENABLED);
 let showAverageLine = readBoolFromStorage("tap_pad.show_average_line", AVERAGE_LINE_DEFAULT_ENABLED);
 let showTargetLine = readBoolFromStorage("tap_pad.show_target_line", TARGET_LINE_DEFAULT_ENABLED);
-const globalGuidesDefault = localStorage.getItem('global.guides') === 'true';
+const globalGuidesDefault = localStorage.getItem('global.guides') !== 'false';
 let showGuides = readBoolFromStorage("tap_pad.show_guides", globalGuidesDefault);
 
 applyTimerButtonUI();
@@ -281,7 +281,7 @@ document.getElementById("reset-button").addEventListener("click", () => {
   showCurrentLine = CURRENT_LINE_DEFAULT_ENABLED;
   showAverageLine = AVERAGE_LINE_DEFAULT_ENABLED;
   showTargetLine = TARGET_LINE_DEFAULT_ENABLED;
-  showGuides = false;
+  showGuides = localStorage.getItem('global.guides') !== 'false';
   hapticMode = false;
   blinkMode = false;
   isSoundOn = true;

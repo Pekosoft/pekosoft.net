@@ -64,7 +64,7 @@
   </svg>
   <div class="justify">
     <h1>GUIDES <span class="object">button</span></h1>
-    Toggles meter guides.
+    Toggles meter guides. <span class="default">Default: on.</span>
   </div>
 </div>
 
@@ -214,7 +214,7 @@
   </svg>
   <div class="justify">
     <h1>GUIDES <span class="object">button</span></h1>
-    Toggles timeline reference lines at cents values (-50, -25, 0, +25, +50). <span class="default">Default: off.</span>
+    Toggles timeline reference lines at cents values (-50, -25, 0, +25, +50). <span class="default">Default: on.</span>
   </div>
 </div>
 

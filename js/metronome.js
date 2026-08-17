@@ -42,7 +42,7 @@ let metersLastActiveSec = 0;
 let isPlaying = false;
 let isSoundOn = true;
 let isBlinkOn = false;
-let show_guides = false;
+let show_guides = localStorage.getItem('global.guides') !== 'false';
 let hapticMode = false;
 let soundVolume = 100;
 let accentOn = true;
@@ -737,7 +737,7 @@ function loadSettings() {
   if (savedGuides !== null) {
     show_guides = JSON.parse(savedGuides);
   } else {
-    show_guides = localStorage.getItem('global.guides') === 'true';
+    show_guides = localStorage.getItem('global.guides') !== 'false';
   }
   if (savedHaptic !== null) {
     hapticMode = JSON.parse(savedHaptic);
@@ -894,7 +894,7 @@ resetButton.addEventListener('click', () => {
 
   isSoundOn = true;
   isBlinkOn = false;
-  show_guides = false;
+  show_guides = localStorage.getItem('global.guides') !== 'false';
   hapticMode = false;
   accentOn = true;
   showBaseBpm = false;

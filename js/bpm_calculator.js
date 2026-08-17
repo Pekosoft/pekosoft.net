@@ -46,7 +46,7 @@ const svgUtils = window.PekoSvgUtils;
 const timelineUtils = window.PekoSvgTimeline;
 const BPM_TIMELINE_WIDTH = 4096;
 const BPM_MIN_TIMELINE_HEIGHT = 256;
-const globalGuidesDefault = localStorage.getItem('global.guides') === 'true';
+const globalGuidesDefault = localStorage.getItem('global.guides') !== 'false';
 const reducedMotionDefault = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let disconnectTimelineResize = null;
 let timelineFollow = null;

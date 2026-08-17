@@ -121,7 +121,7 @@ class Piano {
       }
 
       if (parsedSettings.timelineGuides === undefined) {
-        parsedSettings.timelineGuides = localStorage.getItem('global.guides') === 'true';
+        parsedSettings.timelineGuides = localStorage.getItem('global.guides') !== 'false';
       }
 
       return parsedSettings;
