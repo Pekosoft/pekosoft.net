@@ -1235,6 +1235,10 @@ body.settings-sidebar-open #toggle-settings-panel-button .icons {
   filter: invert(1) hue-rotate(180deg);
 }
 
+html.invert-colors .container:fullscreen {
+  filter: invert(1) hue-rotate(180deg);
+}
+
 /* Table of contents */
 
 .toc-container {
