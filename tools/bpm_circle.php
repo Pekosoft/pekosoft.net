@@ -180,20 +180,23 @@
         </svg>
         <span class="button-text">COPY</span>
       </button>
-      <button id="info-display-selected-button" class="square info-display-button button-on" title="Selected segment" aria-label="Selected segment">
+      <button id="info-display-selected-button" class="info-display-button button-on" title="Selected segment" aria-label="Selected segment">
         <svg class="icons">
           <use href="/icons.svg#field" />
         </svg>
+        <span class="button-text">SELECTED</span>
       </button>
-      <button id="info-display-active-button" class="square info-display-button" title="Active notes" aria-label="Active notes">
+      <button id="info-display-active-button" class="info-display-button" title="Active notes" aria-label="Active notes">
         <svg class="icons">
           <use href="/icons.svg#sound" />
         </svg>
+        <span class="button-text">ACTIVE</span>
       </button>
-      <button id="info-display-all-button" class="square info-display-button" title="All notes" aria-label="All notes">
+      <button id="info-display-all-button" class="info-display-button" title="All notes" aria-label="All notes">
         <svg class="icons">
           <use href="/icons.svg#timeline" />
         </svg>
+        <span class="button-text">ALL</span>
       </button>
     </div>
   </div>
