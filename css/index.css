@@ -1245,7 +1245,7 @@ html.invert-colors .container:fullscreen {
   display: none;
   flex-direction: column;
   position: fixed;
-  top: 40px;
+  top: 48px;
   left: 0;
   right: 0;
   margin: 16px auto 8px;
@@ -1255,7 +1255,7 @@ html.invert-colors .container:fullscreen {
   z-index: 999;
   max-width: var(--maxwidth);
   width: 100%;
-  height: calc(var(--visual-viewport-height, 100dvh) - 64px);
+  height: calc(var(--visual-viewport-height, 100dvh) - 72px);
   overflow: hidden;
   padding: 4px 0;
 }
@@ -1289,7 +1289,7 @@ html.invert-colors .container:fullscreen {
   display: none;
   flex-direction: column;
   position: fixed;
-  top: 40px;
+  top: 48px;
   left: 0;
   right: 0;
   margin: 16px auto 8px;
@@ -1298,7 +1298,7 @@ html.invert-colors .container:fullscreen {
   z-index: 999;
   max-width: var(--maxwidth);
   width: 100%;
-  height: calc(var(--visual-viewport-height, 100dvh) - 64px);
+  height: calc(var(--visual-viewport-height, 100dvh) - 72px);
   overflow: hidden;
   padding: 0;
 }
@@ -1448,11 +1448,11 @@ html.invert-colors .container:fullscreen {
 
   .toc-container,
   .settings-panel {
-    top: 40px;
+    top: 48px;
     left: var(--site-frame-offset);
     right: auto;
     width: var(--sidebar-width);
-    height: calc(var(--visual-viewport-height, 100dvh) - 64px - var(--sidebar-footer-height, 0px));
+    height: calc(var(--visual-viewport-height, 100dvh) - 72px - var(--sidebar-footer-height, 0px));
     margin: 16px 0 8px;
     background-color: var(--black);
   }
