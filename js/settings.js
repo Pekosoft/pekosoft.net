@@ -141,6 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (settings.guides) {
     settings.guides.addEventListener("change", () => {
       saveGuidesSetting();
+      if (window.PekoGuides) window.PekoGuides.setGlobal(settings.guides.checked);
       if (window.applySiteSettings) window.applySiteSettings();
     });
   }
@@ -247,7 +248,9 @@ document.addEventListener("DOMContentLoaded", () => {
       settings.grid.checked = (localStorage.getItem("global.grid") ?? defaults.grid) === "true";
     }
     if (settings.guides) {
-      settings.guides.checked = (localStorage.getItem("global.guides") ?? defaults.guides) === "true";
+      settings.guides.checked = window.PekoGuides
+        ? window.PekoGuides.getGlobal()
+        : (localStorage.getItem("global.guides") ?? String(defaults.guides)) === "true";
     }
     const savedGridSize = normalizeGridSize(parseInt(localStorage.getItem("global.grid_size") ?? `${defaults.gridSize}`, 10));
     setGridSize(savedGridSize, false);
@@ -391,6 +394,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("global.grid", defaults.grid);
     localStorage.setItem("global.grid_size", defaults.gridSize);
     localStorage.setItem("global.guides", defaults.guides);
+    if (window.PekoGuides) window.PekoGuides.setGlobal(defaults.guides);
     localStorage.setItem("global.haptics", defaults.haptics);
     localStorage.setItem("global.headers", defaults.headers);
     localStorage.setItem("global.layout", defaults.layout);

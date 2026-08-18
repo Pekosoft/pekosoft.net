@@ -175,7 +175,7 @@
   </svg>
   <div class="justify">
     <h1>GUIDES <span class="object">button</span></h1>
-    Toggles guides in Timeline. Horizontal BPM reference lines show labeled values (30, 60, 90, 120, 150, 180 and 210). <span class="default">Default: on.</span>
+    Toggles guides in Timeline. Horizontal BPM reference lines show labeled values (30, 60, 90, 120, 150, 180 and 210). This local button overrides the Settings Guides option for Timeline only. <span class="default">Default: on.</span>
   </div>
 </div>
 
@@ -277,7 +277,7 @@
   </svg>
   <div class="justify">
     <h1>GUIDES <span class="object">button</span></h1>
-    Toggles meter guides. <span class="default">Default: on.</span>
+    Toggles meter guides. This local button overrides the Settings Guides option for Meters only. <span class="default">Default: on.</span>
   </div>
 </div>
 

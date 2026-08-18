@@ -34,7 +34,7 @@
   </svg>
   <div class="justify">
     <h1>GUIDES <span class="object">button</span></h1>
-    Toggles meter guides. <span class="default">Default: on.</span>
+    Toggles meter guides. This local button overrides the Settings Guides option for Meters only. <span class="default">Default: on.</span>
   </div>
 </div>
 

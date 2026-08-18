@@ -120,6 +120,7 @@ try {
 <meta charset="utf-8">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" type="text/css" href="/css/index.css?v=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/css/index.css'); ?>">
+<script src="/js/guides.js?v=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/js/guides.js'); ?>"></script>
 <link rel="canonical" href="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8'); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
