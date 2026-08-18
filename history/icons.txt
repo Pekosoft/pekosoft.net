@@ -1,4 +1,4 @@
 <h1>1.0
 XX-XX-2026
 </h1>
-Introducing: Pekosoft Icons. The icons used on the site. Features playback, search, editing, SVG code and download options. Initial release.
+Introducing: Pekosoft Icons. A preview and editing tool for SVG icons, including Pekosoft’s site icon set. Features playback, search, editing, SVG code, and SVG/PNG downloads. Initial release.

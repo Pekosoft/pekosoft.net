@@ -4,7 +4,7 @@
   </svg>
   <div class="justify">
     <h1>General</h1>
-    Pekosoft Icons is the icons used on the site.
+    Icons is a preview and editing tool for SVG icons. It includes Pekosoft’s icon set and supports searching, playback, editing, SVG code, and SVG/PNG downloads.
   </div>
 </div>
 
@@ -14,7 +14,7 @@
   </svg>
   <div class="justify">
     <h1>Tool <span class="object">module</span></h1>
-    This is the large preview.
+    Displays the selected icon at large size for previewing and editing.
   </div>
 </div>
 
