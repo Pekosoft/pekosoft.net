@@ -111,6 +111,9 @@ try {
 	if (localStorage.getItem('global.layout') !== 'false') {
 		document.documentElement.classList.add('layout-two-columns');
 	}
+	if (localStorage.getItem('global.footer') === 'false') {
+		document.documentElement.classList.add('footer-hidden');
+	}
 } catch (_) {}
 </script>
 <title><?php echo htmlspecialchars($documentTitle, ENT_QUOTES, 'UTF-8'); ?></title>
