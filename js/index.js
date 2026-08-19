@@ -328,7 +328,8 @@ function updateFooterTools() {
   const toggleToolsButton = document.getElementById('toggle-tools-button');
   if (!footer || !footerTools || !toggleToolsButton) return;
 
-  const toolsVisible = footer.classList.contains('footer-tools-active');
+  const toolsVisible = localStorage.getItem('global.footer_tools') === 'true';
+  footer.classList.toggle('footer-tools-active', toolsVisible);
   footerTools.setAttribute('aria-hidden', String(!toolsVisible));
   toggleToolsButton.setAttribute('aria-pressed', String(toolsVisible));
   toggleToolsButton.setAttribute('title', toolsVisible ? 'Hide tools' : 'Show tools');
@@ -341,7 +342,8 @@ function toggleFooterTools() {
   const footer = document.querySelector('.footer');
   if (!footer) return;
 
-  footer.classList.toggle('footer-tools-active');
+  const toolsVisible = !footer.classList.contains('footer-tools-active');
+  localStorage.setItem('global.footer_tools', String(toolsVisible));
   updateFooterTools();
 }
 

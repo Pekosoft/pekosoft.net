@@ -1225,6 +1225,28 @@ body.settings-sidebar-open #toggle-settings-panel-button .icons {
   height: var(--size2);
 }
 
+.footer-beta.footer-tools-active {
+  display: grid;
+  grid-template-columns: repeat(13, var(--size2));
+  column-gap: 12px;
+  justify-content: space-between;
+}
+
+.footer-beta.footer-tools-active .footer-tools {
+  display: contents;
+}
+
+.footer-beta.footer-tools-active .footer-tools > div,
+.footer-beta.footer-tools-active .footer-tools a,
+.footer-beta.footer-tools-active #toggle-tools-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size2);
+  min-width: var(--size2);
+  height: var(--size2);
+}
+
 .footer img {
   vertical-align: middle;
 }
