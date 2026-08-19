@@ -60,7 +60,7 @@ body {
   line-height: 1.5;
   text-align: center;
   padding-top: 96px;
-  padding-bottom: 48px;
+  padding-bottom: 64px;
   container-type: inline-size;
   container-name: site-content;
 }
@@ -442,7 +442,7 @@ html.modules-page body:not(.layout-two-columns) > .container.first-module {
     width: 100%;
     max-width: var(--maxwidth);
     margin: 0 auto;
-    padding: 114px 0 48px;
+    padding: 114px 0 64px;
   }
 
   html.modules-page.layout-two-columns .container,
