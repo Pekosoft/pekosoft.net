@@ -16,11 +16,11 @@ function betaFooterHref($toolFile, $currentPage)
 
 <div class="footer footer-beta colored">
 
-  <div class="footer-status statusbar" role="status" aria-live="polite" data-statusbar data-status-ready="READY: Hover or tap a button for help.">
+  <div class="footer-status statusbar" role="status" aria-live="polite" data-statusbar data-status-ready="READY: Hover or tap element for help.">
     <svg class="icons" aria-hidden="true">
       <use href="/icons.svg#about" />
     </svg>
-    <span class="status-text" data-status-text>READY: Hover or tap a button for help.</span>
+    <span class="status-text" data-status-text>READY: Hover or tap element for help.</span>
   </div>
 
   <div class="footer-tools" aria-hidden="true">

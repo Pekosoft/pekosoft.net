@@ -52,7 +52,7 @@
 
       <button id="toggle-footer-button" class="toc-button" title="Toggle status bar" aria-label="Toggle status bar" aria-pressed="true">
         <svg class="icons" role="img">
-          <use href="/icons.svg#bars" />
+          <use href="/icons.svg#about" />
         </svg>
         Status bar
       </button>
