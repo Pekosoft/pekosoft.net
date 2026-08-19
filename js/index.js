@@ -281,7 +281,7 @@ function markActiveTocButton() {
 }
 
 function syncFooterGap() {
-  const footers = document.querySelectorAll('.footer');
+  const footers = document.querySelectorAll('.footer-tools');
   footers.forEach(footer => {
     const items = Array.from(footer.children);
     if (items.length < 2) return;
@@ -320,6 +320,29 @@ function updateFooterVisibility() {
     toggleFooterButton.setAttribute('aria-pressed', String(footerVisible));
     toggleFooterButton.classList.toggle('button-on', footerVisible);
   }
+}
+
+function updateFooterTools() {
+  const footer = document.querySelector('.footer');
+  const footerTools = footer && footer.querySelector('.footer-tools');
+  const toggleToolsButton = document.getElementById('toggle-tools-button');
+  if (!footer || !footerTools || !toggleToolsButton) return;
+
+  const toolsVisible = footer.classList.contains('footer-tools-active');
+  footerTools.setAttribute('aria-hidden', String(!toolsVisible));
+  toggleToolsButton.setAttribute('aria-pressed', String(toolsVisible));
+  toggleToolsButton.setAttribute('title', toolsVisible ? 'Hide tools' : 'Show tools');
+  toggleToolsButton.setAttribute('aria-label', toolsVisible ? 'Hide tools' : 'Show tools');
+  toggleToolsButton.classList.toggle('button-on', toolsVisible);
+  syncFooterGap();
+}
+
+function toggleFooterTools() {
+  const footer = document.querySelector('.footer');
+  if (!footer) return;
+
+  footer.classList.toggle('footer-tools-active');
+  updateFooterTools();
 }
 
 function toggleFooterVisibility() {
@@ -574,32 +597,21 @@ function getStatusTargetLabel(target) {
   return `${name}: ${sentenceTooltip}`;
 }
 
-function createControlsStatusBar() {
-  const bar = document.createElement('div');
-  bar.className = 'module-footer wrapper colored statusbar';
-  bar.setAttribute('role', 'status');
-  bar.setAttribute('aria-live', 'polite');
-  bar.setAttribute('data-statusbar', '');
-  bar.setAttribute('data-status-ready', 'READY: Hover or tap a button for help.');
-
-  bar.innerHTML = `
-    <svg class="icons" aria-hidden="true">
-      <use href="/icons.svg#about" />
-    </svg>
-    <span class="status-text" data-status-text>READY: Hover or tap a button for help.</span>`;
-
-  return bar;
+function createControlsFooter() {
+  const footer = document.createElement('div');
+  footer.className = 'module-footer wrapper colored';
+  return footer;
 }
 
-function ensureControlsStatusBars() {
+function ensureControlsFooters() {
   const controlsContainers = document.querySelectorAll('#controls-container.container');
   if (!controlsContainers.length) return;
 
   controlsContainers.forEach((container) => {
-    const hasBar = container.querySelector(':scope > [data-statusbar]');
-    if (hasBar) return;
+    const hasFooter = container.querySelector(':scope > .module-footer');
+    if (hasFooter) return;
 
-    container.appendChild(createControlsStatusBar());
+    container.appendChild(createControlsFooter());
   });
 }
 
@@ -945,6 +957,11 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleFooterButton.addEventListener('click', toggleFooterVisibility);
   }
 
+  const toggleToolsButton = document.getElementById('toggle-tools-button');
+  if (toggleToolsButton) {
+    toggleToolsButton.addEventListener('click', toggleFooterTools);
+  }
+
   applyColorTheme(getColorTheme());
 
   updateModeButtonState();
@@ -955,9 +972,10 @@ document.addEventListener('DOMContentLoaded', function () {
   markActiveFooterLink();
   markActiveTocButton();
   updateFooterVisibility();
+  updateFooterTools();
   syncFooterGap();
   setupTimelineSaveButton();
-  ensureControlsStatusBars();
+  ensureControlsFooters();
   setupStatusBars();
   setupSitePlayMode();
 });

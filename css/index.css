@@ -1124,7 +1124,6 @@ body.settings-sidebar-open #toggle-settings-panel-button .icons {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--footer-gap, 12px);
   padding: 8px;
   max-width: var(--maxwidth);
   margin: 0 auto;
@@ -1153,6 +1152,73 @@ body.settings-sidebar-open #toggle-settings-panel-button .icons {
 .footer > div {
   flex: 0 0 auto;
   scroll-snap-align: start;
+}
+
+.footer .footer-status,
+.footer .footer-tools {
+  flex: 1 1 auto;
+  height: var(--size2);
+  min-width: 0;
+}
+
+.footer .statusbar {
+  height: var(--size2);
+  padding: 0;
+}
+
+.footer-tools {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--footer-gap, 12px);
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  touch-action: pan-x;
+}
+
+.footer-tools::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.footer-tools > div {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+.footer-tools-active .footer-status {
+  display: none;
+}
+
+.footer-tools-active .footer-tools {
+  display: flex;
+}
+
+.footer #toggle-tools-button {
+  flex: 0 0 var(--size2);
+}
+
+.footer-standard.footer-tools-active {
+  display: grid;
+  grid-template-columns: repeat(5, var(--size2));
+  justify-content: space-between;
+}
+
+.footer-standard.footer-tools-active .footer-tools {
+  display: contents;
+}
+
+.footer-standard.footer-tools-active .footer-tools > div,
+.footer-standard.footer-tools-active .footer-tools a,
+.footer-standard.footer-tools-active #toggle-tools-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size2);
+  min-width: var(--size2);
+  height: var(--size2);
 }
 
 .footer img {
