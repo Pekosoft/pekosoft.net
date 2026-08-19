@@ -405,11 +405,14 @@ function renderPanelView() {
   if (showPanelTempi) {
     metronomeText.value = buildTempiListText();
     metronomeText.scrollTop = 0;
-    return;
+  } else {
+    metronomeText.value = beatsPanelText;
+    metronomeText.scrollTop = metronomeText.scrollHeight;
   }
 
-  metronomeText.value = beatsPanelText;
-  metronomeText.scrollTop = metronomeText.scrollHeight;
+  if (typeof updatePanelDownloadButtonState === 'function') {
+    updatePanelDownloadButtonState(document.getElementById('panel-container'));
+  }
 }
 
 function updateBPM(value, persist = true) {

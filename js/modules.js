@@ -605,8 +605,7 @@ function setupPanelSyntaxHighlighting() {
       preview.innerHTML = preservePanelTrailingLine(value, highlighted);
       syncPreviewScroll();
       requestAnimationFrame(syncPreviewScroll);
-      textarea.dataset.panelSyntaxLastValue = value;
-    };
+      textarea.dataset.panelSyntaxLastValue = value;      updatePanelDownloadButtonState(panelContainer);    };
 
     textarea.addEventListener("input", syncPreview);
     textarea.addEventListener("scroll", syncPreviewScroll);
@@ -631,6 +630,25 @@ function setupPanelSyntaxHighlighting() {
   });
 }
 
+function updatePanelDownloadButtonState(panelContainer) {
+  if (!panelContainer) return;
+
+  const textareas = Array.from(panelContainer.querySelectorAll("textarea"));
+  const hasContent = textareas.some((textarea) => {
+    const value = (textarea.value || "").trim();
+    const placeholder = (textarea.getAttribute("placeholder") || "").trim();
+    return value.length > 0 && value !== placeholder;
+  });
+  const buttons = panelContainer.querySelectorAll(".panel-download-button");
+
+  buttons.forEach((button) => {
+    const isDisabled = !hasContent;
+    button.disabled = isDisabled;
+    button.classList.toggle("grey", isDisabled);
+    button.setAttribute("aria-disabled", String(isDisabled));
+  });
+}
+
 function setupPanelWrapToggle() {
   const panelContainer = document.getElementById("panel-container");
   if (!panelContainer) return;
@@ -640,6 +658,10 @@ function setupPanelWrapToggle() {
 
   const footers = Array.from(panelContainer.querySelectorAll(":scope > .module-footer"));
   if (!footers.length) return;
+
+  textareas.forEach((textarea) => {
+    textarea.addEventListener("input", () => updatePanelDownloadButtonState(panelContainer));
+  });
 
   const release = getReleaseFromPath();
   const wrapStorageKey = `${release}.panel_wrap`;
@@ -663,6 +685,49 @@ function setupPanelWrapToggle() {
       }
       footer.appendChild(button);
     };
+
+    let downloadButton = footer.querySelector(".panel-download-button");
+    if (!downloadButton) {
+      downloadButton = document.createElement("button");
+      downloadButton.className = "square panel-download-button";
+      downloadButton.id = index === 0 ? "panel-download-button" : `panel-download-button-${index + 1}`;
+      downloadButton.title = "Download panel data";
+      downloadButton.innerHTML = `
+      <svg class="icons"><use href="/icons.svg#download" /></svg>
+      <span class="button-text">DOWNLOAD</span>`;
+
+      downloadButton.addEventListener("click", () => {
+        const values = Array.from(footer.closest(".container")?.querySelectorAll("textarea") || [])
+          .map((textarea) => textarea.value || "")
+          .filter((value) => value.length > 0);
+
+        if (!values.length) return;
+
+        const payload = values.length > 1 ? values.join("\n\n") : values[0];
+        const blob = new Blob([payload], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        const now = new Date();
+        const day = String(now.getDate()).padStart(2, "0");
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const year = String(now.getFullYear());
+        const hours = String(now.getHours()).padStart(2, "0");
+        const minutes = String(now.getMinutes()).padStart(2, "0");
+        const seconds = String(now.getSeconds()).padStart(2, "0");
+        const timestamp = `${day}-${month}-${year}_${hours}-${minutes}-${seconds}`;
+        const pageSlug = (release || "panel").replace(/[^a-z0-9]+/gi, "_").replace(/^_+|_+$/g, "").toLowerCase() || "panel";
+        const filename = `pekosoft_${pageSlug}_${timestamp}.txt`;
+        link.href = url;
+        link.download = typeof window.ensurePekosoftFilename === "function"
+          ? window.ensurePekosoftFilename(filename)
+          : (filename.toLowerCase().startsWith("pekosoft_") ? filename : `pekosoft_${filename}`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      });
+    }
+    placePanelFooterButton(downloadButton);
 
     let wrapButton = footer.querySelector(".panel-wrap-button");
     if (!wrapButton) {
@@ -710,6 +775,8 @@ function setupPanelWrapToggle() {
     colorButton.classList.toggle("button-on", isSyntaxColorOn);
     placePanelFooterButton(colorButton);
   });
+
+  updatePanelDownloadButtonState(panelContainer);
 }
 
 async function copyTimelineCanvasToClipboard(timelineContainer) {
