@@ -592,15 +592,39 @@ function createControlsStatusBar() {
 }
 
 function ensureControlsStatusBars() {
-  const controlsContainers = document.querySelectorAll('#controls-container.container');
-  if (!controlsContainers.length) return;
+  return;
+}
 
-  controlsContainers.forEach((container) => {
-    const hasBar = container.querySelector(':scope > [data-statusbar]');
-    if (hasBar) return;
+function updateFooterModeToggleState() {
+  const footers = document.querySelectorAll('.footer');
+  if (!footers.length) return;
 
-    container.appendChild(createControlsStatusBar());
+  const savedMode = localStorage.getItem('global.footer_mode') || 'tools';
+
+  footers.forEach((footer) => {
+    const mode = footer.dataset.footerMode || savedMode;
+    const toggle = footer.querySelector('.footer-toggle');
+    const isStatusMode = mode === 'status';
+
+    footer.dataset.footerMode = mode;
+
+    if (toggle) {
+      toggle.textContent = isStatusMode ? 'Tool icons' : 'Status bar';
+      toggle.setAttribute('aria-pressed', String(isStatusMode));
+      toggle.classList.toggle('button-on', isStatusMode);
+    }
   });
+}
+
+function toggleFooterMode() {
+  const footer = this.closest('.footer');
+  if (!footer) return;
+
+  const currentMode = footer.dataset.footerMode === 'status' ? 'status' : 'tools';
+  const nextMode = currentMode === 'status' ? 'tools' : 'status';
+  footer.dataset.footerMode = nextMode;
+  localStorage.setItem('global.footer_mode', nextMode);
+  updateFooterModeToggleState();
 }
 
 function setupStatusBars() {
@@ -958,8 +982,13 @@ document.addEventListener('DOMContentLoaded', function () {
   syncFooterGap();
   setupTimelineSaveButton();
   ensureControlsStatusBars();
+  updateFooterModeToggleState();
   setupStatusBars();
   setupSitePlayMode();
+
+  document.querySelectorAll('.footer-toggle').forEach((button) => {
+    button.addEventListener('click', toggleFooterMode);
+  });
 });
 
 window.addEventListener('resize', () => {
