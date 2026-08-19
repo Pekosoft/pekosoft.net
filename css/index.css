@@ -431,6 +431,10 @@ html.modules-page body:not(.layout-two-columns) > .container.first-module {
   margin-top: 0;
 }
 
+html.modules-page body:not(.layout-two-columns) {
+  padding-bottom: 54px;
+}
+
 @media (min-width: 800px) {
   html.modules-page.layout-two-columns body {
     display: flex;
@@ -1314,14 +1318,14 @@ html.invert-colors .container:fullscreen {
   top: 48px;
   left: 0;
   right: 0;
-  margin: 16px auto 8px;
+  margin: 16px auto;
   background-color: var(--grey1);
   border: 4px solid var(--grey1);
   padding: 0px;
   z-index: 999;
   max-width: var(--maxwidth);
   width: 100%;
-  height: calc(var(--visual-viewport-height, 100dvh) - 72px);
+  height: calc(var(--visual-viewport-height, 100dvh) - 80px - var(--sidebar-footer-height, 0px));
   overflow: hidden;
   padding: 4px 0;
 }
@@ -1358,13 +1362,13 @@ html.invert-colors .container:fullscreen {
   top: 48px;
   left: 0;
   right: 0;
-  margin: 16px auto 8px;
+  margin: 16px auto;
   background-color: var(--grey1);
   border: 4px solid var(--grey1);
   z-index: 999;
   max-width: var(--maxwidth);
   width: 100%;
-  height: calc(var(--visual-viewport-height, 100dvh) - 72px);
+  height: calc(var(--visual-viewport-height, 100dvh) - 80px - var(--sidebar-footer-height, 0px));
   overflow: hidden;
   padding: 0;
 }
@@ -1518,8 +1522,7 @@ html.invert-colors .container:fullscreen {
     left: var(--site-frame-offset);
     right: auto;
     width: var(--sidebar-width);
-    height: calc(var(--visual-viewport-height, 100dvh) - 72px - var(--sidebar-footer-height, 0px));
-    margin: 16px 0 8px;
+    margin: 16px 0;
     background-color: var(--black);
   }
 
@@ -1921,6 +1924,10 @@ button.grey .icons {
   margin-bottom: 16px;
   text-align: left;
   padding: 16px;
+}
+
+.three-columns-container .column-middle > .feature-row:last-child {
+  margin-bottom: 0;
 }
 
 .feature-row h1 {
