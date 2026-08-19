@@ -43,7 +43,7 @@
       <a href="/notepad" title="Notepad">Notepad - For writing notes.</a><br>
       <a href="/audio_calculator" title="Audio Calculator">Audio Calculator - For calculating audio values.</a><br>
       <a href="/piano" title="Piano">Piano - For playing piano.</a><br>
-      <a href="/icons" title="Icons">Icons - For previewing and editing SVG icons.</a>
+      <a href="/icons" title="Icons">Icons - For previewing and editing icons.</a>
     </h1>
   </div>
 
