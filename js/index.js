@@ -283,13 +283,15 @@ function markActiveTocButton() {
 function syncFooterGap() {
   const footers = document.querySelectorAll('.footer');
   footers.forEach(footer => {
-    const items = Array.from(footer.children);
+    const toolRow = footer.querySelector('.footer-tools');
+    if (!toolRow) return;
+
+    const items = Array.from(toolRow.children);
     if (items.length < 2) return;
 
-    footer.style.setProperty('--footer-gap', '12px');
+    toolRow.style.setProperty('--footer-gap', '12px');
 
-    const footerStyles = getComputedStyle(footer);
-    const contentWidth = footer.clientWidth - parseFloat(footerStyles.paddingLeft) - parseFloat(footerStyles.paddingRight);
+    const contentWidth = toolRow.clientWidth;
     const itemWidth = Math.max(...items.map(item => item.getBoundingClientRect().width));
     const minimumGap = 12;
 
@@ -299,33 +301,45 @@ function syncFooterGap() {
     if (visibleItems < 2 || visibleItems >= items.length) return;
 
     const fittedGap = (contentWidth - visibleItems * itemWidth) / (visibleItems - 1);
-    footer.style.setProperty('--footer-gap', `${Math.max(minimumGap, fittedGap).toFixed(3)}px`);
+    toolRow.style.setProperty('--footer-gap', `${Math.max(minimumGap, fittedGap).toFixed(3)}px`);
   });
 }
 
 function syncSidebarFooterHeight() {
   const footer = document.querySelector('.footer');
-  const footerVisible = footer && !document.documentElement.classList.contains('footer-hidden');
-  const footerHeight = footerVisible ? Math.ceil(footer.getBoundingClientRect().height) : 0;
+  const footerHeight = footer ? Math.ceil(footer.getBoundingClientRect().height) : 0;
   document.documentElement.style.setProperty('--sidebar-footer-height', `${footerHeight}px`);
 }
 
-function updateFooterVisibility() {
-  const footerVisible = localStorage.getItem('global.footer') !== 'false';
-  document.documentElement.classList.toggle('footer-hidden', !footerVisible);
-  syncSidebarFooterHeight();
+function updateFooterView() {
+  const footer = document.querySelector('.footer');
+  if (!footer) return;
 
-  const toggleFooterButton = document.getElementById('toggle-footer-button');
-  if (toggleFooterButton) {
-    toggleFooterButton.setAttribute('aria-pressed', String(footerVisible));
-    toggleFooterButton.classList.toggle('button-on', footerVisible);
+  const view = localStorage.getItem('global.footer_view') === 'tools' ? 'tools' : 'status';
+  const showingStatus = view === 'status';
+  const toggleButton = document.getElementById('toggle-footer-view-button');
+
+  footer.dataset.footerView = view;
+  if (toggleButton) {
+    const label = showingStatus ? 'Show tool icons' : 'Show status bar';
+    const icon = toggleButton.querySelector('use');
+    toggleButton.title = label;
+    toggleButton.setAttribute('aria-label', label);
+    toggleButton.setAttribute('aria-pressed', String(showingStatus));
+    if (icon) icon.setAttribute('href', showingStatus ? '/icons.svg#tool' : '/icons.svg#bars');
   }
+
+  syncSidebarFooterHeight();
+  requestAnimationFrame(syncFooterGap);
 }
 
-function toggleFooterVisibility() {
-  const footerVisible = !document.documentElement.classList.contains('footer-hidden');
-  localStorage.setItem('global.footer', String(!footerVisible));
-  updateFooterVisibility();
+function toggleFooterView() {
+  const footer = document.querySelector('.footer');
+  if (!footer) return;
+
+  const nextView = footer.dataset.footerView === 'tools' ? 'status' : 'tools';
+  localStorage.setItem('global.footer_view', nextView);
+  updateFooterView();
 }
 
 function ensurePekosoftFilename(filename) {
@@ -574,57 +588,15 @@ function getStatusTargetLabel(target) {
   return `${name}: ${sentenceTooltip}`;
 }
 
-function createControlsStatusBar() {
-  const bar = document.createElement('div');
-  bar.className = 'module-footer wrapper colored statusbar';
-  bar.setAttribute('role', 'status');
-  bar.setAttribute('aria-live', 'polite');
-  bar.setAttribute('data-statusbar', '');
-  bar.setAttribute('data-status-ready', 'READY: Hover or tap a button for help.');
+function ensureControlsFooters() {
+  const controlsContainers = document.querySelectorAll('#controls-container.container');
+  controlsContainers.forEach((container) => {
+    if (container.querySelector(':scope > .module-footer')) return;
 
-  bar.innerHTML = `
-    <svg class="icons" aria-hidden="true">
-      <use href="/icons.svg#about" />
-    </svg>
-    <span class="status-text" data-status-text>READY: Hover or tap a button for help.</span>`;
-
-  return bar;
-}
-
-function ensureControlsStatusBars() {
-  return;
-}
-
-function updateFooterModeToggleState() {
-  const footers = document.querySelectorAll('.footer');
-  if (!footers.length) return;
-
-  const savedMode = localStorage.getItem('global.footer_mode') || 'tools';
-
-  footers.forEach((footer) => {
-    const mode = footer.dataset.footerMode || savedMode;
-    const toggle = footer.querySelector('.footer-toggle');
-    const isStatusMode = mode === 'status';
-
-    footer.dataset.footerMode = mode;
-
-    if (toggle) {
-      toggle.textContent = isStatusMode ? 'Tool icons' : 'Status bar';
-      toggle.setAttribute('aria-pressed', String(isStatusMode));
-      toggle.classList.toggle('button-on', isStatusMode);
-    }
+    const footer = document.createElement('div');
+    footer.className = 'module-footer wrapper colored';
+    container.appendChild(footer);
   });
-}
-
-function toggleFooterMode() {
-  const footer = this.closest('.footer');
-  if (!footer) return;
-
-  const currentMode = footer.dataset.footerMode === 'status' ? 'status' : 'tools';
-  const nextMode = currentMode === 'status' ? 'tools' : 'status';
-  footer.dataset.footerMode = nextMode;
-  localStorage.setItem('global.footer_mode', nextMode);
-  updateFooterModeToggleState();
 }
 
 function setupStatusBars() {
@@ -939,7 +911,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const toggleSettingsPanelCloseButton = document.getElementById('toggle-settings-panel-close-button');
   const toggleModeButton = document.getElementById('toggle-mode-button');
   const toggleFullscreenButton = document.getElementById('toggle-fullscreen-button');
-  const toggleFooterButton = document.getElementById('toggle-footer-button');
+  const toggleFooterViewButton = document.getElementById('toggle-footer-view-button');
 
   if (toggleMenuButton) {
     toggleMenuButton.addEventListener('click', toggleMenu);
@@ -965,8 +937,8 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleFullscreenButton.addEventListener('click', toggleFullscreen);
   }
 
-  if (toggleFooterButton) {
-    toggleFooterButton.addEventListener('click', toggleFooterVisibility);
+  if (toggleFooterViewButton) {
+    toggleFooterViewButton.addEventListener('click', toggleFooterView);
   }
 
   applyColorTheme(getColorTheme());
@@ -978,17 +950,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   markActiveFooterLink();
   markActiveTocButton();
-  updateFooterVisibility();
+  updateFooterView();
   syncFooterGap();
   setupTimelineSaveButton();
-  ensureControlsStatusBars();
-  updateFooterModeToggleState();
+  ensureControlsFooters();
   setupStatusBars();
   setupSitePlayMode();
-
-  document.querySelectorAll('.footer-toggle').forEach((button) => {
-    button.addEventListener('click', toggleFooterMode);
-  });
 });
 
 window.addEventListener('resize', () => {

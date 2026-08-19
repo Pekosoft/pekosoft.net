@@ -50,13 +50,6 @@
         Play
       </button>
 
-      <button id="toggle-footer-button" class="toc-button" title="Toggle status bar" aria-label="Toggle status bar" aria-pressed="true">
-        <svg class="icons" role="img">
-          <use href="/icons.svg#bars" />
-        </svg>
-        Status bar
-      </button>
-
       <div class="settings-panel-content">
         <div class="settings-toggle-row"><input type="checkbox" name="grid" id="grid" hidden><button type="button" data-setting-toggle="grid" title="Background grid" class="toc-button"><svg class="icons"><use href="/icons.svg#view_grid" /></svg>Grid</button></div>
         <div class="settings-toggle-row"><input type="checkbox" name="guides" id="guides" hidden><button type="button" data-setting-toggle="guides" title="Timeline guides" class="toc-button"><svg class="icons"><use href="/icons.svg#guides" /></svg>Guides</button></div>

@@ -16,7 +16,6 @@ window.FactoryDefaults = {
   wrap: false,
   inputBackgroundsEnabled: true,
   theme: "dark",
-  footer: true,
   defaultBPM: 120,
   defaultRPM: 33.333,
   a4Hz: 440,
@@ -404,7 +403,6 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("global.wrap", defaults.wrap);
     localStorage.setItem("global.input_backgrounds_enabled", defaults.inputBackgroundsEnabled);
     localStorage.setItem("global.theme", defaults.theme);
-    localStorage.setItem("global.footer", defaults.footer);
     localStorage.setItem("global.default_bpm", defaults.defaultBPM);
     localStorage.setItem("global.default_rpm", defaults.defaultRPM);
     localStorage.setItem("global.a4_hz", defaults.a4Hz);
@@ -421,7 +419,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     if (typeof applyColorTheme === "function") applyColorTheme(defaults.theme);
-    if (typeof updateFooterVisibility === "function") updateFooterVisibility();
     if (typeof stopSitePlay === "function") stopSitePlay();
   }
 

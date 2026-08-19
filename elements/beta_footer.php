@@ -14,115 +14,119 @@ function betaFooterHref($toolFile, $currentPage)
 }
 ?>
 
-<div class="footer colored" data-footer-mode="tools">
-
-  <div class="footer-tool-icons">
-    <div>
-      <a href="<?php echo betaFooterHref('/player', $currentPage); ?>" title="Player" aria-label="Player">
-        <svg class="icons">
-          <use href="/icons.svg#player" />
-        </svg>
-      </a>
-    </div>
-
-    <div>
-      <a href="<?php echo betaFooterHref('/visualizer', $currentPage); ?>" title="Visualizer" aria-label="Visualizer">
-        <svg class="icons">
-          <use href="/icons.svg#visualizer" />
-        </svg>
-      </a>
-    </div>
-
-    <div>
-      <a href="<?php echo betaFooterHref('/bpm_circle', $currentPage); ?>" title="BPM circle" aria-label="BPM circle">
-        <svg class="icons">
-          <use href="/icons.svg#bpm_circle" />
-        </svg>
-      </a>
-    </div>
-
-    <div>
-      <a href="<?php echo betaFooterHref('/bpm_curve', $currentPage); ?>" title="BPM Curve" aria-label="BPM Curve">
-        <svg class="icons">
-          <use href="/icons.svg#bpm_curve" />
-        </svg>
-      </a>
-    </div>
-
-    <div>
-      <a href="<?php echo betaFooterHref('/circle_of_fifths', $currentPage); ?>" title="Circle Of Fifths" aria-label="Circle Of Fifths">
-        <svg class="icons">
-          <use href="/icons.svg#circle_of_fifths" />
-        </svg>
-      </a>
-    </div>
-
-    <div>
-      <a href="<?php echo betaFooterHref('/drum_machine', $currentPage); ?>" title="Drum Machine" aria-label="Drum Machine">
-        <svg class="icons">
-          <use href="/icons.svg#drum_machine" />
-        </svg>
-      </a>
-    </div>
-
-    <div>
-      <a href="<?php echo betaFooterHref('/reference', $currentPage); ?>" title="Reference" aria-label="Reference">
-        <svg class="icons">
-            <use href="/icons.svg#reference" />
-        </svg>
-      </a>
-    </div>
-
-    <div>
-      <a href="<?php echo betaFooterHref('/tuner', $currentPage); ?>" title="Tuner" aria-label="Tuner">
-        <svg class="icons">
-          <use href="/icons.svg#tuner" />
-        </svg>
-      </a>
-    </div>
-
-    <div>
-      <a href="<?php echo betaFooterHref('/notepad', $currentPage); ?>" title="Notepad" aria-label="Notepad">
-        <svg class="icons">
-          <use href="/icons.svg#notepad" />
-        </svg>
-      </a>
-    </div>
-
-    <div>
-      <a href="<?php echo betaFooterHref('/audio_calculator', $currentPage); ?>" title="Audio Calculator" aria-label="Audio Calculator">
-        <svg class="icons">
-          <use href="/icons.svg#audio_calculator" />
-        </svg>
-      </a>
-    </div>
-
-    <div>
-      <a href="<?php echo betaFooterHref('/piano', $currentPage); ?>" title="Piano" aria-label="Piano">
-        <svg class="icons">
-          <use href="/icons.svg#piano" />
-        </svg>
-      </a>
-    </div>
-
-    <div>
-      <a href="<?php echo betaFooterHref('/icons', $currentPage); ?>" title="Icons" aria-label="Icons">
-        <svg class="icons">
-          <use href="/icons.svg#icons" />
-        </svg>
-      </a>
-    </div>
-  </div>
-
-  <div class="footer-statusbar-container">
-    <div class="footer-statusbar statusbar" role="status" aria-live="polite" data-statusbar data-status-ready="READY: Hover or tap a button for help.">
+<div class="footer colored" data-footer-view="status">
+  <div class="footer-content">
+    <div class="statusbar" role="status" aria-live="polite" data-statusbar data-status-ready="READY: Hover or tap a button for help.">
       <svg class="icons" aria-hidden="true">
         <use href="/icons.svg#about" />
       </svg>
       <span class="status-text" data-status-text>READY: Hover or tap a button for help.</span>
     </div>
-    <button class="footer-toggle" type="button" title="Toggle status bar" aria-label="Toggle status bar">Status bar</button>
+
+    <div class="footer-tools">
+      <div>
+    <a href="<?php echo betaFooterHref('/player', $currentPage); ?>" title="Player" aria-label="Player">
+      <svg class="icons">
+        <use href="/icons.svg#player" />
+      </svg>
+    </a>
+      </div>
+
+      <div>
+    <a href="<?php echo betaFooterHref('/visualizer', $currentPage); ?>" title="Visualizer" aria-label="Visualizer">
+      <svg class="icons">
+        <use href="/icons.svg#visualizer" />
+      </svg>
+    </a>
+      </div>
+
+      <div>
+    <a href="<?php echo betaFooterHref('/bpm_circle', $currentPage); ?>" title="BPM circle" aria-label="BPM circle">
+      <svg class="icons">
+        <use href="/icons.svg#bpm_circle" />
+      </svg>
+    </a>
+      </div>
+
+      <div>
+    <a href="<?php echo betaFooterHref('/bpm_curve', $currentPage); ?>" title="BPM Curve" aria-label="BPM Curve">
+      <svg class="icons">
+        <use href="/icons.svg#bpm_curve" />
+      </svg>
+    </a>
+      </div>
+
+      <div>
+    <a href="<?php echo betaFooterHref('/circle_of_fifths', $currentPage); ?>" title="Circle Of Fifths" aria-label="Circle Of Fifths">
+      <svg class="icons">
+        <use href="/icons.svg#circle_of_fifths" />
+      </svg>
+    </a>
+      </div>
+
+      <div>
+    <a href="<?php echo betaFooterHref('/drum_machine', $currentPage); ?>" title="Drum Machine" aria-label="Drum Machine">
+      <svg class="icons">
+        <use href="/icons.svg#drum_machine" />
+      </svg>
+    </a>
+      </div>
+
+      <div>
+    <a href="<?php echo betaFooterHref('/reference', $currentPage); ?>" title="Reference" aria-label="Reference">
+      <svg class="icons">
+          <use href="/icons.svg#reference" />
+      </svg>
+    </a>
+      </div>
+
+      <div>
+    <a href="<?php echo betaFooterHref('/tuner', $currentPage); ?>" title="Tuner" aria-label="Tuner">
+      <svg class="icons">
+        <use href="/icons.svg#tuner" />
+      </svg>
+    </a>
+      </div>
+
+      <div>
+    <a href="<?php echo betaFooterHref('/notepad', $currentPage); ?>" title="Notepad" aria-label="Notepad">
+      <svg class="icons">
+        <use href="/icons.svg#notepad" />
+      </svg>
+    </a>
+      </div>
+
+      <div>
+    <a href="<?php echo betaFooterHref('/audio_calculator', $currentPage); ?>" title="Audio Calculator" aria-label="Audio Calculator">
+      <svg class="icons">
+        <use href="/icons.svg#audio_calculator" />
+      </svg>
+    </a>
+      </div>
+
+      <div>
+    <a href="<?php echo betaFooterHref('/piano', $currentPage); ?>" title="Piano" aria-label="Piano">
+      <svg class="icons">
+        <use href="/icons.svg#piano" />
+      </svg>
+    </a>
+      </div>
+
+      <div>
+    <a href="<?php echo betaFooterHref('/icons', $currentPage); ?>" title="Icons" aria-label="Icons">
+      <svg class="icons">
+        <use href="/icons.svg#icons" />
+      </svg>
+    </a>
+      </div>
+    </div>
   </div>
+
+  <button id="toggle-footer-view-button" class="square icon-only" title="Show tool icons" aria-label="Show tool icons" aria-pressed="true">
+    <svg class="icons" aria-hidden="true">
+      <use href="/icons.svg#tool" />
+    </svg>
+  </button>
 </div>
 
 <script src="/js/index.js?v=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/js/index.js'); ?>"></script>
