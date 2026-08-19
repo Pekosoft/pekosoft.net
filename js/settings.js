@@ -337,13 +337,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveWrapSetting() {
-    const nextWrapState = settings.toggleWrap.checked ? "true" : "false";
-    localStorage.setItem("global.wrap", nextWrapState);
+    const nextWrapState = settings.toggleWrap.checked;
+    if (window.PekoWrap) {
+      window.PekoWrap.setGlobal(nextWrapState);
+      return;
+    }
+    localStorage.setItem("global.wrap", String(nextWrapState));
+    clearPanelWrapOverrides();
+  }
 
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (!key || !key.endsWith(".panel_wrap")) continue;
-      localStorage.setItem(key, nextWrapState);
+  function clearPanelWrapOverrides() {
+    for (let index = localStorage.length - 1; index >= 0; index -= 1) {
+      const key = localStorage.key(index);
+      if (key?.endsWith(".panel_wrap")) localStorage.removeItem(key);
     }
   }
 
@@ -401,7 +407,12 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("global.toggle_button_text", defaults.toggleButtonText);
     localStorage.setItem("global.font_size", defaults.fontSize);
     localStorage.setItem("global.alpha", defaults.alpha);
-    localStorage.setItem("global.wrap", defaults.wrap);
+    if (window.PekoWrap) {
+      window.PekoWrap.setGlobal(defaults.wrap);
+    } else {
+      localStorage.setItem("global.wrap", defaults.wrap);
+      clearPanelWrapOverrides();
+    }
     localStorage.setItem("global.input_backgrounds_enabled", defaults.inputBackgroundsEnabled);
     localStorage.setItem("global.theme", defaults.theme);
     localStorage.setItem("global.footer", defaults.footer);

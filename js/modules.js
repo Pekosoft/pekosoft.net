@@ -459,6 +459,32 @@ function applyPanelWrap(textareas, enabled) {
   });
 }
 
+function setGlobalPanelWrap(enabled) {
+  const nextState = !!enabled;
+  localStorage.setItem("global.wrap", String(nextState));
+
+  for (let index = localStorage.length - 1; index >= 0; index -= 1) {
+    const key = localStorage.key(index);
+    if (key?.endsWith(".panel_wrap")) localStorage.removeItem(key);
+  }
+
+  const panelContainer = document.getElementById("panel-container");
+  if (panelContainer) {
+    applyPanelWrap(Array.from(panelContainer.querySelectorAll("textarea")), nextState);
+    panelContainer.querySelectorAll(".panel-wrap-button").forEach((button) => {
+      button.classList.toggle("button-on", nextState);
+    });
+  }
+
+  window.dispatchEvent(new CustomEvent("pekosoft:wrap-global-change", {
+    detail: { enabled: nextState }
+  }));
+}
+
+window.PekoWrap = {
+  setGlobal: setGlobalPanelWrap
+};
+
 function escapeHtml(text) {
   return text
     .replace(/&/g, "&amp;")
@@ -774,6 +800,14 @@ function setupPanelWrapToggle() {
     }
     colorButton.classList.toggle("button-on", isSyntaxColorOn);
     placePanelFooterButton(colorButton);
+  });
+
+  window.addEventListener("pekosoft:wrap-global-change", (event) => {
+    const enabled = !!event.detail?.enabled;
+    applyPanelWrap(textareas, enabled);
+    footers.forEach((footer) => {
+      footer.querySelector(".panel-wrap-button")?.classList.toggle("button-on", enabled);
+    });
   });
 
   updatePanelDownloadButtonState(panelContainer);
