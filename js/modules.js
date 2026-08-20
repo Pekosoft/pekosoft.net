@@ -144,6 +144,21 @@ function syncMaximizedModuleState() {
   document.documentElement.classList.toggle("module-view-maximized", hasMaximizedModule);
 }
 
+function exitMaximizedModule() {
+  const container = document.querySelector(".container.module-maximized");
+  if (!container) return;
+
+  const id = container.id.replace(/-container$/, "");
+  container.classList.remove("module-maximized");
+  container.querySelector(".module-maximize-btn")?.classList.remove("button-on");
+  localStorage.setItem("module_" + id + "_state", "normal");
+  syncMaximizedModuleState();
+}
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") exitMaximizedModule();
+});
+
 function disableMinimizeForTwoColumnLayout() {
   if (!isTwoColumnLayoutActive()) return;
 
