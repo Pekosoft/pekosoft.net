@@ -199,9 +199,6 @@ if (toggleSoundButton) {
         muteNode.gain.setValueAtTime(isSoundOn ? 1 : 0, now);
       }
     }
-    if (!isSoundOn) {
-      stopTapPlaybackEvents();
-    }
     applySoundButtonUI();
   });
   makeKeyboardActivatable(toggleSoundButton, () => toggleSoundButton.click());
@@ -499,7 +496,7 @@ function scheduleTapPlayback() {
 
   let scheduledCount = 0;
   while (tapPlaybackNextBeatTime < now + TAP_PLAYBACK_SCHEDULE_AHEAD_SEC && scheduledCount < 128) {
-    // playTapTransient silences itself when sound is off; blink still fires
+    // Meters receive every beat; SOUND mutes only the master output.
     const event = playTapTransient(context, tapPlaybackNextBeatTime, TAP_CLICK_DURATION_SEC);
     schedulePadBlink(tapPlaybackNextBeatTime);
     if (event?.stopNode) {
@@ -566,7 +563,7 @@ function clampVolume(value) {
 }
 
 function playTapSound() {
-  if (!isSoundOn || typeof window.playTransientSound !== "function") return;
+  if (typeof window.playTransientSound !== "function") return;
 
   ensureTapAudioContextReady().then((context) => {
     if (!context) return;
@@ -575,7 +572,7 @@ function playTapSound() {
 }
 
 function playTapTransient(context, when, durationSec = TAP_CLICK_DURATION_SEC) {
-  if (!isSoundOn || typeof window.playTransientSound !== "function" || !context) return null;
+  if (typeof window.playTransientSound !== "function" || !context) return null;
 
   const now = context.currentTime;
   const startTime = Math.max(when ?? now, now + 0.001);
