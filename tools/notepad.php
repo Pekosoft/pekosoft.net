@@ -51,6 +51,13 @@
         <span class="button-text">COPY</span>
       </button>
 
+      <button id="notepad-paste-button" class="square" title="Paste text">
+        <svg class="icons">
+          <use href="/icons.svg#paste" />
+        </svg>
+        <span class="button-text">PASTE</span>
+      </button>
+
     </div>
   </div>
 

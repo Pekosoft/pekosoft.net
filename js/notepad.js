@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const speechButton = document.getElementById('notepad-speech-button');
   const downloadButton = document.getElementById('notepad-download-button');
   const copyButton = document.getElementById('notepad-copy-button');
+  const pasteButton = document.getElementById('notepad-paste-button');
   const textarea = document.getElementById('Textarea');
   const STORAGE_KEY = 'notepad.text';
 
@@ -64,6 +65,21 @@ document.addEventListener('DOMContentLoaded', function () {
       localStorage.setItem(STORAGE_KEY, textarea.value);
       updateDownloadButtonState();
     });
+  }
+
+  async function pasteFromClipboard() {
+    if (!textarea || !navigator.clipboard || typeof navigator.clipboard.readText !== 'function') return;
+
+    try {
+      const text = await navigator.clipboard.readText();
+      if (!text) return;
+
+      textarea.setRangeText(text, textarea.selectionStart, textarea.selectionEnd, 'end');
+      textarea.focus();
+      textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    } catch {
+      // Clipboard permission is controlled by the browser.
+    }
   }
 
   let currentUtterance = null;
@@ -135,6 +151,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (copyButton) {
     copyButton.addEventListener('click', copyToClipboard);
+  }
+
+  if (pasteButton) {
+    pasteButton.addEventListener('click', pasteFromClipboard);
   }
 
   window.addEventListener('beforeunload', function () {

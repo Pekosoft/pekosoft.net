@@ -53,3 +53,12 @@
     Copies the text to clipboard.
   </div>
 </div>
+
+<div class="feature-row border"><svg class="standard-image-help">
+    <use href="/icons.svg#paste"></use>
+  </svg>
+  <div class="justify">
+    <h1>PASTE <span class="object">button</span></h1>
+    Pastes clipboard text at the cursor.
+  </div>
+</div>
