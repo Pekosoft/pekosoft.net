@@ -13,8 +13,8 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
-    The Tool module shows the editable curve, point handles and the live playhead. The curve summary in the footer updates as you edit points or scrub the playhead.
+    <h1>Instrument <span class="object">module</span></h1>
+    The Instrument module shows the editable curve, point handles and the live playhead. The curve summary in the footer updates as you edit points or scrub the playhead.
   </div>
 </div>
 
@@ -24,7 +24,7 @@
   </svg>
   <div class="justify">
     <h1>GUIDES <span class="object">button</span></h1>
-    Toggles graph guides. This local button overrides the Settings Guides option for the Tool module only. <span class="default">Default: on.</span>
+    Toggles graph guides. This local button overrides the Settings Guides option for the Instrument module only. <span class="default">Default: on.</span>
   </div>
 </div>
 

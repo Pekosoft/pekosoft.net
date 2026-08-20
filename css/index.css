@@ -2685,7 +2685,7 @@ body > #panel-container.module-maximized > .module-body {
   height: 100%;
 }
 
-/* Tool module: make the content area scale in maximized mode like Panel. */
+/* Instrument module: make the content area scale in maximized mode like Panel. */
 #tool-container.module-maximized > .module-body {
   flex: 1 1 auto;
   min-height: 0;

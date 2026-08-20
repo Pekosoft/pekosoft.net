@@ -13,7 +13,7 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
+    <h1>Instrument <span class="object">module</span></h1>
     Shows the active visualizers as meters. Each meter responds to the same BPM, but with a different visual language. Footer buttons switch between All and Single view and step through meters in Single view.
   </div>
 </div>
@@ -114,7 +114,7 @@
   </svg>
   <div class="justify">
     <h1>ALL <span class="object">button</span></h1>
-    Shows all enabled visualizers in Tool module. <span class="default">Default: on.</span>
+    Shows all enabled visualizers in Instrument module. <span class="default">Default: on.</span>
   </div>
 </div>
 
@@ -124,7 +124,7 @@
   </svg>
   <div class="justify">
     <h1>ONE <span class="object">button</span></h1>
-    Shows one enabled visualizer at a time in Tool module.
+    Shows one enabled visualizer at a time in Instrument module.
   </div>
 </div>
 
@@ -204,7 +204,7 @@
   </svg>
   <div class="justify">
     <h1>TITLE <span class="object">button</span></h1>
-    Toggles meter titles in Tool module. <span class="default">Default: on.</span>
+    Toggles meter titles in Instrument module. <span class="default">Default: on.</span>
   </div>
 </div>
 

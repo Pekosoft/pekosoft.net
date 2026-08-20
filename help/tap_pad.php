@@ -13,7 +13,7 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
+    <h1>Instrument <span class="object">module</span></h1>
     The pad is for tapping, and also shows the average BPM, rounded to whole number, in large font.
   </div>
 </div>

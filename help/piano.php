@@ -13,8 +13,8 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
-    The Tool module shows the piano keyboard. White and black keys can be played with mouse or touch.
+    <h1>Instrument <span class="object">module</span></h1>
+    The Instrument module shows the piano keyboard. White and black keys can be played with mouse or touch.
   </div>
 </div>
 

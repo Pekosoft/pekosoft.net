@@ -13,7 +13,7 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
+    <h1>Instrument <span class="object">module</span></h1>
     Emulates a classical metronome. Base display buttons can show BPM, Italian tempi or time signature circles.
   </div>
 </div>
@@ -135,7 +135,7 @@
   </svg>
   <div class="justify">
     <h1>BLINK <span class="object">button</span></h1>
-    Toggles the blinking Tool module background. A highly visual and practical feature, even far away from the screen. <span class="default">Default: off.</span>
+    Toggles the blinking Instrument module background. A highly visual and practical feature, even far away from the screen. <span class="default">Default: off.</span>
   </div>
 </div>
 

@@ -81,7 +81,7 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
 
       <div class="toc-column">
         <?php if (empty($hideReleaseMenu) && $release !== ''): ?>
-          <button class="toc-button" data-href="<?php echo $releaseHref; ?>" title="Release" aria-label="Release"><svg class="icons" role="img"><use href="/icons.svg#release"></use></svg>Release</button>
+          <button class="toc-button" data-href="<?php echo $releaseHref; ?>" title="Tool" aria-label="Tool"><svg class="icons" role="img"><use href="/icons.svg#release"></use></svg>Tool</button>
           <button class="toc-button" data-href="/help.php?r=<?php echo $release; ?>" title="Help" aria-label="Help"><svg class="icons" role="img"><use href="/icons.svg#help"></use></svg>Help</button>
           <button class="toc-button" data-href="/history.php?r=<?php echo $release; ?>" title="History" aria-label="History"><svg class="icons" role="img"><use href="/icons.svg#clock"></use></svg>History</button>
           <button class="toc-button" data-href="/about.php?r=<?php echo $release; ?>" title="About" aria-label="About"><svg class="icons" role="img"><use href="/icons.svg#about"></use></svg>About</button>
@@ -91,7 +91,7 @@ $hasPlaylistModule = in_array('playlist', $availableModules, true);
       <div id="toc-module-items" class="toc-column">
         <?php if ($hasModules): ?>
           <?php if (in_array('tool', $availableModules, true)): ?>
-            <button class="toc-button" id="tool-toggle-toc-button" title="Tool" aria-label="Tool"><svg class="icons" role="img"><use href="/icons.svg#tool"></use></svg>Tool</button>
+            <button class="toc-button" id="tool-toggle-toc-button" title="Instrument" aria-label="Instrument"><svg class="icons" role="img"><use href="/icons.svg#tool"></use></svg>Instrument</button>
           <?php endif; ?>
           <?php if (in_array('controls', $availableModules, true)): ?>
             <button class="toc-button" id="controls-toggle-toc-button" title="Controls" aria-label="Controls"><svg class="icons" role="img"><use href="/icons.svg#controls"></use></svg>Controls</button>

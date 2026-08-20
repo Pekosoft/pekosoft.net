@@ -13,7 +13,7 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
+    <h1>Instrument <span class="object">module</span></h1>
     Three wheel rings show major, minor and diminished relationships. Four centered triangles move key selection and mode focus.
   </div>
 </div>

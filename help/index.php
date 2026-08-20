@@ -162,7 +162,7 @@
   </svg>
   <div class="justify">
     <h1>Pages</h1>
-    The following is a description of the pages each tool has. They are Release, Help, History and About. Pages can be swiped left and right in header. Tools are accessible from front page, TOC and footer.
+    The following is a description of the pages each tool has. They are Tool, Help, History and About. Pages can be swiped left and right in header. Tools are accessible from front page, TOC and footer.
   </div>
 </div>
 
@@ -220,7 +220,7 @@
   </svg>
   <div class="justify">
     <h1>Modules</h1>
-    Each tool is made up of two or more modules. Depending on the tool, these are Tool, Controls, Timeline, Playlist, History, Panel and Meters. Modules can be toggled from Menu.
+    Each tool is made up of two or more modules. Depending on the tool, these are Instrument, Controls, Timeline, Playlist, History, Panel and Meters. Modules can be toggled from Menu.
   </div>
 </div>
 
@@ -229,7 +229,7 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
+    <h1>Instrument <span class="object">module</span></h1>
     This is the main module. It's designed to provide basic functionality on its own.
   </div>
 </div>

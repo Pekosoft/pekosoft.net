@@ -13,7 +13,7 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
+    <h1>Instrument <span class="object">module</span></h1>
     Main tuning display. Shows detected note, frequency in HZ, cents offset from current target, a meter with center at 0 cents, and selectable target note buttons.
   </div>
 </div>

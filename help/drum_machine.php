@@ -13,7 +13,7 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
+    <h1>Instrument <span class="object">module</span></h1>
     The sequencer is split into steps 1-8 and 9-16. Each row controls one drum voice. Click or tap a step to cycle between off, normal and accent velocity. Drag across steps to paint the selected velocity.
   </div>
 </div>

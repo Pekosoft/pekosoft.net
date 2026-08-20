@@ -13,7 +13,7 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
+    <h1>Instrument <span class="object">module</span></h1>
     You can scratch the platter by clicking and dragging (mouse) or touching and dragging (finger). This simulates manually rotating a vinyl record. Scratching works in all states. Touch input supports natural gestures, including full circular motion, backward motion, and quick releases.
   </div>
 </div>

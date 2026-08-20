@@ -13,7 +13,7 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
+    <h1>Instrument <span class="object">module</span></h1>
     This table shows values and information for the current BPM. This is also where you choose what note value to visualize. Columns: Select, Note, Value, MS, HZ, CM, Inches, USA, UK, BPM, Diff, Percent, Rest, Play and Close. Rows: Triplet, base and dotted notes in the values of 8/1 to 1/128. All rows and columns can be toggled.
   </div>
 </div>
@@ -184,8 +184,8 @@
     <use href="/icons.svg#menu"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">menu</span></h1>
-    Rows and Columns toggles are in Tool menu.
+    <h1>Instrument <span class="object">menu</span></h1>
+    Rows and Columns toggles are in Instrument menu.
   </div>
 </div>
 

@@ -276,7 +276,7 @@ Pekosoft is organized as root-level PHP pages rather than tool folders. The curr
 
 ### Main page types
 
-- Release pages
+- Tool pages
 - Help pages
 - History pages
 - About pages
@@ -287,7 +287,7 @@ Pekosoft is organized as root-level PHP pages rather than tool folders. The curr
 - `js/` — shared and per-tool scripts
 - `help/` — feature documentation
 - `history/` — update logs
-- `about/` — short release-specific metadata
+- `about/` — short tool-specific metadata
 - `img/` — small site assets
 - `png/` — preview graphics / Open Graph images
 
@@ -309,7 +309,7 @@ Examples of root-level tool and site files include:
 Special page note:
 
 - `bitcoin.php` is a standalone donation page linked from the main TOC as **BUY US COFFEE**.
-- On `bitcoin.php`, the release menu (Release, Help, History, About) is intentionally hidden.
+- On `bitcoin.php`, the tool menu (Tool, Help, History, About) is intentionally hidden.
 
 ### Icons
 
@@ -319,7 +319,7 @@ See [`icons.md`](icons.md) for Pekosoft icon authoring rules, sprite conventions
 
 Across the site, tools consist of a small number of reusable conceptual modules:
 
-- **Tool** — the core working area
+- **Instrument** — the core working area
 - **Controls** — buttons, fields, menus, sliders
 - **Timeline** — scrollable visual time-based feedback
 - **Panel** — text-based session output or data display
@@ -374,11 +374,11 @@ Examples:
 
 ## Player Tool
 
-The Player tool includes feature-specific footer buttons for both the Tool and Panel modules:
+The Player tool includes feature-specific footer buttons for both the Instrument and Panel modules:
 
-### Tool Footer
+### Instrument Footer
 
-The **Tool footer** contains buttons to switch between visualization meters:
+The **Instrument footer** contains buttons to switch between visualization meters:
 
 - **Spectroscope** (`eq` icon) — displays frequency analysis visualization
 - **Level meter** (`meter` icon) — displays audio level meters

@@ -4,7 +4,7 @@
   </svg>
   <div class="justify">
     <h1>General</h1>
-    Pekosoft Blockchain displays the live Bitcoin blockchain using the public mempool.space API. Recent confirmed blocks are shown in the Tool module. A WebSocket connection delivers new blocks in real time.
+    Pekosoft Blockchain displays the live Bitcoin blockchain using the public mempool.space API. Recent confirmed blocks are shown in the Instrument module. A WebSocket connection delivers new blocks in real time.
   </div>
 </div>
 
@@ -13,7 +13,7 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
+    <h1>Instrument <span class="object">module</span></h1>
     A scrollable horizontal chain of confirmed Bitcoin blocks, newest on the left. Each card shows the block height, mining pool, transaction count, size, median fee, and age. Click a card to select it and load its details into the Panel.
   </div>
 </div>

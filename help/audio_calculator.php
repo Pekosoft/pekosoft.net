@@ -13,7 +13,7 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
+    <h1>Instrument <span class="object">module</span></h1>
     The grid maps Sample rate on horizontal axis, and Bit depth on vertical axis. Clicking a cell sets those two values.
   </div>
 </div>

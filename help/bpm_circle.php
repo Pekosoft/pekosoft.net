@@ -13,8 +13,8 @@
     <use href="/icons.svg#tool"></use>
   </svg>
   <div class="justify">
-    <h1>Tool <span class="object">module</span></h1>
-    The Tool module shows concentric note rings for whole, half, quarter and smaller divisions. Segments can be selected directly in the circle.
+    <h1>Instrument <span class="object">module</span></h1>
+    The Instrument module shows concentric note rings for whole, half, quarter and smaller divisions. Segments can be selected directly in the circle.
   </div>
 </div>
 

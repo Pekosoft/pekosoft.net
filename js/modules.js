@@ -6,7 +6,7 @@ const legacyModuleIds = ["tool", "meters", "controls", "timeline", "playlist", "
 const moduleOrderStorageKey = "global.module_order";
 
 const moduleConfig = {
-  tool:     { icon: "tool",     title: "Tool" },
+  tool:     { icon: "tool",     title: "Instrument" },
   meters:   { icon: "meter",    title: "Meters" },
   controls: { icon: "controls", title: "Controls" },
   timeline: { icon: "timeline", title: "Timeline" },
