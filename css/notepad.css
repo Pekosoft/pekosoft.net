@@ -1,0 +1,6 @@
+/* Pekosoft Notepad */
+
+#Textarea {
+	font-family: Arial, sans-serif;
+	font-size: var(--font-size);
+}
