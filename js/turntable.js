@@ -1243,6 +1243,22 @@ if (document.readyState === 'loading') {
 
 loadSettings();
 
+window.addEventListener('pekosoft:global-defaults-change', (event) => {
+  const defaults = event.detail;
+  if (!defaults || !['rpm', 'a4_hz', 'all'].includes(defaults.changed)) return;
+
+  if ((defaults.changed === 'rpm' || defaults.changed === 'all') && Number.isFinite(defaults.rpm)) {
+    targetSpeed = defaults.rpm;
+    updateStateFromRPM(defaults.rpm);
+    currentSpeedButton = getSpeedButtonForRPM(defaults.rpm);
+    updateButtonHighlight();
+    if (!torqueMode) currentSpeed = defaults.rpm;
+  }
+
+  referenceFrequency = rpmToReferenceHz(currentSpeed);
+  updateActualSpeed(currentSpeed);
+});
+
 if (turntableTimelineSvg && turntableSvgTimeline?.observeResize) {
   disconnectTurntableTimelineResize = turntableSvgTimeline.observeResize({
     svg: turntableTimelineSvg,

@@ -1157,6 +1157,14 @@ window.addEventListener('beforeunload', () => {
 });
 
 loadSettings();
+
+window.addEventListener('pekosoft:global-defaults-change', (event) => {
+  if (!['a4_hz', 'all'].includes(event.detail?.changed)) return;
+  updateCurrentTarget();
+  renderTargetButtons();
+  syncReadout();
+});
+
 setStatus('Mic off');
 
 if (tunerTimelineSvg && tunerSvgTimeline?.observeResize) {

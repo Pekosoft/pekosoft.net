@@ -306,6 +306,13 @@ targetInput.addEventListener("input", () => {
   setTargetValue(parseFloat(targetInput.value) || 0);
 });
 
+window.addEventListener('pekosoft:global-defaults-change', (event) => {
+  const defaults = event.detail;
+  if (!defaults || !['bpm', 'all'].includes(defaults.changed)) return;
+  const bpm = defaults.bpm;
+  if (Number.isFinite(bpm)) setTargetValue(bpm, false);
+});
+
 tapButton.addEventListener("click", () => {
   const now = Date.now();
 

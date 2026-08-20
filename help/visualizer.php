@@ -164,7 +164,7 @@
   </svg>
   <div class="justify">
     <h1>BPM <span class="object">field</span></h1>
-    Sets beats per minute. <span class="default">Default: 5.</span>
+    Sets beats per minute. Updates when the global BPM setting changes.
   </div>
 </div>
 

@@ -422,22 +422,22 @@
 
 <div class="feature-row border">
   <svg class="standard-image-help"><use href="/icons.svg#field"></use></svg>
-  <div class="justify"><h1>BPM <span class="object">field</span></h1>Sets the default beats per minute.</div>
+  <div class="justify"><h1>BPM <span class="object">field</span></h1>Sets the default beats per minute and updates supported open tools.</div>
 </div>
 
 <div class="feature-row border">
   <svg class="standard-image-help"><use href="/icons.svg#field"></use></svg>
-  <div class="justify"><h1>RPM <span class="object">field</span></h1>Sets the default rounds per minute.</div>
+  <div class="justify"><h1>RPM <span class="object">field</span></h1>Sets the default rounds per minute and updates supported open tools.</div>
 </div>
 
 <div class="feature-row border">
   <svg class="standard-image-help"><use href="/icons.svg#field"></use></svg>
-  <div class="justify"><h1>A4 Hz <span class="object">field</span></h1>Sets the default frequency for A4.</div>
+  <div class="justify"><h1>A4 Hz <span class="object">field</span></h1>Sets the default frequency for A4 and updates supported open tools.</div>
 </div>
 
 <div class="feature-row border">
   <svg class="standard-image-help"><use href="/icons.svg#field"></use></svg>
-  <div class="justify"><h1>SOS <span class="object">field</span></h1>Sets the default speed of sound.</div>
+  <div class="justify"><h1>SOS <span class="object">field</span></h1>Sets the default speed of sound and updates supported open tools.</div>
 </div>
 
 <div class="feature-row border">

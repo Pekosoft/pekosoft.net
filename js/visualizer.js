@@ -284,6 +284,8 @@ function saveSingleMeterName(name) {
 }
 
 function loadBpm() {
+  const globalBpm = parseInt(localStorage.getItem('global.default_bpm'), 10);
+  if (Number.isFinite(globalBpm)) return Math.min(480, Math.max(1, globalBpm));
   const saved = localStorage.getItem('visualizer.bpm');
   return saved ? parseInt(saved) : 5;
 }
@@ -522,6 +524,17 @@ bpmInput.addEventListener('input', () => {
   const bpm = parseInt(bpmInput.value);
   saveBpm(bpm);
   updateStars(bpm);
+  updateAnimation();
+});
+
+window.addEventListener('pekosoft:global-defaults-change', (event) => {
+  const defaults = event.detail;
+  if (!defaults || !['bpm', 'all'].includes(defaults.changed) || !Number.isFinite(defaults.bpm)) return;
+  const bpm = Math.min(480, Math.max(1, Math.round(defaults.bpm)));
+  bpmInput.value = String(bpm);
+  saveBpm(bpm);
+  updateStars(bpm);
+  restartTickerOnNextUpdate = true;
   updateAnimation();
 });
 

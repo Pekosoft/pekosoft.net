@@ -201,13 +201,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const val = clampSettingNumber(settings.defaultBPM.value, numericRanges.defaultBPM.min, numericRanges.defaultBPM.max, defaults.defaultBPM);
       settings.defaultBPM.value = `${val}`;
       localStorage.setItem("global.default_bpm", val);
+      dispatchGlobalDefaultsChange("bpm");
     });
   }
 
   if (settings.defaultRPM) {
     settings.defaultRPM.addEventListener("input", () => {
       const val = parseFloat(settings.defaultRPM.value);
-      if (!isNaN(val)) localStorage.setItem("global.default_rpm", val);
+      if (!isNaN(val)) {
+        localStorage.setItem("global.default_rpm", val);
+        dispatchGlobalDefaultsChange("rpm");
+      }
     });
   }
 
@@ -216,6 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const val = clampSettingNumber(settings.a4Hz.value, numericRanges.a4Hz.min, numericRanges.a4Hz.max, defaults.a4Hz);
       settings.a4Hz.value = `${val}`;
       localStorage.setItem("global.a4_hz", val);
+      dispatchGlobalDefaultsChange("a4_hz");
     });
   }
 
@@ -224,6 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const val = clampSettingNumber(settings.speedOfSound.value, numericRanges.speedOfSound.min, numericRanges.speedOfSound.max, defaults.speedOfSound);
       settings.speedOfSound.value = `${val}`;
       localStorage.setItem("global.speed_of_sound", val);
+      dispatchGlobalDefaultsChange("speed_of_sound");
     });
   }
 
@@ -346,6 +352,18 @@ document.addEventListener("DOMContentLoaded", () => {
     clearPanelWrapOverrides();
   }
 
+  function dispatchGlobalDefaultsChange(changed) {
+    window.dispatchEvent(new CustomEvent("pekosoft:global-defaults-change", {
+      detail: {
+        changed,
+        bpm: clampSettingNumber(localStorage.getItem("global.default_bpm"), numericRanges.defaultBPM.min, numericRanges.defaultBPM.max, defaults.defaultBPM),
+        rpm: normalizeRPMPreset(parseFloat(localStorage.getItem("global.default_rpm"))),
+        a4Hz: clampSettingNumber(localStorage.getItem("global.a4_hz"), numericRanges.a4Hz.min, numericRanges.a4Hz.max, defaults.a4Hz),
+        speedOfSound: clampSettingNumber(localStorage.getItem("global.speed_of_sound"), numericRanges.speedOfSound.min, numericRanges.speedOfSound.max, defaults.speedOfSound)
+      }
+    }));
+  }
+
   function clearPanelWrapOverrides() {
     for (let index = localStorage.length - 1; index >= 0; index -= 1) {
       const key = localStorage.key(index);
@@ -420,6 +438,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("global.default_rpm", defaults.defaultRPM);
     localStorage.setItem("global.a4_hz", defaults.a4Hz);
     localStorage.setItem("global.speed_of_sound", defaults.speedOfSound);
+    dispatchGlobalDefaultsChange("all");
 
     // Also apply immediately
     window.enableInputBackgrounds = defaults.inputBackgroundsEnabled;

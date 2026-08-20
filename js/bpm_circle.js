@@ -544,6 +544,16 @@ class BPMVisualizer {
       this.bpmInput.value = this.DEFAULT_BPM;
       this.updateBPM(false);
     }
+
+    window.addEventListener('pekosoft:global-defaults-change', (event) => {
+      const defaults = event.detail;
+      if (!defaults || !['bpm', 'all'].includes(defaults.changed)) return;
+      const bpm = defaults.bpm;
+      if (!Number.isFinite(bpm)) return;
+      this.DEFAULT_BPM = Math.min(300, Math.max(1, Math.round(bpm)));
+      this.bpmInput.value = String(this.DEFAULT_BPM);
+      this.updateBPM(this.isPlaying);
+    });
   }
 
   reset() {

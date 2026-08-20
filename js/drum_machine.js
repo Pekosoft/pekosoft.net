@@ -397,6 +397,13 @@
       this.bindEvents();
       this.updateAll();
         this.renderRecordingPlaylist();
+
+      window.addEventListener("pekosoft:global-defaults-change", (event) => {
+          const defaults = event.detail;
+          if (!defaults || !["bpm", "all"].includes(defaults.changed)) return;
+          const bpm = defaults.bpm;
+        if (Number.isFinite(bpm)) this.setBpm(bpm);
+      });
     }
 
       loadRecordingPlaylist() {

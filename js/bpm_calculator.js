@@ -1928,6 +1928,13 @@ if (toneTypeSelect) {
   });
 }
 
+window.addEventListener('pekosoft:global-defaults-change', (event) => {
+  const defaults = event.detail;
+  if (!defaults || !['bpm', 'a4_hz', 'speed_of_sound', 'all'].includes(defaults.changed)) return;
+  if (defaults.changed === 'bpm' || defaults.changed === 'all') state.bpm = defaults.bpm;
+  scheduleCalculation();
+});
+
 // no extra update needed here – calculateValues() already applies backgrounds on its own
 
 // Event delegation for dynamically-generated row close buttons
