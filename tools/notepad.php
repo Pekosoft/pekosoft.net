@@ -30,6 +30,13 @@
         <span class="button-text">SPEECH</span>
       </button>
 
+      <button id="notepad-download-button" class="square" title="Download text" disabled>
+        <svg class="icons">
+          <use href="/icons.svg#download" />
+        </svg>
+        <span class="button-text">DOWNLOAD</span>
+      </button>
+
       <button id="notepad-clear-button" class="square" title="Clear text">
         <svg class="icons">
           <use href="/icons.svg#delete" />

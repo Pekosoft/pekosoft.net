@@ -28,6 +28,15 @@
 </div>
 
 <div class="feature-row border"><svg class="standard-image-help">
+    <use href="/icons.svg#download"></use>
+  </svg>
+  <div class="justify">
+    <h1>DOWNLOAD <span class="object">button</span></h1>
+    Downloads the text as a text file.
+  </div>
+</div>
+
+<div class="feature-row border"><svg class="standard-image-help">
     <use href="/icons.svg#delete"></use>
   </svg>
   <div class="justify">

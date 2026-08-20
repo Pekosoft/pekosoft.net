@@ -424,8 +424,13 @@
   </svg>
   <div class="justify">
     <h1>Panel <span class="object">module</span></h1>
-    The Panel module shows the curve summary and the point list. The COPY button copies the same text to the clipboard.
+    The Panel module shows the curve summary and the point list.
   </div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#speech"></use></svg>
+  <div class="justify"><h1>SPEECH <span class="object">button</span></h1>Speaks current Panel text. Press again to stop.</div>
 </div>
 
 <div class="feature-row border">

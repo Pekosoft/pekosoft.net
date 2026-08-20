@@ -244,8 +244,13 @@
   </svg>
   <div class="justify">
     <h1>Panel <span class="object">module</span></h1>
-    Shows key analysis text including signatures, scale notes, diatonic chords and progression references. COPY button exports panel text.
+    Shows key analysis text including signatures, scale notes, diatonic chords and progression references.
   </div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#speech"></use></svg>
+  <div class="justify"><h1>SPEECH <span class="object">button</span></h1>Speaks current Panel text. Press again to stop.</div>
 </div>
 
 <div class="feature-row border"><svg class="standard-image-help">

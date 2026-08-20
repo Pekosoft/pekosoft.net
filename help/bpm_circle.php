@@ -265,8 +265,13 @@
   </svg>
   <div class="justify">
     <h1>Panel <span class="object">module</span></h1>
-    The information panel shows BPM, note value, beat number, position and duration for selected, active or all notes. Panel footer includes a COPY button to copy data to clipboard.
+    The information panel shows BPM, note value, beat number, position and duration for selected, active or all notes.
   </div>
+</div>
+
+<div class="feature-row border">
+  <svg class="standard-image-help"><use href="/icons.svg#speech"></use></svg>
+  <div class="justify"><h1>SPEECH <span class="object">button</span></h1>Speaks current Panel text. Press again to stop.</div>
 </div>
 
 <div class="feature-row border">

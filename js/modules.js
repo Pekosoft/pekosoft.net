@@ -716,6 +716,49 @@ function setupPanelWrapToggle() {
   applyPanelWrap(textareas, isWrapOn);
   panelContainer.classList.toggle("panel-syntax-color-off", !isSyntaxColorOn);
 
+  let currentUtterance = null;
+  let isSpeaking = false;
+
+  const setSpeechState = (active) => {
+    isSpeaking = active;
+    footers.forEach((footer) => {
+      const button = footer.querySelector(".panel-speech-button");
+      if (!button) return;
+      button.classList.toggle("button-on", active);
+      button.setAttribute("aria-pressed", String(active));
+      button.title = active ? "Stop speaking" : "Speak panel text";
+    });
+  };
+
+  const stopSpeech = () => {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    currentUtterance = null;
+    setSpeechState(false);
+  };
+
+  const startSpeech = () => {
+    if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined") return;
+    const text = textareas.map((textarea) => textarea.value.trim()).filter(Boolean).join("\n\n");
+    if (!text) {
+      setSpeechState(false);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    currentUtterance = utterance;
+
+    utterance.onend = utterance.onerror = () => {
+      if (currentUtterance !== utterance) return;
+      currentUtterance = null;
+      setSpeechState(false);
+    };
+
+    window.speechSynthesis.speak(utterance);
+    setSpeechState(true);
+  };
+
   footers.forEach((footer, index) => {
     const copyButton = footer.querySelector("#copy-button");
 
@@ -726,6 +769,27 @@ function setupPanelWrapToggle() {
       }
       footer.appendChild(button);
     };
+
+    let speechButton = footer.querySelector(".panel-speech-button");
+    if (!speechButton) {
+      speechButton = document.createElement("button");
+      speechButton.className = "square panel-speech-button";
+      speechButton.id = index === 0 ? "panel-speech-button" : `panel-speech-button-${index + 1}`;
+      speechButton.title = "Speak panel text";
+      speechButton.innerHTML = `
+      <svg class="icons"><use href="/icons.svg#speech" /></svg>
+      <span class="button-text">SPEECH</span>`;
+
+      speechButton.addEventListener("click", () => {
+        if (isSpeaking) {
+          stopSpeech();
+        } else {
+          startSpeech();
+        }
+      });
+    }
+    speechButton.setAttribute("aria-pressed", "false");
+    placePanelFooterButton(speechButton);
 
     let downloadButton = footer.querySelector(".panel-download-button");
     if (!downloadButton) {
@@ -824,6 +888,8 @@ function setupPanelWrapToggle() {
       footer.querySelector(".panel-wrap-button")?.classList.toggle("button-on", enabled);
     });
   });
+
+  window.addEventListener("beforeunload", stopSpeech, { once: true });
 
   updatePanelDownloadButtonState(panelContainer);
 }
