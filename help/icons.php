@@ -206,6 +206,15 @@
 </div>
 
 <div class="feature-row border"><svg class="standard-image-help">
+    <use href="/icons.svg#asterisk"></use>
+  </svg>
+  <div class="justify">
+    <h1>CENTER <span class="object">button</span></h1>
+    Centers selected elements vertically and horizontally.
+  </div>
+</div>
+
+<div class="feature-row border"><svg class="standard-image-help">
     <use href="/icons.svg#select_all"></use>
   </svg>
   <div class="justify">

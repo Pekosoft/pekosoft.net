@@ -28,6 +28,7 @@ const resetButton = document.getElementById("reset-button");
 const undoButton = document.getElementById("undo-button");
 const redoButton = document.getElementById("redo-button");
 const rotateButton = document.getElementById("rotate-button");
+const centerButton = document.getElementById("center-button");
 const selectAllButton = document.getElementById("select-all-button");
 const selectNoneButton = document.getElementById("select-none-button");
 const resizeButton = document.getElementById("resize-button");
@@ -419,6 +420,29 @@ function getSelectionBox(elements) {
   return { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
 }
 
+function getRenderedSelectionBox(elements) {
+  const points = elements.flatMap((element) => {
+    try {
+      const box = element.getBBox();
+      const matrix = getElementToPreviewMatrix(element);
+      return [
+        new DOMPoint(box.x, box.y),
+        new DOMPoint(box.x + box.width, box.y),
+        new DOMPoint(box.x, box.y + box.height),
+        new DOMPoint(box.x + box.width, box.y + box.height)
+      ].map((point) => point.matrixTransform(matrix));
+    } catch (_) {
+      return [];
+    }
+  });
+  if (!points.length) return null;
+  const minX = Math.min(...points.map((point) => point.x));
+  const minY = Math.min(...points.map((point) => point.y));
+  const maxX = Math.max(...points.map((point) => point.x));
+  const maxY = Math.max(...points.map((point) => point.y));
+  return { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
+}
+
 function serializeCurrentSymbol() {
   const id = getCurrentIconId();
   if (!id) return null;
@@ -567,6 +591,22 @@ function rotateSelectionLeft() {
     clearEditorSelection();
     elements.forEach((element) => selectElement(element, true));
   }
+  updateCurrentPanelFromPreview();
+  rememberEditFromSnapshot(beforeSnapshot);
+}
+
+function centerSelection() {
+  const elements = getSelectedEditableElements();
+  const box = getRenderedSelectionBox(elements);
+  if (!box) return;
+
+  const beforeSnapshot = getEditSnapshot();
+  const offsetX = 256 - (box.x + box.width / 2);
+  const offsetY = 256 - (box.y + box.height / 2);
+  elements.forEach((element) => {
+    const existing = element.getAttribute("transform") || "";
+    element.setAttribute("transform", `${existing} translate(${formatNumber(offsetX)} ${formatNumber(offsetY)})`.trim());
+  });
   updateCurrentPanelFromPreview();
   rememberEditFromSnapshot(beforeSnapshot);
 }
@@ -1861,6 +1901,10 @@ circleOutlineButton?.addEventListener("click", () => setEditorTool("circle-outli
 
 rotateButton?.addEventListener("click", () => {
   rotateSelectionLeft();
+});
+
+centerButton?.addEventListener("click", () => {
+  centerSelection();
 });
 
 selectAllButton?.addEventListener("click", () => {

@@ -178,6 +178,13 @@
         <span class="button-text">ROTATE</span>
       </button>
 
+      <button id="center-button" class="square" title="Center selected elements">
+        <svg class="icons">
+          <use href="/icons.svg#asterisk" />
+        </svg>
+        <span class="button-text">CENTER</span>
+      </button>
+
       <button id="select-all-button" class="square" title="Select all">
         <svg class="icons">
           <use href="/icons.svg#select_all" />
@@ -370,7 +377,7 @@
 
   <script src="/js/modules.js?v=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/js/modules.js'); ?>"></script>
   <script src="/js/drag.js?v=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/js/drag.js'); ?>"></script>
-  <script src="/js/<?php echo $release; ?>.js"></script>
+  <script src="/js/<?php echo $release; ?>.js?v=<?php echo filemtime($_SERVER['DOCUMENT_ROOT'] . '/js/' . $release . '.js'); ?>"></script>
   <?php require($_SERVER['DOCUMENT_ROOT'] . "/elements/beta_footer.php"); ?>
 </body>
 
