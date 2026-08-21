@@ -1338,18 +1338,19 @@ html.invert-colors .container:fullscreen {
   flex-direction: column;
   position: fixed;
   top: 48px;
+  bottom: var(--sidebar-footer-height, 0px);
   left: 0;
   right: 0;
-  margin: 16px auto;
+  margin: 0;
   background-color: var(--grey1);
   border: 4px solid var(--grey1);
   padding: 0px;
   z-index: 999;
   max-width: var(--maxwidth);
   width: 100%;
-  height: calc(var(--visual-viewport-height, 100dvh) - 80px - var(--sidebar-footer-height, 0px));
+  height: auto;
   overflow: hidden;
-  padding: 4px 0;
+  padding: 0;
 }
 
 .toc-content {
@@ -1358,7 +1359,7 @@ html.invert-colors .container:fullscreen {
   flex: 1 1 auto;
   min-height: 0;
   width: 100%;
-  padding-top: 24px;
+  padding-top: 0;
   overflow-y: auto;
   overscroll-behavior-y: contain;
 }
@@ -1382,15 +1383,16 @@ html.invert-colors .container:fullscreen {
   flex-direction: column;
   position: fixed;
   top: 48px;
+  bottom: var(--sidebar-footer-height, 0px);
   left: 0;
   right: 0;
-  margin: 16px auto;
+  margin: 0;
   background-color: var(--grey1);
   border: 4px solid var(--grey1);
   z-index: 999;
   max-width: var(--maxwidth);
   width: 100%;
-  height: calc(var(--visual-viewport-height, 100dvh) - 80px - var(--sidebar-footer-height, 0px));
+  height: auto;
   overflow: hidden;
   padding: 0;
 }
@@ -1417,7 +1419,7 @@ html.invert-colors .container:fullscreen {
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior-y: contain;
-  padding: 24px 0 4px;
+  padding: 0 0 4px;
 }
 
 .settings-panel-content {
@@ -1525,9 +1527,25 @@ html.invert-colors .container:fullscreen {
 }
 
 @media (max-width: 799px) {
-  .toc-container,
-  .settings-panel {
-    box-shadow: 0 -16px var(--grey1), 0 8px var(--grey1);
+  .footer-standard.footer-tools-active,
+  .footer-beta.footer-tools-active {
+    display: flex;
+  }
+
+  .footer-standard.footer-tools-active .footer-tools,
+  .footer-beta.footer-tools-active .footer-tools {
+    display: flex;
+  }
+
+  .footer-standard.footer-tools-active .footer-tools > div,
+  .footer-beta.footer-tools-active .footer-tools > div {
+    display: flex;
+    flex: 0 0 var(--size2);
+    align-items: center;
+    justify-content: center;
+    width: var(--size2);
+    min-width: var(--size2);
+    height: var(--size2);
   }
 }
 
@@ -1541,10 +1559,12 @@ html.invert-colors .container:fullscreen {
   .toc-container,
   .settings-panel {
     top: 48px;
+    bottom: auto;
     left: var(--site-frame-offset);
     right: auto;
     width: var(--sidebar-width);
     margin: 16px 0;
+    height: calc(var(--visual-viewport-height, 100dvh) - 80px - var(--sidebar-footer-height, 0px));
     background-color: var(--black);
   }
 
